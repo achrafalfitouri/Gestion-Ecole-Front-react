@@ -1,10 +1,12 @@
 import React, { Suspense, useState } from 'react';
-import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, BookOutlined, CalendarOutlined, DashboardOutlined, FileTextOutlined, IdcardOutlined, LineChartOutlined, SnippetsOutlined, UploadOutlined, UserAddOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme, Dropdown, Button, Row, Col, Space, Avatar } from 'antd';
+import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, BookOutlined, CalendarOutlined, DashboardOutlined, FileTextOutlined, IdcardOutlined, LineChartOutlined, SnippetsOutlined, UploadOutlined, UserAddOutlined, UserOutlined, VideoCameraOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme, Dropdown, Button, Row, Col, Space, Avatar, Popconfirm } from 'antd';
 import './style.css';
 import AppRoutes from '../Routes';
 import { UserContext } from '../UserContextData/UserContext';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { Navigate } from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -12,17 +14,40 @@ const Components = () => {
   const [logoText, setLogoText] = useState("EHPM");
   const [collapsed, setCollapsed] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const [confirmLogout, setConfirmLogout] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); // State to track hover state
+
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
-    window.location.href = '/login'; // Redirect to login page
+    navigate('/login'); // Use navigate to redirect to login page
+    // Redirect to login page
   };
+
+
+  const userLogin = localStorage.getItem('user');
+
+
+  if (!userLogin) {
+    return <Navigate to="/login" />;
+  }
+
+  //logout button
+  
+  const hoverStyles = {
+    fontSize: '18px',
+    color: '#ce5254',
+  };
+
 
   const itemsDropdown = [
     {
       label: 'Gérer Compte',
       key: '1',
+      onClick: () => navigate('/manage-account'), // Example navigation with navigate
     },
     {
       label: 'Déconnexion',
@@ -41,11 +66,13 @@ const Components = () => {
       label: "Tableau de bord",
       icon: <DashboardOutlined />,
       key: "/",
+
     },
     {
       label: "Utilisateur",
       key: "/utilisateur",
       icon: <UserOutlined />,
+
     },
     {
       label: "Rendez-vous",
@@ -166,6 +193,9 @@ const Components = () => {
           {logoText}
         </div>
         <Menu 
+          onClick={(item) => {
+            navigate(item.key);
+          }}
 
 style={{
    
@@ -173,6 +203,45 @@ style={{
     fontWeight: "bold",
   }}
         theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+
+<div style={{ padding: '16px',  display: 'flex', alignItems: 'center',textAlign : "center" }}>
+         <LogoutOutlined style={{
+              color: 'white',
+              fontSize: '16px',
+              transition: 'font-size 0.3s, color 0.3s',
+              margin : '8px',
+              marginRight : '-4px',
+              textAlign : "center",
+              ...(isHovered && hoverStyles), // Apply hover styles when button is hovered
+            }} />
+
+        <Popconfirm
+        
+          title="Are you sure you want to logout?"
+          onConfirm={handleLogout}
+          okText="Yes"
+          cancelText="No"
+          visible={confirmLogout}
+          onCancel={() => setConfirmLogout(false)}
+        >
+          <Button
+            type="text"
+            onClick={() => setConfirmLogout(true)}
+            style={{
+              color: 'white',
+              fontSize: '16px',
+              transition: 'font-size 0.3s, color 0.3s',
+            
+              ...(isHovered && hoverStyles), // Apply hover styles when button is hovered
+            }}
+            onMouseEnter={() => setIsHovered(true)} // Set isHovered to true on mouse enter
+            onMouseLeave={() => setIsHovered(false)} // Set isHovered to false on mouse leave
+          >
+                        <span style={{ visibility: collapsed ? 'hidden' : 'visible' }}>Deconnexion</span>
+
+          </Button>
+        </Popconfirm>
+      </div>
       </Sider>
       <Layout>
       <Header

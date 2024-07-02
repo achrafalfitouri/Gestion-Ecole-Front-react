@@ -20,16 +20,17 @@ const Login = () => {
       const response = await axiosInstance.post('/api/auth/login', values);
       localStorage.setItem('token', response.data.token);
       message.success('Login successful!');
-      
+  
       const userResponse = await axiosInstance.get('/api/auth/me');
+      localStorage.setItem('user', JSON.stringify(userResponse.data)); // Store as JSON string
       setUser(userResponse.data);
-
-      setNavigate(true);// Redirect to home or dashboard
+      
+      setNavigate(true); // Redirect to home or dashboard
     } catch (error) {
       message.error('Login failed. Please check your credentials.');
     }
   };
-
+  
   if (navigate) {
     return <Navigate to="/" />;
   }
