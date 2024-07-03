@@ -85,7 +85,7 @@ const Components = () => {
       icon: <BankOutlined />,
       children: [
         {
-          key: '14',
+          key: 'etudiant',
           label: 'Etudiant',
         },
         {

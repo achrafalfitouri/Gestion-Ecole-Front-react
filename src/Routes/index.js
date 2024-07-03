@@ -18,6 +18,7 @@ import { UserContext } from "../UserContextData/UserContext";
 
 import Dashboard from "../Pages/Dashboard";
 import Utilisateur from "../Pages/Utilisateurs/index";
+import Etudiant from "../Pages/Scolarite/Etudiant";
 
 
 
@@ -33,6 +34,7 @@ function AppRoutes() {
           {/* <Route path="/" element={<DashboardDataProvider>{(data) => <Dashboard data={data} />}</DashboardDataProvider>} /> */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/utilisateur" element={<Utilisateur />} />
+          <Route path="/etudiant" element={<Etudiant />} />
           {/* Fallback route for unauthorized access */}
           <Route path="*" element={<Unauthorized />} />
         </Routes>
