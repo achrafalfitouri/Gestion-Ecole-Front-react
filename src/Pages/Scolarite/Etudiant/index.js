@@ -325,12 +325,7 @@ const CrudTable = () => {
     form.resetFields(); // Reset form fields when opening 'Ajouter un nouvel utilisateur' drawer
   };
 
-  const handleEdit = (record) => {
-    setSelectedRecord(record);
-    setDrawerType('edit');
-    setDrawerVisible(true);
-    form.setFieldsValue(record); // Populate form fields with selected record data
-  };
+ 
 
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
