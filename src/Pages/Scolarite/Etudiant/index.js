@@ -662,7 +662,8 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
-      {drawerType === 'add' ? 'Ajouter Etudiant' : 'Modifier Etudiant'}
+ {drawerType === 'add' ? 'Ajouter Etudiant' : drawerType === 'edit' ? 'Modifier Etudiant' : 'Afficher Etudiant'}
+
     </Text>
   }
   width={480}
