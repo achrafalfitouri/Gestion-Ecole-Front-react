@@ -266,6 +266,7 @@ const CrudTable = () => {
         </Text>
       ),
       ellipsis: true,
+      
     },
     {
       title: <Text strong style={{ fontSize: '16px' }}>Telephone</Text>,
@@ -305,7 +306,6 @@ const CrudTable = () => {
         </Text>
       ),
       ellipsis: true,
-      collumnTiltle : true
     },
     {
       title: '',
@@ -409,7 +409,7 @@ const CrudTable = () => {
     placeholder="Sélectionner un rôle"
   >
     <Option style={{ fontSize: '16px' }} value="Masculin">Masculin</Option>
-    <Option style={{ fontSize: '16px' }} value="Feminin">Feminin</Option>
+    <Option style={{ fontSize: '16px' }} value="Féminin">Féminin</Option>
   </Select>
 </Form.Item>
 
@@ -459,7 +459,7 @@ const CrudTable = () => {
 >
   <Select
     style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-    placeholder="Sélectionner un rôle"
+    placeholder="Sélectionner une filiere"
   >
     <Option style={{ fontSize: '16px' }} value="1">1</Option>
     <Option style={{ fontSize: '16px' }} value="2">2</Option>
@@ -530,19 +530,20 @@ const CrudTable = () => {
 >
   <Select
     style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-    placeholder="Sélectionner un rôle"
+    placeholder="Sélectionner le sexe"
   >
     <Option style={{ fontSize: '16px' }} value="Masculin">Masculin</Option>
-    <Option style={{ fontSize: '16px' }} value="Feminin">Feminin</Option>
+    <Option style={{ fontSize: '16px' }} value="Féminin">Feminin</Option>
   </Select>
 </Form.Item>
+
 
       <Form.Item
         name="DateNaissance"
         label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date" placeholder="Entrez la date de naissance de l'etudiant" style={{ fontSize: '16px' }} />
+        <Input type = "date"  placeholder="Entrez la date de naissance de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
      
       <Form.Item
@@ -646,13 +647,15 @@ const CrudTable = () => {
                     borderRadius: '15px'
                   }}
                 >
-                  Ajouter un utilisateur
+                  Ajouter un Etudiant
                 </Button>
               </Space>
             </Col>
           </Row>
           <Table columns={columns} dataSource={data} rowKey="ID_Etudiant" pagination={pagination} loading={refreshLoading}
-            onChange={handleTableChange} />
+            onChange={handleTableChange}  scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
+            size="middle" // Optionally change the size of the table (default, middle, small)
+            rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}   />
         </Space>
       </Card>
 
@@ -685,7 +688,7 @@ const CrudTable = () => {
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Sexe}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.DateNaissance}</Text>
+        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateNaissance).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>lieu de Naissance</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.LieuNaissance}</Text>

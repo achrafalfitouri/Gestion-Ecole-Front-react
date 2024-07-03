@@ -182,6 +182,8 @@ const CrudTable = () => {
       sorter: (a, b) => a.NomUtilisateur.localeCompare(b.NomUtilisateur),
       ...getColumnSearchProps('NomUtilisateur'),
       render: (text) => <Text strong style={{ fontSize: '16px' }}>{renderText(text, globalSearchText)}</Text>,
+      ellipsis: true,
+
     },
     {
       title: <Text strong style={{ fontSize: '16px' }}>Prénom</Text>,
@@ -190,6 +192,8 @@ const CrudTable = () => {
       sorter: (a, b) => a.PrenomUtilisateur.localeCompare(b.PrenomUtilisateur),
       ...getColumnSearchProps('PrenomUtilisateur'),
       render: (text) => <Text strong style={{ fontSize: '16px' }}>{renderText(text, globalSearchText)}</Text>,
+      ellipsis: true,
+
     },
     {
       title: <Text strong style={{ fontSize: '16px' }}>Email</Text>,
@@ -198,6 +202,8 @@ const CrudTable = () => {
       sorter: (a, b) => a.Email.localeCompare(b.Email),
       ...getColumnSearchProps('Email'),
       render: (text) => <Text strong style={{ fontSize: '16px' }}>{renderText(text, globalSearchText)}</Text>,
+      ellipsis: true,
+
     },
     {
       title: <Text strong style={{ fontSize: '16px' }}>Role</Text>,
@@ -206,6 +212,8 @@ const CrudTable = () => {
       sorter: (a, b) => a.NomRole.localeCompare(b.NomRole),
       ...getColumnSearchProps('NomRole'),
       render: (text) => <Text strong style={{ fontSize: '16px' }}>{renderText(text, globalSearchText)}</Text>,
+      ellipsis: true,
+
     },
     {
       title: '',
@@ -224,12 +232,7 @@ const CrudTable = () => {
     form.resetFields(); // Reset form fields when opening 'Ajouter un nouvel utilisateur' drawer
   };
 
-  const handleEdit = (record) => {
-    setSelectedRecord(record);
-    setDrawerType('edit');
-    setDrawerVisible(true);
-    form.setFieldsValue(record); // Populate form fields with selected record data
-  };
+ 
 
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
@@ -239,21 +242,34 @@ const CrudTable = () => {
 
   const handleFormSubmit = async (values) => {
     try {
+      const currentTimestamp = new Date().toISOString(); // Get current timestamp in ISO format
+  
       if (drawerType === 'add') {
-        await axiosInstance.post('/api/utilisateurs', values);
+        const newValues = {
+          ...values,
+          created_at: currentTimestamp,
+          updated_at: currentTimestamp,
+        };
+        await axiosInstance.post('/api/utilisateurs', newValues);
         message.success('Utilisateur ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
-        const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
+        const updatedValues = {
+          ...selectedRecord,
+          ...values,
+          updated_at: currentTimestamp, // Only update the updated_at field
+        };
         await axiosInstance.put(`/api/utilisateurs/${selectedRecord.ID_Utilisateur}`, updatedValues);
         message.success('Utilisateur modifié avec succès');
       }
-
+  
       handleCloseDrawer();
       fetchData(); // Refresh data after submission
     } catch (error) {
       console.error('Error saving data:', error);
+      message.error('Une erreur est survenue lors de la sauvegarde des données');
     }
   };
+  
 
   const handleTableChange = (pagination, filters, sorter) => {
     setPagination(pagination);
@@ -461,16 +477,19 @@ const CrudTable = () => {
               </Space>
             </Col>
           </Row>
-          <Table columns={columns} dataSource={data} rowKey="ID_Utilisateur" pagination={pagination} loading={refreshLoading}
-            onChange={handleTableChange} />
+      
+          <Table columns={columns} dataSource={data} rowKey="ID_Etudiant" pagination={pagination} loading={refreshLoading}
+            onChange={handleTableChange}  scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
+            size="middle" // Optionally change the size of the table (default, middle, small)
+            rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}   />
         </Space>
       </Card>
 
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
-      {drawerType === 'add' ? 'Ajouter Utilisateur' : 'Modifier Utilisateur'}
-    </Text>
+{drawerType === 'add' ? 'Ajouter Utilisateur' : drawerType === 'edit' ? 'Modifier Utilisateur' : 'Afficher Utilisateur'}
+</Text>
   }
   width={480}
   onClose={handleCloseDrawer}
