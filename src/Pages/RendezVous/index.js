@@ -176,19 +176,7 @@ const CrudTable = () => {
   );
 
   const columns = [
-  {
-    title: <Text strong style={{ fontSize: '16px' }}>ID RendezVous</Text>,
-    dataIndex: 'ID_RendezVous',
-    key: 'ID_RendezVous',
-    sorter: (a, b) => a.ID_RendezVous.localeCompare(b.ID_RendezVous),
-    ...getColumnSearchProps('ID_RendezVous'),
-    render: (text) => (
-      <Text strong style={{ fontSize: '16px' }}>
-        {renderText(text, globalSearchText)}
-      </Text>
-    ),
-    ellipsis: true,
-  },
+  
   {
     title: <Text strong style={{ fontSize: '16px' }}>Date</Text>,
     dataIndex: 'Date',
@@ -328,21 +316,21 @@ const CrudTable = () => {
     <Form layout="vertical" onFinish={handleFormSubmit}>
       <Form.Item
         name="Date"
-        label={<Text strong style={{ fontSize: '16px' }}>date</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type = "date" placeholder="Entrez la date" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="HeureDebut"
-        label={<Text strong style={{ fontSize: '16px' }}>l'heure du debut</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>L'heure du debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="HeureFin"
-        label={<Text strong style={{ fontSize: '16px' }}>l'heure du fin</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>L'heure du fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
@@ -351,7 +339,7 @@ const CrudTable = () => {
 
       <Form.Item
         name="Sujet"
-        label={<Text strong style={{ fontSize: '16px' }}>sujet du rendez-vous</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Sujet du rendez-vous</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez lae sujet" style={{ fontSize: '16px' }} />
@@ -456,7 +444,7 @@ const CrudTable = () => {
     <div style={{ padding: '40px', fontSize: '16px' }}>
       <Card style={{ borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '2px 6px 14px rgba(0, 0, 0.1, 0.2)' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title level={3} style={{ fontSize: '24px' }}>listes des rendez-vous</Title>
+          <Title level={3} style={{ fontSize: '24px' }}>Listes des rendez-vous</Title>
           <Row justify="end" align="middle" style={{ marginBottom: '16px' }}>
             <Col>
               <Space>
@@ -512,10 +500,11 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
-      {drawerType === 'add' ? 'Ajouter Etudiant' : 'Modifier Etudiant'}
+ {drawerType === 'add' ? 'Ajouter Rendez-vous' : drawerType === 'edit' ? 'Modifier Rendez-vous' : 'Afficher Rendez-vous'}
+
     </Text>
   }
-  width={480}
+  width={drawerType === 'view' ? 720 : 480}
   onClose={handleCloseDrawer}
   visible={drawerVisible}
   bodyStyle={{ paddingBottom: 80 }}

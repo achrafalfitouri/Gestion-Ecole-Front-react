@@ -480,7 +480,7 @@ const CrudTable = () => {
 {drawerType === 'add' ? 'Ajouter Utilisateur' : drawerType === 'edit' ? 'Modifier Utilisateur' : 'Afficher Utilisateur'}
 </Text>
   }
-  width={480}
+  width={drawerType === 'view' ? 720 : 480}
   onClose={handleCloseDrawer}
   visible={drawerVisible}
   bodyStyle={{ paddingBottom: 80 }}
