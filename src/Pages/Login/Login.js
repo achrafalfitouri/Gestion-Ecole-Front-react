@@ -2,14 +2,12 @@ import React, { useContext, useState } from 'react';
 import { Form, Input, Button, message, Row, Col, Card, Checkbox, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axiosInstance from '../../Middleware/axiosInstance';
-import { UserContext } from '../../UserContextData/UserContext';
 import { Navigate } from "react-router-dom";
 
 const { Item } = Form;
 const { Title, Text } = Typography;
 
 const Login = () => {
-  const { setUser } = useContext(UserContext);
   const [navigate, setNavigate] = useState(false);
   const [form] = Form.useForm();
 
@@ -17,12 +15,10 @@ const Login = () => {
     try {
       const response = await axiosInstance.post('/api/auth/login', values);
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('expireIn', response.data.expiresIn);
       message.success('Login successful!');
 
       const userResponse = await axiosInstance.get('/api/auth/me');
       localStorage.setItem('user', JSON.stringify(userResponse.data)); // Store as JSON string
-      setUser(userResponse.data);
 
       setNavigate(true); // Redirect to home or dashboard
     } catch (error) {

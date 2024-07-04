@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter , Route, Routes, Navigate } from 'react-router-dom';
-import { UserProvider, UserContext } from './UserContextData/UserContext';
 import Login from './Pages/Login/Login';
 import Components from './Components/index'; // Assume Home is a component for the home page
 
@@ -10,7 +9,6 @@ const PrivateRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <UserProvider>
       <BrowserRouter>
   
         <Routes>
@@ -19,7 +17,6 @@ const App = () => {
         </Routes>
       
       </BrowserRouter>
-    </UserProvider>
   );
 };
 

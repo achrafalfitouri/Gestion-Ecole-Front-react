@@ -2,7 +2,6 @@ import React, { lazy, Suspense, useContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import Unauthorized from "../Pages/Unauthorized";
 import { AnimatePresence } from "framer-motion";
-import { UserContext } from "../UserContextData/UserContext";
 // import { fetchUserData } from "../interceptors/axios"; // Import fetchUserData from axios.js
 // import DashboardDataProvider from '../../Pages/Dashbaord/DashboardProvider';
 
@@ -25,7 +24,6 @@ import RendezVous from "../Pages/RendezVous";
 
 
 function AppRoutes() {
-  const { user } = useContext(UserContext);
 
   return (
     <AnimatePresence>
