@@ -56,7 +56,7 @@ const CrudTable = () => {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_Etudiant);
+      showDeleteConfirm(record.ID_Filiere);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
@@ -81,7 +81,7 @@ const CrudTable = () => {
       message.success('filiere supprimé avec succès');
       fetchData();
     } catch (error) {
-      console.error('Error deleting data:', error);
+      message.error('Impossible de supprimer la filiere. Il existe des enregistrements associés.');
     }
   };
 
@@ -216,6 +216,24 @@ const CrudTable = () => {
       ellipsis: true,
     },
     {
+      title: <Text strong style={{ fontSize: '16px' }}>Nombre classe</Text>,
+      dataIndex: 'NombreClasse',
+      key: 'NombreClasse',
+      sorter: (a, b) => {
+        if (typeof a.NombreClasse === 'number' && typeof b.NombreClasse === 'number') {
+          return a.NombreClasse - b.NombreClasse;
+        }
+        return a.NombreClasse.toString().localeCompare(b.NombreClasse.toString());
+      },
+      ...getColumnSearchProps('NombreClasse'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
       title: '',
       key: 'action',
       render: (text, record) => (
@@ -250,14 +268,29 @@ const CrudTable = () => {
   
 
   const handleFormSubmit = async (values) => {
-    const formData = new FormData();
-    formData.append('ID_filiere', values.ID_filiere);
-    formData.append('NomFiliere', values.NomFiliere);
-   
+    try {
+        
+      if (drawerType === 'add') {
+        const existingFiliere = data.find(filiere => filiere.NomFiliere.toLowerCase() === values.NomFiliere.toLowerCase());
+      if (existingFiliere) {
+        message.error('Cette filiere existe déjà.');
+        return;
+      }
   
-    // Check if a file is selected before appending
+        await axiosInstance.post('/api/filiere', values);
+        message.success('rendez-vous ajouté avec succès');
+      } else if (drawerType === 'edit' && selectedRecord) {
+        const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
+        await axiosInstance.put(`/api/filiere/${selectedRecord.ID_Filiere}`, updatedValues);
+        message.success('rendez-vous modifié avec succès');
+      }
 
-  }
+      handleCloseDrawer();
+      fetchData(); // Refresh data after submission
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
   
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -276,20 +309,7 @@ const CrudTable = () => {
     }, 1100); // Adjust delay time as needed
   };
  
-  const [filiereOptions, setFiliereOptions] = useState([]);
-  useEffect(() => {
-    const fetchFiliereOptions = async () => {
-      try {
-        const response = await axiosInstance.get('/api/filiere');
-        setFiliereOptions(response.data);
-      } catch (error) {
-        console.error('Error fetching filiere options:', error);
-        message.error('Erreur lors du chargement des options de filiere');
-      }
-    };
-
-    fetchFiliereOptions();
-  }, []);
+ 
   
   // Add Form Component for Ajouter Utilisateur
   const AddUserForm = () => (
@@ -435,8 +455,11 @@ const CrudTable = () => {
  <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Filiere</Text>}>
   <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
 </Descriptions.Item>
-<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nombre d'etudiant</Text>}>
+<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nombre des etudiants</Text>}>
   <Text style={{ fontSize: '16px' }}>{selectedRecord?.NombreEtudiant}</Text>
+</Descriptions.Item>
+<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nombre des classes</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.NombreClasse}</Text>
 </Descriptions.Item>
 
     </Descriptions>

@@ -93,7 +93,7 @@ if (!user || !token) {
           label: 'Formateur',
         },
         {
-          key: '17',
+          key: 'classe',
           label: 'Classe',
         },
         {

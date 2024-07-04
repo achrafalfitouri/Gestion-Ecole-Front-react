@@ -701,19 +701,24 @@ const CrudTable = () => {
       </Form.Item>
       
       <Form.Item
-  name="ID_Filiere"
-  label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-  rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
-  style={{ fontSize: '16px' }}
->
-  <Select
-    style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-    placeholder="Sélectionner un rôle"
-  >
-    <Option style={{ fontSize: '16px' }} value="1">1</Option>
-    <Option style={{ fontSize: '16px' }} value="2">2</Option>
-  </Select>
-</Form.Item>
+        name="ID_Filiere"
+        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner une filiere"
+        >
+          {filiereOptions.map(filiere => (
+            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
+              {filiere.NomFiliere}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+     
+
         <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
             Modifier

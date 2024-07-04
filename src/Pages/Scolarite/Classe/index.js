@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutlined, SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 
 const CrudTable = () => {
@@ -185,7 +186,21 @@ const CrudTable = () => {
   
     {
 
-      title: <Text strong style={{ fontSize: '16px' }}>Nom Filiere</Text>,
+      title: <Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>,
+      dataIndex: 'NomClasse',
+      key: 'NomClasse',
+      sorter: (a, b) => a.NomClasse.localeCompare(b.NomClasse),
+      ...getColumnSearchProps('NomClasse'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+
+      title: <Text strong style={{ fontSize: '16px' }}>Filiere</Text>,
       dataIndex: 'NomFiliere',
       key: 'NomFiliere',
       sorter: (a, b) => a.NomFiliere.localeCompare(b.NomFiliere),
@@ -197,17 +212,14 @@ const CrudTable = () => {
       ),
       ellipsis: true,
     },
+   
     {
-      title: <Text strong style={{ fontSize: '16px' }}>Nombre etudiant</Text>,
-      dataIndex: 'NombreEtudiant',
-      key: 'NombreEtudiant',
-      sorter: (a, b) => {
-        if (typeof a.NombreEtudiant === 'number' && typeof b.NombreEtudiant === 'number') {
-          return a.NombreEtudiant - b.NombreEtudiant;
-        }
-        return a.NombreEtudiant.toString().localeCompare(b.NombreEtudiant.toString());
-      },
-      ...getColumnSearchProps('NombreEtudiant'),
+
+      title: <Text strong style={{ fontSize: '16px' }}>AnneeScolaire</Text>,
+      dataIndex: 'AnneeScolaire',
+      key: 'AnneeScolaire',
+      sorter: (a, b) => a.AnneeScolaire.localeCompare(b.AnneeScolaire),
+      ...getColumnSearchProps('AnneeScolaire'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
           {renderText(text, globalSearchText)}
@@ -215,6 +227,21 @@ const CrudTable = () => {
       ),
       ellipsis: true,
     },
+    {
+
+      title: <Text strong style={{ fontSize: '16px' }}>Remarques</Text>,
+      dataIndex: 'Remarques',
+      key: 'Remarques',
+      sorter: (a, b) => a.Remarques.localeCompare(b.Remarques),
+      ...getColumnSearchProps('Remarques'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+   
     {
       title: '',
       key: 'action',
@@ -250,14 +277,24 @@ const CrudTable = () => {
   
 
   const handleFormSubmit = async (values) => {
-    const formData = new FormData();
-    formData.append('ID_filiere', values.ID_filiere);
-    formData.append('NomFiliere', values.NomFiliere);
-   
-  
-    // Check if a file is selected before appending
+    try {
+        
+      if (drawerType === 'add') {
+        await axiosInstance.post('/api/classes', values);
+        message.success('rendez-vous ajouté avec succès');
+      } else if (drawerType === 'edit' && selectedRecord) {
+        const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
+        await axiosInstance.put(`/api/classes/${selectedRecord.ID_Classe}`, updatedValues);
+        message.success('rendez-vous modifié avec succès');
+      }
 
-  }
+      handleCloseDrawer();
+      fetchData(); // Refresh data after submission
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
+  
   
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -297,11 +334,42 @@ const CrudTable = () => {
 
 
 <Form.Item
-    name="NomFiliere"
-    label={<Text strong style={{ fontSize: '16px' }}>Nom Filiere</Text>}
+    name="NomClasse"
+    label={<Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>}
     rules={[{ required: true, message: 'Champ requis' }]}
   >
-    <Input placeholder="Entrez le nom de la filiere" style={{ fontSize: '16px' }} />
+    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
+  </Form.Item>
+  <Form.Item
+        name="ID_Filiere"
+        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner une filiere"
+        >
+          {filiereOptions.map(filiere => (
+            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
+              {filiere.NomFiliere}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+<Form.Item
+    name="AnneeScolaire"
+    label={<Text strong style={{ fontSize: '16px' }}>Anneé Scolaire</Text>}
+    rules={[{ required: true, message: 'Champ requis' }]}
+  >
+    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
+  </Form.Item>
+<Form.Item
+    name="Remarques"
+    label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}
+    rules={[{ required: true, message: 'Champ requis' }]}
+  >
+    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
   </Form.Item>
 
   <Form.Item>
@@ -339,11 +407,42 @@ const CrudTable = () => {
       >
         
         <Form.Item
-    name="NomFiliere"
-    label={<Text strong style={{ fontSize: '16px' }}>Nom Filiere</Text>}
+    name="NomClasse"
+    label={<Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>}
     rules={[{ required: true, message: 'Champ requis' }]}
   >
-    <Input placeholder="Entrez le nom de la filiere" style={{ fontSize: '16px' }} />
+    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
+  </Form.Item>
+  <Form.Item
+        name="ID_Filiere"
+        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner une filiere"
+        >
+          {filiereOptions.map(filiere => (
+            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
+              {filiere.NomFiliere}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+<Form.Item
+    name="AnneeScolaire"
+    label={<Text strong style={{ fontSize: '16px' }}>Anneé Scolaire</Text>}
+    rules={[{ required: true, message: 'Champ requis' }]}
+  >
+    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
+  </Form.Item>
+<Form.Item
+    name="Remarques"
+    label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}
+    rules={[{ required: true, message: 'Champ requis' }]}
+  >
+    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
   </Form.Item>
 
   <Form.Item>
@@ -362,7 +461,7 @@ const CrudTable = () => {
     <div style={{ padding: '40px', fontSize: '16px' }}>
       <Card style={{ borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '2px 6px 14px rgba(0, 0, 0.1, 0.2)' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title level={3} style={{ fontSize: '24px' }}>Liste des filieres</Title>
+          <Title level={3} style={{ fontSize: '24px' }}>Liste des classes</Title>
           <Row justify="end" align="middle" style={{ marginBottom: '16px' }}>
             <Col>
               <Space>
@@ -403,7 +502,7 @@ const CrudTable = () => {
                     borderRadius: '15px'
                   }}
                 >
-                  Ajouter une filiere
+                  Ajouter une classe
                 </Button>
               </Space>
             </Col>
@@ -418,7 +517,7 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter filiere' : drawerType === 'edit' ? 'Modifier filiere' : 'Afficher filiere'}
+ {drawerType === 'add' ? 'Ajouter classe' : drawerType === 'edit' ? 'Modifier classe' : 'Afficher classe'}
 
     </Text>
   }
@@ -432,11 +531,17 @@ const CrudTable = () => {
     <Descriptions column={1} bordered>
  
               
- <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Filiere</Text>}>
+ <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomClasse}</Text>
+</Descriptions.Item>
+<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filire</Text>}>
   <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
 </Descriptions.Item>
-<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nombre d'etudiant</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.NombreEtudiant}</Text>
+<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>AnneeScolaire</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.AnneeScolaire}</Text>
+</Descriptions.Item>
+<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.Remarques}</Text>
 </Descriptions.Item>
 
     </Descriptions>
