@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
-import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload } from 'antd';
+import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined, RedoOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import axiosInstance from '../../Middleware/axiosInstance';
+import axiosInstance from '../../../Middleware/axiosInstance';
 import moment from 'moment';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const CrudTable = () => {
   const [data, setData] = useState(null);
@@ -18,6 +25,14 @@ const CrudTable = () => {
   const [globalSearchText, setGlobalSearchText] = useState('');
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
   const [refreshLoading, setRefreshLoading] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState([]);
+  const [visibleModal, setVisibleModal] = useState(false);
+
+  const toggleModal = () => {
+    setVisibleModal(!visibleModal);
+  };
   const [form] = Form.useForm(); // Ant Design form instance
 
   const searchInput = React.useRef(null);
@@ -29,7 +44,7 @@ const CrudTable = () => {
   const fetchData = async () => {
     setRefreshLoading(true);
     try {
-      const response = await axiosInstance.get('/api/formateure', {
+      const response = await axiosInstance.get('/api/formateurs', {
         params: {
           page: pagination.current,
           pageSize: pagination.pageSize,
@@ -44,13 +59,20 @@ const CrudTable = () => {
     }
   };
 
+
+  
+
+
+ 
+
+
   const handleMenuClick = (record, action) => {
     setSelectedRecord(record);
     if (action === 'edit') {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_RendezVous);
+      showDeleteConfirm(record.ID_Formateur);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
@@ -59,7 +81,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous?',
+      title: 'Êtes-vous sûr de vouloir supprimer ce formateure?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -71,8 +93,8 @@ const CrudTable = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/api/rendezvous/${id}`);
-      message.success('rendez-vous supprimé avec succès');
+      await axiosInstance.delete(`/api/formateurs/${id}`);
+      message.success('etudiant supprimé avec succès');
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -176,83 +198,100 @@ const CrudTable = () => {
   );
 
   const columns = [
-  
-  {
-    title: <Text strong style={{ fontSize: '16px' }}>Date</Text>,
-    dataIndex: 'Date',
-    key: 'Date',
-    sorter: (a, b) => a.Date.localeCompare(b.Date),
-    ...getColumnSearchProps('Date'),
-    render: (text) => (
-      <Text strong style={{ fontSize: '16px' }}>
-        {renderText(moment(text).format('DD/MM/YYYY'), globalSearchText)}
-      </Text>
-    ),
-    ellipsis: true,
-  },
-  {
-    title: <Text strong style={{ fontSize: '16px' }}>Heure Debut</Text>,
-    dataIndex: 'HeureDebut',
-    key: 'HeureDebut',
-    sorter: (a, b) => a.HeureDebut.localeCompare(b.HeureDebut),
-    ...getColumnSearchProps('HeureDebut'),
-    render: (text) => (
-      <Text strong style={{ fontSize: '16px' }}>
-        {renderText(text, globalSearchText)}
-      </Text>
-    ),
-    ellipsis: true,
-  },
-  {
-    title: <Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>,
-    dataIndex: 'HeureFin',
-    key: 'HeureFin',
-    sorter: (a, b) => a.HeureFin.localeCompare(b.HeureFin),
-    ...getColumnSearchProps('HeureFin'),
-    render: (text) => (
-      <Text strong style={{ fontSize: '16px' }}>
-        {renderText(text, globalSearchText)}
-      </Text>
-    ),
-    ellipsis: true,
-  },
-  {
-    title: <Text strong style={{ fontSize: '16px' }}>Sujet</Text>,
-    dataIndex: 'Sujet',
-    key: 'Sujet',
-    sorter: (a, b) => a.Sujet.localeCompare(b.Sujet),
-    ...getColumnSearchProps('Sujet'),
-    render: (text) => (
-      <Text strong style={{ fontSize: '16px' }}>
-        {renderText(text, globalSearchText)}
-      </Text>
-    ),
-    ellipsis: true,
-  },
-  {
-    title: <Text strong style={{ fontSize: '16px' }}>Description</Text>,
-    dataIndex: 'Description',
-    key: 'Description',
-    sorter: (a, b) => a.Description.localeCompare(b.Description),
-    ...getColumnSearchProps('Description'),
-    render: (text) => (
-      <Text strong style={{ fontSize: '16px' }}>
-        {renderText(text, globalSearchText)}
-      </Text>
-    ),
-    ellipsis: true,
-  },
-  {
-    title: '',
-    key: 'action',
-    render: (text, record) => (
-      <Dropdown overlay={menu(record)} trigger={['click']}>
-        <Button icon={<EllipsisOutlined />} style={{ fontWeight: 'bold', fontSize: '16px' }} />
-      </Dropdown>
-    ),
-  },
-];
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>nom </Text>,
+      dataIndex: 'NomFormateur',
+      key: 'NomFormateur',
+      sorter: (a, b) => a.NomFormateur.localeCompare(b.NomFormateur),
+      ...getColumnSearchProps('NomFormateur'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Prenom</Text>,
+      dataIndex: 'PrenomFormateur',
+      key: 'PrenomFormateur',
+      sorter: (a, b) => a.PrenomFormateur.localeCompare(b.PrenomFormateur),
+      ...getColumnSearchProps('PrenomFormateur'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Titre</Text>,
+      dataIndex: 'Titre',
+      key: 'Titre',
+      sorter: (a, b) => a.Titre.localeCompare(b.Titre),
+      ...getColumnSearchProps('Titre'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Etat de formateure</Text>,
+      dataIndex: 'EtatFormateur',
+      key: 'EtatFormateur',
+      sorter: (a, b) => a.EtatFormateur.localeCompare(b.EtatFormateur),
+      ...getColumnSearchProps('EtatFormateur'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Adresse</Text>,
+      dataIndex: 'Adresse',
+      key: 'Adresse',
+      sorter: (a, b) => a.Adresse.localeCompare(b.Adresse),
+      ...getColumnSearchProps('Adresse'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Telephone</Text>,
+      dataIndex: 'Tel',
+      key: 'Tel',
+      sorter: (a, b) => a.Tel.localeCompare(b.Tel),
+      ...getColumnSearchProps('Tel'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    
+      
+     
 
+    {
+        title: '',
+        key: 'action',
+        render: (text, record) => (
+          <Dropdown overlay={menu(record)} trigger={['click']}>
+            <Button icon={<EllipsisOutlined />} style={{ fontWeight: 'bold', fontSize: '16px' }} />
+          </Dropdown>
+        ),
+      }, 
+    
+   
+  ];
   
 
   const handleAddNew = () => {
@@ -261,37 +300,74 @@ const CrudTable = () => {
     form.resetFields(); // Reset form fields when opening 'Ajouter un nouvel utilisateur' drawer
   };
 
-  const handleEdit = (record) => {
-    setSelectedRecord(record);
-    setDrawerType('edit');
-    setDrawerVisible(true);
-    form.setFieldsValue(record); // Populate form fields with selected record data
+  const handleCancel = () => setPreviewOpen(false);
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
   };
+
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+
+
 
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
-    setDrawerType(null); // Reset drawer type when closing
-    form.resetFields(); // Reset form fields when closing drawer
+    setDrawerType(null);
+    setSelectedRecord(null);
+    form.resetFields();
+    setFileList([]);// Reset form fields when closing drawer
   };
+  
 
   const handleFormSubmit = async (values) => {
-    try {
-        
-      if (drawerType === 'add') {
-        await axiosInstance.post('/api/rendezvous', values);
-        message.success('rendez-vous ajouté avec succès');
-      } else if (drawerType === 'edit' && selectedRecord) {
-        const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
-        await axiosInstance.put(`/api/rendezvous/${selectedRecord.ID_RendezVous}`, updatedValues);
-        message.success('rendez-vous modifié avec succès');
-      }
+    const formData = new FormData();
+    formData.append('NomFormateur', values.NomFormateur);
+    formData.append('PrenomFormateur', values.PrenomFormateur);
+    formData.append('Titre', values.Titre);
+    formData.append('EtatFormateur', values.EtatFormateur);
+    formData.append('Adresse', values.Adresse);
+    formData.append('Tel', values.Tel);
+    formData.append('ID_Filiere', values.ID_Filiere);
 
-      handleCloseDrawer();
-      fetchData(); // Refresh data after submission
+    
+  
+    // Check if a file is selected before appending
+     if (fileList.length > 0) {
+      formData.append('PhotoProfil', fileList[0].originFileObj);
+    }
+  
+
+    try {
+      let response;
+      if (drawerType === 'add') {
+        response = await axiosInstance.post('/api/formateurs', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        message.success('Formateur ajouté avec succès');
+      } else if (drawerType === 'edit') {
+        response = await axiosInstance.put(`/api/formateurs/${selectedRecord.ID_Formateur}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        message.success('Formateur mis à jour avec succès');
+      }
+      console.log('Response from server:', response.data);
+      setDrawerVisible(false);
+      fetchData(); // Assuming fetchData is a function to refresh data after form submission
     } catch (error) {
-      console.error('Error saving data:', error);
+      console.error('Error submitting form:', error);
+      message.error('Une erreur est survenue lors de la soumission du formulaire');
     }
   };
+  
+  
 
   const handleTableChange = (pagination, filters, sorter) => {
     setPagination(pagination);
@@ -308,52 +384,121 @@ const CrudTable = () => {
       setGlobalSearchText(''); // Clear global search text
     }, 1100); // Adjust delay time as needed
   };
+ 
+  const [filiereOptions, setFiliereOptions] = useState([]);
+  useEffect(() => {
+    const fetchFiliereOptions = async () => {
+      try {
+        const response = await axiosInstance.get('/api/filiere');
+        setFiliereOptions(response.data);
+      } catch (error) {
+        console.error('Error fetching filiere options:', error);
+        message.error('Erreur lors du chargement des options de filiere');
+      }
+    };
+
+    fetchFiliereOptions();
+  }, []);
   
-
-
   // Add Form Component for Ajouter Utilisateur
   const AddUserForm = () => (
     <Form layout="vertical" onFinish={handleFormSubmit}>
-      <Form.Item
-        name="Date"
-        label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
-      >
-        <Input type = "date" placeholder="Entrez la date" style={{ fontSize: '16px' }} />
-      </Form.Item>
-      <Form.Item
-        name="HeureDebut"
-        label={<Text strong style={{ fontSize: '16px' }}>L'heure du debut</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
-      >
-        <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
-      </Form.Item>
-      <Form.Item
-        name="HeureFin"
-        label={<Text strong style={{ fontSize: '16px' }}>L'heure du fin</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
-      >
-        <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
-      </Form.Item>
-     
 
+<Form.Item
+            name="PhotoProfil"
+            label={<Text strong style={{ fontSize: '16px' }}>Photo</Text>}
+
+          >
+            <Upload
+        listType="picture-circle"
+        fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+              beforeUpload={() => false}
+            >
+              {fileList.length >= 1 ? null : (
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Télécharger</div>
+                </div>
+              )}
+            </Upload>
+            <Modal visible={previewOpen} footer={null} onCancel={handleCancel}>
+              <img alt="PhotoProfil" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </Form.Item>
       <Form.Item
-        name="Sujet"
-        label={<Text strong style={{ fontSize: '16px' }}>Sujet du rendez-vous</Text>}
+        name="NomFormateur"
+        label={<Text strong style={{ fontSize: '16px' }}>Nom </Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input  placeholder="Entrez lae sujet" style={{ fontSize: '16px' }} />
+        <Input placeholder="Entrez le nom du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
-     
       <Form.Item
-        name="Description"
-        label={<Text strong style={{ fontSize: '16px' }}>La description du sujet</Text>}
+        name="PrenomFormateur"
+        label={<Text strong style={{ fontSize: '16px' }}>Prenom</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input  placeholder="Entrez la description" style={{ fontSize: '16px' }} />
+        <Input placeholder="Entrez le prenom du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Titre"
+        label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le titre du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+  name="EtatFormateur"
+  label={<Text strong style={{ fontSize: '16px' }}>etat du formateur</Text>}
+  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
+  style={{ fontSize: '16px' }}
+>
+  <Select
+    style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+    placeholder="Sélectionner un rôle"
+  >
+    <Option style={{ fontSize: '16px' }} value="actif">actif</Option>
+    <Option style={{ fontSize: '16px' }} value="inactif">inactif</Option>
+  </Select>
+</Form.Item>
+
+
+    
+      
+      <Form.Item
+        name="Adresse"
+        label={<Text strong style={{ fontSize: '16px' }}>Adresse</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez l'Adresse du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Tel"
+        label={<Text strong style={{ fontSize: '16px' }}>Telephone</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
       
-   
+      <Form.Item
+        name="ID_Filiere"
+        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner une filiere"
+        >
+          {filiereOptions.map(filiere => (
+            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
+              {filiere.NomFiliere}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+
      
 
       <Form.Item>
@@ -374,8 +519,7 @@ const CrudTable = () => {
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-      delete initialValues.MotDePasse; // Remove MotDePasse from initial values
-      delete initialValues.ID_Role; // Remove MotDePasse from initial values
+     
       return initialValues;
     };
   
@@ -391,42 +535,105 @@ const CrudTable = () => {
         initialValues={getInitialValues()}
       >
         <Form.Item
-        name="Date"
-        label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
-      >
-        <Input type = "date" placeholder="Entrez la date" style={{ fontSize: '16px' }} />
-      </Form.Item>
-      <Form.Item
-        name="HeureDebut"
-        label={<Text strong style={{ fontSize: '16px' }}>L'heure du debut</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
-      >
-        <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
-      </Form.Item>
-      <Form.Item
-        name="HeureFin"
-        label={<Text strong style={{ fontSize: '16px' }}>L'heure du fin</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
-      >
-        <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
-      </Form.Item>
-     
+            name="PhotoProfil"
+            label={<Text strong style={{ fontSize: '16px' }}>Photo</Text>}
 
+          >
+            <Upload
+        listType="picture-circle"
+        fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+              beforeUpload={() => false}
+            >
+              {fileList.length >= 1 ? null : (
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Télécharger</div>
+                </div>
+              )}
+            </Upload>
+            <Modal visible={previewOpen} footer={null} onCancel={handleCancel}>
+              <img alt="PhotoProfil" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </Form.Item>
       <Form.Item
-        name="Sujet"
-        label={<Text strong style={{ fontSize: '16px' }}>Sujet du rendez-vous</Text>}
+        name="NomFormateur"
+        label={<Text strong style={{ fontSize: '16px' }}>Nom </Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input  placeholder="Entrez lae sujet" style={{ fontSize: '16px' }} />
+        <Input placeholder="Entrez le nom du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
-     
       <Form.Item
-        name="Description"
-        label={<Text strong style={{ fontSize: '16px' }}>La description du sujet</Text>}
+        name="PrenomFormateur"
+        label={<Text strong style={{ fontSize: '16px' }}>Prenom</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input  placeholder="Entrez la description" style={{ fontSize: '16px' }} />
+        <Input placeholder="Entrez le prenom du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Titre"
+        label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le titre du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+  name="EtatFormateur"
+  label={<Text strong style={{ fontSize: '16px' }}>etat du formateur</Text>}
+  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
+  style={{ fontSize: '16px' }}
+>
+  <Select
+    style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+    placeholder="Sélectionner un rôle"
+  >
+    <Option style={{ fontSize: '16px' }} value="Masculin">actif</Option>
+    <Option style={{ fontSize: '16px' }} value="Féminin">inactif</Option>
+  </Select>
+</Form.Item>
+
+
+    
+      
+      <Form.Item
+        name="Adresse"
+        label={<Text strong style={{ fontSize: '16px' }}>Adresse</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez l'Adresse du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Tel"
+        label={<Text strong style={{ fontSize: '16px' }}>Telephone</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Titre"
+        label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le titre " style={{ fontSize: '16px' }} />
+      </Form.Item>
+      
+      <Form.Item
+        name="ID_Filiere"
+        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner une filiere"
+        >
+          {filiereOptions.map(filiere => (
+            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
+              {filiere.NomFiliere}
+            </Option>
+          ))}
+        </Select>
       </Form.Item>
         <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
@@ -444,7 +651,7 @@ const CrudTable = () => {
     <div style={{ padding: '40px', fontSize: '16px' }}>
       <Card style={{ borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '2px 6px 14px rgba(0, 0, 0.1, 0.2)' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title level={3} style={{ fontSize: '24px' }}>Listes des rendez-vous</Title>
+          <Title level={3} style={{ fontSize: '24px' }}>Liste des Formateurs</Title>
           <Row justify="end" align="middle" style={{ marginBottom: '16px' }}>
             <Col>
               <Space>
@@ -485,22 +692,22 @@ const CrudTable = () => {
                     borderRadius: '15px'
                   }}
                 >
-                  Ajouter un rendez-vous
+                  Ajouter un formateur
                 </Button>
               </Space>
             </Col>
           </Row>
-          <Table columns={columns} dataSource={data} rowKey="ID_Etudiant" pagination={pagination} loading={refreshLoading}
+          <Table columns={columns} dataSource={data} rowKey="ID_Formateur" pagination={pagination} loading={refreshLoading}
             onChange={handleTableChange}  scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
             size="middle" // Optionally change the size of the table (default, middle, small)
-            rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'} />
+            rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}   />
         </Space>
       </Card>
 
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter Rendez-vous' : drawerType === 'edit' ? 'Modifier Rendez-vous' : 'Afficher Rendez-vous'}
+ {drawerType === 'add' ? 'Ajouter Fomateure' : drawerType === 'edit' ? 'Modifier formateure' : 'Afficher Formateur'}
 
     </Text>
   }
@@ -510,22 +717,39 @@ const CrudTable = () => {
   bodyStyle={{ paddingBottom: 80 }}
 >
   {drawerType === 'view' ? (
+    
     <Descriptions column={1} bordered>
-            
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Date}</Text>
+
+    <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Photo De Profil</Text>}>
+      <div style={{ textAlign: 'center' }}>
+        <img
+          src={`http://localhost:3000/api/form/photo/${selectedRecord?.ID_Formateur}`}
+          alt="PhotoProfil"
+          style={{ width: '100px', height: '100px', borderRadius: '50%', cursor: 'pointer' }}
+          onClick={toggleModal}
+        />
+      </div>
+    </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFormateur}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>HeureDebut</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.HeureDebut}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Prénom</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.PrenomFormateur}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>HeureFin</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.HeureFin}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Titre}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Sujet</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Sujet}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Etat du formateur</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.EtatFormateur}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Description</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Description}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Adresse</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Adresse}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Telephone</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Tel}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
       </Descriptions.Item>
     </Descriptions>
   ) : (
@@ -534,6 +758,21 @@ const CrudTable = () => {
       {drawerType === 'edit' && <EditUserForm />}
     </>
   )}
+
+<Modal
+        title="Photo De Profil"
+        visible={visibleModal}
+        onCancel={toggleModal}
+        footer={null}
+        width={600}
+        centered
+      >
+        <img
+          src={`http://localhost:3000/api/form/photo/${selectedRecord?.ID_Formateur}`}
+          alt="PhotoProfil"
+          style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+        />
+      </Modal>
 </Drawer>
 
     </div>

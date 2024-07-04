@@ -21,6 +21,7 @@ import Etudiant from "../Pages/Scolarite/Etudiant";
 import Filiere from "../Pages/Scolarite/Filiere";
 import RendezVous from "../Pages/RendezVous";
 import Classe from "../Pages/Scolarite/Classe";
+import Formateur from "../Pages/Scolarite/Formateur";
 
 
 
@@ -39,6 +40,7 @@ function AppRoutes() {
           <Route path="/rendezvous" element={<RendezVous />} />
           <Route path="/filiere" element={<Filiere />} />
           <Route path="/classe" element={<Classe />} />
+          <Route path="/formateur" element={<Formateur />} />
           {/* Fallback route for unauthorized access */}
           <Route path="*" element={<Unauthorized />} />
         </Routes>
