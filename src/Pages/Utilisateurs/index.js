@@ -242,22 +242,11 @@ const CrudTable = () => {
 
   const handleFormSubmit = async (values) => {
     try {
-      const currentTimestamp = new Date().toISOString(); // Get current timestamp in ISO format
-  
       if (drawerType === 'add') {
-        const newValues = {
-          ...values,
-          created_at: currentTimestamp,
-          updated_at: currentTimestamp,
-        };
-        await axiosInstance.post('/api/utilisateurs', newValues);
+        await axiosInstance.post('/api/utilisateurs', values);
         message.success('Utilisateur ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
-        const updatedValues = {
-          ...selectedRecord,
-          ...values,
-          updated_at: currentTimestamp, // Only update the updated_at field
-        };
+        const updatedValues = { ...selectedRecord, ...values }; 
         await axiosInstance.put(`/api/utilisateurs/${selectedRecord.ID_Utilisateur}`, updatedValues);
         message.success('Utilisateur modifié avec succès');
       }

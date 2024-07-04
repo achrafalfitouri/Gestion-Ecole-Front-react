@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
-import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload } from 'antd';
+import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined, RedoOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 import moment from 'moment';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const CrudTable = () => {
   const [data, setData] = useState(null);
@@ -18,6 +25,14 @@ const CrudTable = () => {
   const [globalSearchText, setGlobalSearchText] = useState('');
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
   const [refreshLoading, setRefreshLoading] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState([]);
+  const [visibleModal, setVisibleModal] = useState(false);
+
+  const toggleModal = () => {
+    setVisibleModal(!visibleModal);
+  };
   const [form] = Form.useForm(); // Ant Design form instance
 
   const searchInput = React.useRef(null);
@@ -43,6 +58,13 @@ const CrudTable = () => {
       setRefreshLoading(false);
     }
   };
+
+
+  
+
+
+ 
+
 
   const handleMenuClick = (record, action) => {
     setSelectedRecord(record);
@@ -296,10 +318,10 @@ const CrudTable = () => {
     },
     {
       title: <Text strong style={{ fontSize: '16px' }}>Filiere</Text>,
-      dataIndex: 'ID_Filiere',
-      key: 'ID_Filiere',
-      sorter: (a, b) => a.ID_Filiere.localeCompare(b.ID_Filiere),
-      ...getColumnSearchProps('ID_Filiere'),
+      dataIndex: 'NomFiliere',
+      key: 'NomFiliere',
+      sorter: (a, b) => a.NomFiliere.localeCompare(b.NomFiliere),
+      ...getColumnSearchProps('NomFiliere'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
           {renderText(text, globalSearchText)}
@@ -325,31 +347,75 @@ const CrudTable = () => {
     form.resetFields(); // Reset form fields when opening 'Ajouter un nouvel utilisateur' drawer
   };
 
- 
+  const handleCancel = () => setPreviewOpen(false);
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+
+
 
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
-    setDrawerType(null); // Reset drawer type when closing
-    form.resetFields(); // Reset form fields when closing drawer
+    setDrawerType(null);
+    setSelectedRecord(null);
+    form.resetFields();
+    setFileList([]);// Reset form fields when closing drawer
   };
+  
 
   const handleFormSubmit = async (values) => {
-    try {
-      if (drawerType === 'add') {
-        await axiosInstance.post('/api/etudiants', values);
-        message.success('etudiant ajouté avec succès');
-      } else if (drawerType === 'edit' && selectedRecord) {
-        const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
-        await axiosInstance.put(`/api/etudiants/${selectedRecord.ID_Etudiant}`, updatedValues);
-        message.success('etudiant modifié avec succès');
-      }
+    const formData = new FormData();
+    formData.append('NumEtudiant', values.NumEtudiant);
+    formData.append('NomEtudiant', values.NomEtudiant);
+    formData.append('PrenomEtudiant', values.PrenomEtudiant);
+    formData.append('Sexe', values.Sexe);
+    formData.append('DateNaissance', moment(values.DateNaissance).format('YYYY-MM-DD'));
+    formData.append('LieuNaissance', values.LieuNaissance);
+    formData.append('Adresse', values.Adresse);
+    formData.append('Tel', values.Tel);
+    formData.append('Nationalite', values.Nationalite);
+    formData.append('ID_Filiere', values.ID_Filiere);
+  
+    // Check if a file is selected before appending
+    if (fileList.length > 0) {
+      formData.append('PhotoProfil', fileList[0].originFileObj);
+    }
+  
 
-      handleCloseDrawer();
-      fetchData(); // Refresh data after submission
+    try {
+      let response;
+      if (drawerType === 'add') {
+        response = await axiosInstance.post('/api/etudiants', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        message.success('Étudiant ajouté avec succès');
+      } else if (drawerType === 'edit') {
+        response = await axiosInstance.put(`/api/etudiants/${selectedRecord.ID_Etudiant}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        message.success('Étudiant mis à jour avec succès');
+      }
+      console.log('Response from server:', response.data);
+      setDrawerVisible(false);
+      fetchData(); // Assuming fetchData is a function to refresh data after form submission
     } catch (error) {
-      console.error('Error saving data:', error);
+      console.error('Error submitting form:', error);
+      message.error('Une erreur est survenue lors de la soumission du formulaire');
     }
   };
+  
+  
 
   const handleTableChange = (pagination, filters, sorter) => {
     setPagination(pagination);
@@ -366,12 +432,49 @@ const CrudTable = () => {
       setGlobalSearchText(''); // Clear global search text
     }, 1100); // Adjust delay time as needed
   };
+ 
+  const [filiereOptions, setFiliereOptions] = useState([]);
+  useEffect(() => {
+    const fetchFiliereOptions = async () => {
+      try {
+        const response = await axiosInstance.get('/api/filiere');
+        setFiliereOptions(response.data);
+      } catch (error) {
+        console.error('Error fetching filiere options:', error);
+        message.error('Erreur lors du chargement des options de filiere');
+      }
+    };
+
+    fetchFiliereOptions();
+  }, []);
   
-
-
   // Add Form Component for Ajouter Utilisateur
   const AddUserForm = () => (
     <Form layout="vertical" onFinish={handleFormSubmit}>
+
+<Form.Item
+            name="PhotoProfil"
+            label={<Text strong style={{ fontSize: '16px' }}>Photo</Text>}
+
+          >
+            <Upload
+        listType="picture-circle"
+        fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+              beforeUpload={() => false}
+            >
+              {fileList.length >= 1 ? null : (
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Télécharger</div>
+                </div>
+              )}
+            </Upload>
+            <Modal visible={previewOpen} footer={null} onCancel={handleCancel}>
+              <img alt="PhotoProfil" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </Form.Item>
       <Form.Item
         name="NumEtudiant"
         label={<Text strong style={{ fontSize: '16px' }}>Numero</Text>}
@@ -395,7 +498,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
   name="Sexe"
-  label={<Text strong style={{ fontSize: '16px' }}>sexe</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Sexe</Text>}
   rules={[{ required: true, message: 'Veuillez sélectionner le sexe de l\'etudiant' }]}
   style={{ fontSize: '16px' }}
 >
@@ -447,19 +550,22 @@ const CrudTable = () => {
       </Form.Item>
       
       <Form.Item
-  name="ID_Filiere"
-  label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-  rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
-  style={{ fontSize: '16px' }}
->
-  <Select
-    style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-    placeholder="Sélectionner une filiere"
-  >
-    <Option style={{ fontSize: '16px' }} value="1">1</Option>
-    <Option style={{ fontSize: '16px' }} value="2">2</Option>
-  </Select>
-</Form.Item>
+        name="ID_Filiere"
+        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner une filiere"
+        >
+          {filiereOptions.map(filiere => (
+            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
+              {filiere.NomFiliere}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
      
 
       <Form.Item>
@@ -480,8 +586,7 @@ const CrudTable = () => {
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-      delete initialValues.MotDePasse; // Remove MotDePasse from initial values
-      delete initialValues.ID_Role; // Remove MotDePasse from initial values
+     
       return initialValues;
     };
   
@@ -496,6 +601,30 @@ const CrudTable = () => {
         onFinish={handleFormSubmit}
         initialValues={getInitialValues()}
       >
+        <Form.Item
+            name="PhotoProfil"
+            label={<Text strong style={{ fontSize: '16px' }}>Photo</Text>}
+
+          >
+            <Upload
+        listType="picture-circle"
+        fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+              beforeUpload={() => false}
+              
+            >
+              {fileList.length >= 1 ? null : (
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Télécharger</div>
+                </div>
+              )}
+            </Upload>
+            <Modal visible={previewOpen} footer={null} onCancel={handleCancel}>
+              <img alt="PhotoProfil" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </Form.Item>
         <Form.Item
         name="NumEtudiant"
         label={<Text strong style={{ fontSize: '16px' }}>Numero</Text>}
@@ -519,7 +648,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
   name="Sexe"
-  label={<Text strong style={{ fontSize: '16px' }}>sexe</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Sexe</Text>}
   rules={[{ required: true, message: 'Veuillez sélectionner le sexe de l\'etudiant' }]}
   style={{ fontSize: '16px' }}
 >
@@ -661,16 +790,25 @@ const CrudTable = () => {
 
     </Text>
   }
-  width={480}
+  width={drawerType === 'view' ? 720 : 480}
   onClose={handleCloseDrawer}
   visible={drawerVisible}
   bodyStyle={{ paddingBottom: 80 }}
 >
   {drawerType === 'view' ? (
+    
     <Descriptions column={1} bordered>
-              <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Photo De Profil</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.PhotoProfil}</Text>
-      </Descriptions.Item>
+    <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Photo De Profil</Text>}>
+      <div style={{ textAlign: 'center' }}>
+        <img
+          src={`http://localhost:3000/api/etud/photo/${selectedRecord?.ID_Etudiant}`}
+          alt="PhotoProfil"
+          style={{ width: '100px', height: '100px', borderRadius: '50%', cursor: 'pointer' }}
+          onClick={toggleModal}
+        />
+      </div>
+    </Descriptions.Item>
+              
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Numero</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.NumEtudiant}</Text>
       </Descriptions.Item>
@@ -699,7 +837,7 @@ const CrudTable = () => {
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Nationalite}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.ID_Filiere}</Text>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
       </Descriptions.Item>
     </Descriptions>
   ) : (
@@ -708,6 +846,21 @@ const CrudTable = () => {
       {drawerType === 'edit' && <EditUserForm />}
     </>
   )}
+
+<Modal
+        title="Photo De Profil"
+        visible={visibleModal}
+        onCancel={toggleModal}
+        footer={null}
+        width={600}
+        centered
+      >
+        <img
+          src={`http://localhost:3000/api/etud/photo/${selectedRecord?.ID_Etudiant}`}
+          alt="PhotoProfil"
+          style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+        />
+      </Modal>
 </Drawer>
 
     </div>

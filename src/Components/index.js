@@ -3,8 +3,6 @@ import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, BookOutlined, Calen
 import { Layout, Menu, theme, Dropdown, Button, Row, Col, Space, Avatar, Popconfirm } from 'antd';
 import './style.css';
 import AppRoutes from '../Routes';
-import { UserContext } from '../UserContextData/UserContext';
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 import { Navigate } from "react-router-dom";
 
@@ -13,7 +11,6 @@ const { Header, Content, Footer, Sider } = Layout;
 const Components = () => {
   const [logoText, setLogoText] = useState("EHPM");
   const [collapsed, setCollapsed] = useState(false);
-  const { user, setUser } = useContext(UserContext);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [isHovered, setIsHovered] = useState(false); // State to track hover state
 
@@ -22,19 +19,17 @@ const Components = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    setUser(null);
     navigate('/login'); // Use navigate to redirect to login page
     // Redirect to login page
   };
 
 
-  const userLogin = localStorage.getItem('user');
+const userLogin = JSON.parse(localStorage.getItem('user'));
+const user = localStorage.getItem('user');
 
-
-  if (!userLogin) {
-    return <Navigate to="/login" />;
-  }
-
+if (!user) {
+  return <Navigate to="/login" />;
+}
   //logout button
   
   const hoverStyles = {
@@ -269,7 +264,7 @@ style={{
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Shadow for depth
           }}
         >
-                {user ? `${user.PrenomUtilisateur} ${user.NomUtilisateur}` : 'Guest'}
+                {userLogin ? `${userLogin.PrenomUtilisateur} ${userLogin.NomUtilisateur}` : 'Guest'}
               </span>
               <Dropdown
               style={{
