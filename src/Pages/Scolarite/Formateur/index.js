@@ -580,7 +580,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
   name="EtatFormateur"
-  label={<Text strong style={{ fontSize: '16px' }}>etat du formateur</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Etat du formateur</Text>}
   rules={[{ required: true, message: 'Veuillez sélectionner' }]}
   style={{ fontSize: '16px' }}
 >
@@ -588,8 +588,8 @@ const CrudTable = () => {
     style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
     placeholder="Sélectionner un rôle"
   >
-    <Option style={{ fontSize: '16px' }} value="Masculin">actif</Option>
-    <Option style={{ fontSize: '16px' }} value="Féminin">inactif</Option>
+    <Option style={{ fontSize: '16px' }} value="Actif">Actif</Option>
+    <Option style={{ fontSize: '16px' }} value="Inactif">Inactif</Option>
   </Select>
 </Form.Item>
 
@@ -707,7 +707,7 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter Fomateure' : drawerType === 'edit' ? 'Modifier formateure' : 'Afficher Formateur'}
+ {drawerType === 'add' ? 'Ajouter Fomateur' : drawerType === 'edit' ? 'Modifier formateur' : 'Afficher formateur'}
 
     </Text>
   }
