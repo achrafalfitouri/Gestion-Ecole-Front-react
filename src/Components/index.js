@@ -26,8 +26,9 @@ const Components = () => {
 
 const userLogin = JSON.parse(localStorage.getItem('user'));
 const user = localStorage.getItem('user');
+const token = localStorage.getItem('token');
 
-if (!user) {
+if (!user || !token) {
   return <Navigate to="/login" />;
 }
   //logout button
