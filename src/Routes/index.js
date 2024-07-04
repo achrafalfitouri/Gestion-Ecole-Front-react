@@ -20,6 +20,7 @@ import Utilisateur from "../Pages/Utilisateurs/index";
 import Etudiant from "../Pages/Scolarite/Etudiant";
 import Filiere from "../Pages/Scolarite/Filiere";
 import RendezVous from "../Pages/RendezVous";
+import Formateur from "../Pages/Scolarite/Formateur";
 
 
 
@@ -37,6 +38,7 @@ function AppRoutes() {
           <Route path="/etudiant" element={<Etudiant />} />
           <Route path="/rendezvous" element={<RendezVous />} />
           <Route path="/filiere" element={<Filiere />} />
+          <Route path="/formateur" element={<Formateur />} />
           {/* Fallback route for unauthorized access */}
           <Route path="*" element={<Unauthorized />} />
         </Routes>

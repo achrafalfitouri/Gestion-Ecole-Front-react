@@ -89,7 +89,7 @@ if (!user || !token) {
           label: 'Inscription',
         },
         {
-          key: '16',
+          key: 'Formateur',
           label: 'Formateur',
         },
         {
