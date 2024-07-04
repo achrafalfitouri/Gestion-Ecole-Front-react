@@ -50,7 +50,7 @@ const CrudTable = () => {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_Etudiant);
+      showDeleteConfirm(record.ID_RendezVous);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
@@ -456,7 +456,7 @@ const CrudTable = () => {
     <div style={{ padding: '40px', fontSize: '16px' }}>
       <Card style={{ borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '2px 6px 14px rgba(0, 0, 0.1, 0.2)' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title level={3} style={{ fontSize: '24px' }}>table des rendez-vous</Title>
+          <Title level={3} style={{ fontSize: '24px' }}>listes des rendez-vous</Title>
           <Row justify="end" align="middle" style={{ marginBottom: '16px' }}>
             <Col>
               <Space>
@@ -520,38 +520,21 @@ const CrudTable = () => {
 >
   {drawerType === 'view' ? (
     <Descriptions column={1} bordered>
-              <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Photo De Profil</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.PhotoProfil}</Text>
+            
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Date}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Numero</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NumEtudiant}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>HeureDebut</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.HeureDebut}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomEtudiant}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>HeureFin</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.HeureFin}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Prénom</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.PrenomEtudiant}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Sujet</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Sujet}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>sexe</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Sexe}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.DateNaissance}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>lieu de Naissance</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.LieuNaissance}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Adresse</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Adresse}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Telephone</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Tel}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nationalite</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Nationalite}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.ID_Filiere}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Description</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Description}</Text>
       </Descriptions.Item>
     </Descriptions>
   ) : (
