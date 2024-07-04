@@ -18,6 +18,7 @@ import { AnimatePresence } from "framer-motion";
 import Dashboard from "../Pages/Dashboard";
 import Utilisateur from "../Pages/Utilisateurs/index";
 import Etudiant from "../Pages/Scolarite/Etudiant";
+import Filiere from "../Pages/Scolarite/Filiere";
 import RendezVous from "../Pages/RendezVous";
 
 
@@ -35,6 +36,7 @@ function AppRoutes() {
           <Route path="/utilisateur" element={<Utilisateur />} />
           <Route path="/etudiant" element={<Etudiant />} />
           <Route path="/rendezvous" element={<RendezVous />} />
+          <Route path="/filiere" element={<Filiere />} />
           {/* Fallback route for unauthorized access */}
           <Route path="*" element={<Unauthorized />} />
         </Routes>
