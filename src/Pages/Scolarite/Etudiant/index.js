@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
-import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload } from 'antd';
+import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 import moment from 'moment';
@@ -325,31 +325,67 @@ const CrudTable = () => {
     form.resetFields(); // Reset form fields when opening 'Ajouter un nouvel utilisateur' drawer
   };
 
- 
+  const handleEdit = (record) => {
+    setSelectedRecord(record);
+    setDrawerType('edit');
+    setDrawerVisible(true);
+    form.setFieldsValue(record); // Populate form fields with selected record data
+  };
 
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
     setDrawerType(null); // Reset drawer type when closing
     form.resetFields(); // Reset form fields when closing drawer
   };
+  
 
   const handleFormSubmit = async (values) => {
-    try {
-      if (drawerType === 'add') {
-        await axiosInstance.post('/api/etudiants', values);
-        message.success('etudiant ajouté avec succès');
-      } else if (drawerType === 'edit' && selectedRecord) {
-        const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
-        await axiosInstance.put(`/api/etudiants/${selectedRecord.ID_Etudiant}`, updatedValues);
-        message.success('etudiant modifié avec succès');
-      }
+    const formData = new FormData();
+    formData.append('NumEtudiant', values.NumEtudiant);
+    formData.append('NomEtudiant', values.NomEtudiant);
+    formData.append('PrenomEtudiant', values.PrenomEtudiant);
+    formData.append('Sexe', values.Sexe);
+    formData.append('DateNaissance', moment(values.DateNaissance).format('YYYY-MM-DD'));
+    formData.append('LieuNaissance', values.LieuNaissance);
+    formData.append('Adresse', values.Adresse);
+    formData.append('Tel', values.Tel);
+    formData.append('Nationalite', values.Nationalite);
+    formData.append('ID_Filiere', values.ID_Filiere);
+  
+    // Check if a file is selected before appending
+    if (values.PhotoProfil && values.PhotoProfil.fileList.length > 0) {
+      const file = values.PhotoProfil.fileList[0].originFileObj;
+      console.log('form' , file)
+    }
+  
 
-      handleCloseDrawer();
-      fetchData(); // Refresh data after submission
+    try {
+      let response;
+      if (drawerType === 'add') {
+        response = await axiosInstance.post('/api/etudiants', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        message.success('Étudiant ajouté avec succès');
+      } else if (drawerType === 'edit') {
+        response = await axiosInstance.put(`/api/etudiants/${selectedRecord.ID_Etudiant}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        message.success('Étudiant mis à jour avec succès');
+      }
+      console.log('Response from server:', response.data);
+      setDrawerVisible(false);
+      fetchData(); // Assuming fetchData is a function to refresh data after form submission
     } catch (error) {
-      console.error('Error saving data:', error);
+      console.error('Error submitting form:', error);
+      message.error('Une erreur est survenue lors de la soumission du formulaire');
     }
   };
+  
+  
 
   const handleTableChange = (pagination, filters, sorter) => {
     setPagination(pagination);
@@ -366,12 +402,45 @@ const CrudTable = () => {
       setGlobalSearchText(''); // Clear global search text
     }, 1100); // Adjust delay time as needed
   };
-  
+ 
 
+  const [fileList, setFileList] = useState([]);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  const handleChange = ({ fileList }) => {
+    setFileList(fileList);
+
+    if (fileList.length > 0) {
+      const file = fileList[0].originFileObj;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrl(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImageUrl(null);
+    }
+  };
+
+  
 
   // Add Form Component for Ajouter Utilisateur
   const AddUserForm = () => (
     <Form layout="vertical" onFinish={handleFormSubmit}>
+
+<Form.Item
+  name="PhotoProfil"
+  label="Photo de Profil"
+  
+  rules={[{ required: true, message: 'Veuillez télécharger une photo de profil' }]}
+>
+
+  <Upload
+    beforeUpload={() => false} // Prevent automatic upload
+  >
+    <Button icon={<UploadOutlined />}>Cliquez pour télécharger</Button>
+  </Upload>
+</Form.Item>
       <Form.Item
         name="NumEtudiant"
         label={<Text strong style={{ fontSize: '16px' }}>Numero</Text>}

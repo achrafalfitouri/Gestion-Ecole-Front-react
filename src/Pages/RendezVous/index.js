@@ -50,7 +50,7 @@ const CrudTable = () => {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_Etudiant);
+      showDeleteConfirm(record.ID_RendezVous);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
