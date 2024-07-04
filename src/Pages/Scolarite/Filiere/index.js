@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload } from 'antd';
-import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined, RedoOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal } from 'antd';
+import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutlined, SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
-import moment from 'moment';
 
 const { Title, Text } = Typography;
-const { Option } = Select;
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+
 
 const CrudTable = () => {
   const [data, setData] = useState(null);
-  const [dataetudiantcount, setDataetudiantcount] = useState(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [drawerType, setDrawerType] = useState(null); // Use null for no action
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -26,14 +17,8 @@ const CrudTable = () => {
   const [globalSearchText, setGlobalSearchText] = useState('');
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
   const [refreshLoading, setRefreshLoading] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [fileList, setFileList] = useState([]);
-  const [visibleModal, setVisibleModal] = useState(false);
 
-  const toggleModal = () => {
-    setVisibleModal(!visibleModal);
-  };
+
   const [form] = Form.useForm(); // Ant Design form instance
 
   const searchInput = React.useRef(null);
@@ -52,15 +37,10 @@ const CrudTable = () => {
             },
         });
 
-        const response2 = await axiosInstance.get('/api/filiere/etud');
 
-        if (response2.data) {
+      
             setData(response.data);
-            setDataetudiantcount(response2.data);
-            console.log("Data from response2:", response2.data);
-        } else {
-            console.log("Empty response from response2:", response2);
-        }
+       
 
         setPagination({ ...pagination, total: response.data.total });
     } catch (error) {
@@ -202,19 +182,7 @@ const CrudTable = () => {
   );
 
   const columns = [
-    {
-        title: <Text strong style={{ fontSize: '16px' }}>ID Filiere</Text>,
-        dataIndex: 'ID_Filiere',
-        key: 'ID_Filiere',
-        sorter: (a, b) => a.ID_Filiere.localeCompare(b.ID_Filiere),
-        ...getColumnSearchProps('ID_Filiere'),
-        render: (text) => (
-          <Text strong style={{ fontSize: '16px' }}>
-            {renderText(text, globalSearchText)}
-          </Text>
-        ),
-        ellipsis: true,
-      },
+  
     {
 
       title: <Text strong style={{ fontSize: '16px' }}>Nom Filiere</Text>,
@@ -230,19 +198,32 @@ const CrudTable = () => {
       ellipsis: true,
     },
     {
-
-        title: <Text strong style={{ fontSize: '16px' }}>Nombre etudiant</Text>,
-        dataIndex: 'count',
-        key: 'count',
-        sorter: (a, b) => a.count.localeCompare(b.count),
-        ...getColumnSearchProps('count'),
-        render: (text) => (
-          <Text strong style={{ fontSize: '16px' }}>
-            {renderText(text, globalSearchText)}
-          </Text>
-        ),
-        ellipsis: true,
+      title: <Text strong style={{ fontSize: '16px' }}>Nombre etudiant</Text>,
+      dataIndex: 'NombreEtudiant',
+      key: 'NombreEtudiant',
+      sorter: (a, b) => {
+        if (typeof a.NombreEtudiant === 'number' && typeof b.NombreEtudiant === 'number') {
+          return a.NombreEtudiant - b.NombreEtudiant;
+        }
+        return a.NombreEtudiant.toString().localeCompare(b.NombreEtudiant.toString());
       },
+      ...getColumnSearchProps('NombreEtudiant'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: '',
+      key: 'action',
+      render: (text, record) => (
+        <Dropdown overlay={menu(record)} trigger={['click']}>
+          <Button icon={<EllipsisOutlined />} style={{ fontWeight: 'bold', fontSize: '16px' }} />
+        </Dropdown>
+      ),
+    },
   
     
   ];
@@ -255,17 +236,8 @@ const CrudTable = () => {
     form.resetFields(); // Reset form fields when opening 'Ajouter un nouvel utilisateur' drawer
   };
 
-  const handleCancel = () => setPreviewOpen(false);
 
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
-
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+ 
 
 
 
@@ -274,7 +246,6 @@ const CrudTable = () => {
     setDrawerType(null);
     setSelectedRecord(null);
     form.resetFields();
-    setFileList([]);// Reset form fields when closing drawer
   };
   
 
@@ -333,14 +304,14 @@ const CrudTable = () => {
     <Input placeholder="Entrez le nom de la filiere" style={{ fontSize: '16px' }} />
   </Form.Item>
 
-  <Form.Item
-    name="ID_Filiere"
-    label={<Text strong style={{ fontSize: '16px' }}>ID Filiere</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-    style={{ fontSize: '16px' }}
-  >
-    <Input placeholder="Entrez l'ID de la filiere" style={{ fontSize: '16px' }} />
-  </Form.Item>
+  <Form.Item>
+          <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
+            Ajouter
+          </Button>
+          <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px' }} onClick={handleCloseDrawer}>
+            Annuler
+          </Button>
+        </Form.Item>
     </Form>
   );
 
@@ -375,15 +346,14 @@ const CrudTable = () => {
     <Input placeholder="Entrez le nom de la filiere" style={{ fontSize: '16px' }} />
   </Form.Item>
 
-  <Form.Item
-    name="ID_Filiere"
-    label={<Text strong style={{ fontSize: '16px' }}>ID Filiere</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-    style={{ fontSize: '16px' }}
-  >
-    <Input placeholder="Entrez l'ID de la filiere" style={{ fontSize: '16px' }} />
-  </Form.Item>
-
+  <Form.Item>
+          <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
+            Modifier
+          </Button>
+          <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px' }} onClick={handleCloseDrawer}>
+            Annuler
+          </Button>
+        </Form.Item>
       </Form>
     );
   };
@@ -465,8 +435,8 @@ const CrudTable = () => {
  <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Filiere</Text>}>
   <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
 </Descriptions.Item>
-<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>ID Filiere</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.ID_Filiere}</Text>
+<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nombre d'etudiant</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.NombreEtudiant}</Text>
 </Descriptions.Item>
 
     </Descriptions>
