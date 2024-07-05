@@ -23,6 +23,7 @@ import Matiere from "../Pages/Scolarite/Matiere";
 import RendezVous from "../Pages/RendezVous";
 import Classe from "../Pages/Scolarite/Classe";
 import Formateur from "../Pages/Scolarite/Formateur";
+import Inscription from "../Pages/Scolarite/Inscription";
 import Niveau from "../Pages/Scolarite/Classe/Niveau";
 
 
@@ -45,6 +46,7 @@ function AppRoutes() {
           <Route path="/formateur" element={<Formateur />} />
           <Route path="/niveau" element={<Niveau />} />
           <Route path="/matiere" element={<Matiere />} />
+          <Route path="/inscription" element={<Inscription />} />
           {/* Fallback route for unauthorized access */}
           <Route path="*" element={<Unauthorized />} />
         </Routes>

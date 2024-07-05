@@ -199,7 +199,7 @@ const CrudTable = () => {
 
   const columns = [
     {
-      title: <Text strong style={{ fontSize: '16px' }}>nom </Text>,
+      title: <Text strong style={{ fontSize: '16px' }}>Nom </Text>,
       dataIndex: 'NomFormateur',
       key: 'NomFormateur',
       sorter: (a, b) => a.NomFormateur.localeCompare(b.NomFormateur),
@@ -269,6 +269,20 @@ const CrudTable = () => {
       key: 'Tel',
       sorter: (a, b) => a.Tel.localeCompare(b.Tel),
       ...getColumnSearchProps('Tel'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Nom filiere</Text>,
+      dataIndex: 'NomFiliere',
+      key: 'NomFiliere',
+      sorter: (a, b) => a.NomFiliere.localeCompare(b.NomFiliere),
+      ...getColumnSearchProps('NomFiliere'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
           {renderText(text, globalSearchText)}

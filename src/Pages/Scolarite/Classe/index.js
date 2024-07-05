@@ -357,13 +357,23 @@ const CrudTable = () => {
           ))}
         </Select>
       </Form.Item>
-<Form.Item
-    name="AnneeScolaire"
-    label={<Text strong style={{ fontSize: '16px' }}>Anneé Scolaire</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-  >
-    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
-  </Form.Item>
+      <Form.Item
+  name="AnneeScolaire"
+  label={<Text strong style={{ fontSize: '16px' }}>Année Scolaire</Text>}
+  rules={[
+    { 
+      required: true, 
+      message: 'Veuillez entrer l\'année scolaire' 
+    },
+    {
+      pattern: /^(19|20)\d{2}-(19|20)\d{2}$/, // Exemple de pattern pour YYYY-YYYY
+      message: 'Format incorrect. Exemple: 2023-2024'
+    }
+  ]}
+>
+  <Input placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
+</Form.Item>
+
 <Form.Item
     name="Remarques"
     label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}
@@ -430,13 +440,23 @@ const CrudTable = () => {
           ))}
         </Select>
       </Form.Item>
-<Form.Item
-    name="AnneeScolaire"
-    label={<Text strong style={{ fontSize: '16px' }}>Anneé Scolaire</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-  >
-    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
-  </Form.Item>
+      <Form.Item
+  name="AnneeScolaire"
+  label={<Text strong style={{ fontSize: '16px' }}>Année Scolaire</Text>}
+  rules={[
+    { 
+      required: true, 
+      message: 'Veuillez entrer l\'année scolaire' 
+    },
+    {
+      pattern: /^(19|20)\d{2}-(19|20)\d{2}$/, // Exemple de pattern pour YYYY-YYYY
+      message: 'Format incorrect. Exemple: 2023-2024'
+    }
+  ]}
+>
+  <Input placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
+</Form.Item>
+
 <Form.Item
     name="Remarques"
     label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}

@@ -1,6 +1,6 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, BookOutlined, CalendarOutlined, DashboardOutlined, FileTextOutlined, IdcardOutlined, LineChartOutlined, SnippetsOutlined, UploadOutlined, UserAddOutlined, UserOutlined, VideoCameraOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme, Dropdown, Button, Row, Col, Space, Avatar, Popconfirm } from 'antd';
+import { Layout, Menu, theme, Dropdown, Button, Row, Col, Space, Avatar, Popconfirm, Spin } from 'antd';
 import './style.css';
 import AppRoutes from '../Routes';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
@@ -14,16 +14,32 @@ const Components = () => {
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [isHovered, setIsHovered] = useState(false); // State to track hover state
 
+  const [isLoading, setIsLoading] = useState(true);
+
+
   const navigate = useNavigate(); // Initialize useNavigate hook
+
+  useEffect(() => {
+    // Simulate async operation
+    setTimeout(() => {
+      setIsLoading(false); // Set loading state to false after 2 seconds (simulating data fetch)
+    }, 2000);
+  }, []); // Run only once on component mount
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('/login'); // Use navigate to redirect to login page
-    // Redirect to login page
+    setTimeout(() => {
+      setIsLoading(true); // Set loading state to false after 1000ms (or after redirection)
+    }, 1000);
+  
+    setTimeout(() => {
+      setIsLoading(false); // Set loading state to false after 1000ms (or after redirection)
+      navigate('/login'); // Redirect to login page after 1000ms
+    }, 1000);
   };
-
-
+  
+  
 const userLogin = JSON.parse(localStorage.getItem('user'));
 const user = localStorage.getItem('user');
 const token = localStorage.getItem('token');
@@ -85,7 +101,7 @@ if (!user || !token) {
           label: 'Etudiant',
         },
         {
-          key: '15',
+          key: 'inscription',
           label: 'Inscription',
         },
         {
@@ -171,165 +187,165 @@ if (!user || !token) {
   } = theme.useToken();
 
   return (
-    <Layout>
-      <Sider
-      
-        width={230}
-        breakpoint="lg"
-        collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
-      >
-        <div className="demo-logo-vertical" />
-        <div
-          style={{
-            textAlign: "center",
-            padding: "16px",
-            color: "white",
-            fontSize: '20px',
-            fontFamily: "Helvetica, Arial, sans-serif",
-            fontWeight: "bold",
-          }}
-        >
-          {logoText}
-        </div>
-        <Menu 
-          onClick={(item) => {
-            navigate(item.key);
-          }}
-
-style={{
-   
-    fontSize: '16px',
-    fontWeight: "bold",
-  }}
-        theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
-
-<div style={{ padding: '16px',  display: 'flex', alignItems: 'center',textAlign : "center" }}>
-         <LogoutOutlined style={{
-              color: 'white',
-              fontSize: '16px',
-              transition: 'font-size 0.3s, color 0.3s',
-              margin : '8px',
-              marginRight : '-4px',
-              textAlign : "center",
-              ...(isHovered && hoverStyles), // Apply hover styles when button is hovered
-            }} />
-
-        <Popconfirm
-        
-          title="Are you sure you want to logout?"
-          onConfirm={handleLogout}
-          okText="Yes"
-          cancelText="No"
-          visible={confirmLogout}
-          onCancel={() => setConfirmLogout(false)}
-        >
-          <Button
-            type="text"
-            onClick={() => setConfirmLogout(true)}
-            style={{
-              color: 'white',
-              fontSize: '16px',
-              transition: 'font-size 0.3s, color 0.3s',
-            
-              ...(isHovered && hoverStyles), // Apply hover styles when button is hovered
-            }}
-            onMouseEnter={() => setIsHovered(true)} // Set isHovered to true on mouse enter
-            onMouseLeave={() => setIsHovered(false)} // Set isHovered to false on mouse leave
-          >
-                        <span style={{ visibility: collapsed ? 'hidden' : 'visible' }}>Deconnexion</span>
-
-          </Button>
-        </Popconfirm>
+    isLoading ? (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Spin size="large" />
       </div>
-      </Sider>
+    ) : (
       <Layout>
-      <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
+        <Sider
+          width={230}
+          breakpoint="lg"
+          collapsedWidth="0"
+          onBreakpoint={(broken) => {
+            console.log(broken);
+          }}
+          onCollapse={(collapsed, type) => {
+            console.log(collapsed, type);
           }}
         >
-          <div style={{ marginRight: '30px', display: 'flex', alignItems: 'center' }}>
-
-            <Space wrap>
-            <span
-          style={{
-            padding: '10px 12px',
-            background: '#001529', // Dark navy background
-            borderRadius: '25px', // Rounded corners
-            color: '#ffffff', // White text
-            fontWeight: 'bold',
-            fontFamily: 'Montserrat, sans-serif', // Professional bold font
-            fontSize: '16px', // Adjust font size as needed
-
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Shadow for depth
-          }}
-        >
-                {userLogin ? `${userLogin.PrenomUtilisateur} ${userLogin.NomUtilisateur}` : 'Guest'}
-              </span>
-              <Dropdown
-              style={{
-   
-                fontSize: '16px',
-                fontWeight: "bold",
-              }}
-                overlay={<Menu items={itemsDropdown} />}
-                placement="bottomRight"
-                arrow
-              >
-                <Avatar
-                  style={{
-                    backgroundColor: '#87d068',
-                    cursor: 'pointer',
-                    fontSize: '20px',
-                    width: '40px', // Increase avatar width
-                height: '40px', // Increase avatar height
-                    
-                  }}
-                  icon={<UserOutlined />}
-                />
-              </Dropdown>
-            
-            </Space>
-          </div>
-        </Header>
-        <Content
-          style={{
-            margin: '24px 16px 0',
-          }}
-        >
+          <div className="demo-logo-vertical" />
           <div
             style={{
-              padding: 24,
-              minHeight: "100vh",
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
+              textAlign: "center",
+              padding: "16px",
+              color: "white",
+              fontSize: '20px',
+              fontFamily: "Helvetica, Arial, sans-serif",
+              fontWeight: "bold",
             }}
           >
-            <Suspense fallback={<div>Loading...</div>}>
-              <AppRoutes />
-            </Suspense>
+            {logoText}
           </div>
-        </Content>
-        <Footer
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
+          <Menu
+            onClick={(item) => {
+              navigate(item.key);
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: "bold",
+            }}
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={['4']}
+            items={items}
+          />
+          <div style={{ padding: '16px', display: 'flex', alignItems: 'center', textAlign: "center" }}>
+            <LogoutOutlined
+              style={{
+                color: 'white',
+                fontSize: '16px',
+                transition: 'font-size 0.3s, color 0.3s',
+                margin: '8px',
+                marginRight: '-4px',
+                textAlign: "center",
+                ...(isHovered && hoverStyles), // Apply hover styles when button is hovered
+              }}
+            />
+            <Popconfirm
+              title="Are you sure you want to logout?"
+              onConfirm={handleLogout}
+              okText="Yes"
+              cancelText="No"
+              visible={confirmLogout}
+              onCancel={() => setConfirmLogout(false)}
+            >
+              <Button
+                type="text"
+                onClick={() => setConfirmLogout(true)}
+                style={{
+                  color: 'white',
+                  fontSize: '16px',
+                  transition: 'font-size 0.3s, color 0.3s',
+                  ...(isHovered && hoverStyles), // Apply hover styles when button is hovered
+                }}
+                onMouseEnter={() => setIsHovered(true)} // Set isHovered to true on mouse enter
+                onMouseLeave={() => setIsHovered(false)} // Set isHovered to false on mouse leave
+              >
+                <span style={{ visibility: collapsed ? 'hidden' : 'visible' }}>Deconnexion</span>
+              </Button>
+            </Popconfirm>
+          </div>
+        </Sider>
+        <Layout>
+          <Header
+            style={{
+              padding: 0,
+              background: colorBgContainer,
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
+          >
+            <div style={{ marginRight: '30px', display: 'flex', alignItems: 'center' }}>
+              <Space wrap>
+                <span
+                  style={{
+                    padding: '10px 12px',
+                    background: '#001529', // Dark navy background
+                    borderRadius: '25px', // Rounded corners
+                    color: '#ffffff', // White text
+                    fontWeight: 'bold',
+                    fontFamily: 'Montserrat, sans-serif', // Professional bold font
+                    fontSize: '16px', // Adjust font size as needed
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Shadow for depth
+                  }}
+                >
+                  {userLogin ? `${userLogin.PrenomUtilisateur} ${userLogin.NomUtilisateur}` : 'Guest'}
+                </span>
+                <Dropdown
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: "bold",
+                  }}
+                  overlay={<Menu items={itemsDropdown} />}
+                  placement="bottomRight"
+                  arrow
+                >
+                  <Avatar
+                    style={{
+                      backgroundColor: '#87d068',
+                      cursor: 'pointer',
+                      fontSize: '20px',
+                      width: '40px', // Increase avatar width
+                      height: '40px', // Increase avatar height
+                    }}
+                    icon={<UserOutlined />}
+                  />
+                </Dropdown>
+              </Space>
+            </div>
+          </Header>
+          <Content
+            style={{
+              margin: '24px 16px 0',
+            }}
+          >
+            <div
+              style={{
+                padding: 24,
+                minHeight: "100vh",
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+              }}
+            >
+              <Suspense fallback={<div>Loading...</div>}>
+                <AppRoutes />
+              </Suspense>
+            </div>
+          </Content>
+          <Footer
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          </Footer>
+        </Layout>
       </Layout>
-    </Layout>
+    )
   );
+  
 };
 
 export default Components;
