@@ -89,21 +89,30 @@ if (!user || !token) {
           label: 'Inscription',
         },
         {
-          key: 'Formateur',
+          key: 'formateur',
           label: 'Formateur',
-        },
-        {
-          key: 'classe',
-          label: 'Classe',
-        },
-        {
-          key: '18',
-          label: 'Matière',
         },
         {
           key: 'filiere',
           label: 'Filière',
         },
+        { 
+          key: 'classe',
+          label: 'Classe',
+        },
+        { 
+          key: 'niveau',
+          label: 'Niveau',
+        },
+        {
+          key: 'matiere',
+          label: 'Matière',
+        },
+        {
+          key: 'absence',
+          label: 'Absence',
+        },
+       
         {
           key: '20',
           label: 'Suivi de stage',
