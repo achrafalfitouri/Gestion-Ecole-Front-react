@@ -25,6 +25,9 @@ import Classe from "../Pages/Scolarite/Classe";
 import Formateur from "../Pages/Scolarite/Formateur";
 import Inscription from "../Pages/Scolarite/Inscription";
 import Niveau from "../Pages/Scolarite/Classe/Niveau";
+import Stage from "../Pages/Scolarite/Stage";
+import Absence from "../Pages/Scolarite/Abcense";
+
 
 
 
@@ -47,6 +50,8 @@ function AppRoutes() {
           <Route path="/niveau" element={<Niveau />} />
           <Route path="/matiere" element={<Matiere />} />
           <Route path="/inscription" element={<Inscription />} />
+          <Route path="/stage" element={<Stage />} />
+          <Route path="/absence" element={<Absence />} />
           {/* Fallback route for unauthorized access */}
           <Route path="*" element={<Unauthorized />} />
         </Routes>

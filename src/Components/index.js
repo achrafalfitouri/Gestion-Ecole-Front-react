@@ -130,7 +130,7 @@ if (!user || !token) {
         },
        
         {
-          key: '20',
+          key: 'stage',
           label: 'Suivi de stage',
         },
         {
