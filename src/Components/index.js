@@ -134,7 +134,7 @@ if (!user || !token) {
           label: 'Suivi de stage',
         },
         {
-          key: '21',
+          key: 'planing',
           label: 'Emploie de temps',
         },
       ],
