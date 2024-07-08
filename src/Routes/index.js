@@ -32,6 +32,7 @@ import Personnel from "../Pages/Finance/Personnel";
 
 
 
+import Planing from "../Pages/Scolarite/Planing";
 
 
 
@@ -60,6 +61,7 @@ function AppRoutes() {
           <Route path="/fournisseur" element={<Fournisseur />} />
           <Route path="/personnel" element={<Personnel />} />
 
+          <Route path="/planing" element={<Planing />} />
           {/* Fallback route for unauthorized access */}
           <Route path="*" element={<Unauthorized />} />
         </Routes>

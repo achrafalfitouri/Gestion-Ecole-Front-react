@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, DatePicker, TimePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
@@ -29,7 +29,7 @@ const CrudTable = () => {
   const fetchData = async () => {
     setRefreshLoading(true);
     try {
-      const response = await axiosInstance.get('/api/absence', {
+      const response = await axiosInstance.get('/api/planing', {
         params: {
           page: pagination.current,
           pageSize: pagination.pageSize,
@@ -50,7 +50,7 @@ const CrudTable = () => {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_Absence);
+      showDeleteConfirm(record.ID_Planning);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
@@ -71,7 +71,7 @@ const CrudTable = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/api/absence/${id}`);
+      await axiosInstance.delete(`/api/planing/${id}`);
       message.success(' supprimé avec succès');
       fetchData();
     } catch (error) {
@@ -177,11 +177,11 @@ const CrudTable = () => {
 
   const columns = [
     {
-        title: <Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>,
-        dataIndex: 'NomEtudiant',
-        key: 'NomEtudiant',
-        sorter: (a, b) => a.NomEtudiant.localeCompare(b.NomEtudiant),
-        ...getColumnSearchProps('NomEtudiant'),
+        title: <Text strong style={{ fontSize: '16px' }}>Classe</Text>,
+        dataIndex: 'NomClasse',
+        key: 'NomClasse',
+        sorter: (a, b) => a.NomClasse.localeCompare(b.NomClasse),
+        ...getColumnSearchProps('NomClasse'),
         render: (text) => (
           <Text strong style={{ fontSize: '16px' }}>
             {renderText(text, globalSearchText)}
@@ -190,11 +190,11 @@ const CrudTable = () => {
         ellipsis: true,
       },
     {
-        title: <Text strong style={{ fontSize: '16px' }}>Prenom etudiant</Text>,
-        dataIndex: 'PrenomEtudiant',
-        key: 'PrenomEtudiant',
-        sorter: (a, b) => a.PrenomEtudiant.localeCompare(b.PrenomEtudiant),
-        ...getColumnSearchProps('PrenomEtudiant'),
+        title: <Text strong style={{ fontSize: '16px' }}>Matiere</Text>,
+        dataIndex: 'NomMatiere',
+        key: 'NomMatiere',
+        sorter: (a, b) => a.NomMatiere.localeCompare(b.NomMatiere),
+        ...getColumnSearchProps('NomMatiere'),
         render: (text) => (
           <Text strong style={{ fontSize: '16px' }}>
             {renderText(text, globalSearchText)}
@@ -204,31 +204,55 @@ const CrudTable = () => {
       },
   
   {
-    title: <Text strong style={{ fontSize: '16px' }}>Date Debut </Text>,
-    dataIndex: 'DateDebutAbsence',
-    key: 'DateDebutAbsence',
-    sorter: (a, b) => a.DateDebutAbsence.localeCompare(b.DateDebutAbsence),
-    ...getColumnSearchProps('DateDebutAbsence'),
+    title: <Text strong style={{ fontSize: '16px' }}>Salle</Text>,
+    dataIndex: 'Nom',
+    key: 'Nom',
+    sorter: (a, b) => a.Nom.localeCompare(b.Nom),
+    ...getColumnSearchProps('Nom'),
     render: (text) => (
       <Text strong style={{ fontSize: '16px' }}>
-        {renderText(moment(text).format('DD/MM/YYYY'), globalSearchText)}
-      </Text>
+ {renderText(text, globalSearchText)}      </Text>
     ),
     ellipsis: true,
   },
   {
-    title: <Text strong style={{ fontSize: '16px' }}>Date Fin</Text>,
-    dataIndex: 'DateFinAbsence',
-    key: 'DateFinAbsence',
-    sorter: (a, b) => a.DateFinAbsence.localeCompare(b.DateFinAbsence),
-    ...getColumnSearchProps('DateFinAbsence'),
+    title: <Text strong style={{ fontSize: '16px' }}>Jour</Text>,
+    dataIndex: 'Jour',
+    key: 'Jour',
+    sorter: (a, b) => a.Jour.localeCompare(b.Jour),
+    ...getColumnSearchProps('Jour'),
     render: (text) => (
       <Text strong style={{ fontSize: '16px' }}>
-        {renderText(moment(text).format('DD/MM/YYYY'), globalSearchText)}
+ {renderText(text, globalSearchText)}      </Text>
+    ),
+    ellipsis: true,
+  },
+  {
+    title: <Text strong style={{ fontSize: '16px' }}>Heure Debut</Text>,
+    dataIndex: 'HeureDebut',
+    key: 'HeureDebut',
+    sorter: (a, b) => a.HeureDebut.localeCompare(b.HeureDebut),
+    ...getColumnSearchProps('HeureDebut'),
+    render: (text) => (
+      <Text strong style={{ fontSize: '16px' }}>
+ {renderText(moment(text, 'HH:mm:ss').format('HH:mm'), globalSearchText)}      </Text>
+    ),
+    ellipsis: true,
+  },
+  {
+    title: <Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>,
+    dataIndex: 'HeureFin',
+    key: 'HeureFin',
+    sorter: (a, b) => a.HeureFin.localeCompare(b.HeureFin),
+    ...getColumnSearchProps('HeureFin'),
+    render: (text) => (
+      <Text strong style={{ fontSize: '16px' }}>
+        {renderText(moment(text, 'HH:mm:ss').format('HH:mm'), globalSearchText)}
       </Text>
     ),
     ellipsis: true,
   },
+  
   {
     title: <Text strong style={{ fontSize: '16px' }}>Nb heure</Text>,
     dataIndex: 'Nb_Heure',
@@ -247,7 +271,33 @@ const CrudTable = () => {
     ),
     ellipsis: true,
   },
-  
+  {
+    title: <Text strong style={{ fontSize: '16px' }}>Nom Formateur</Text>,
+    dataIndex: 'NomFormateur',
+    key: 'NomFormateur',
+    sorter: (a, b) => a.NomFormateur.localeCompare(b.NomFormateur),
+    ...getColumnSearchProps('NomFormateur'),
+    render: (text) => (
+      <Text strong style={{ fontSize: '16px' }}>
+        {renderText(text, globalSearchText)}
+      </Text>
+    ),
+    ellipsis: true,
+  },
+  {
+    title: <Text strong style={{ fontSize: '16px' }}>Prenom Formateur</Text>,
+    dataIndex: 'PrenomFormateur',
+    key: 'PrenomFormateur',
+    sorter: (a, b) => a.PrenomFormateur.localeCompare(b.PrenomFormateur),
+    ...getColumnSearchProps('PrenomFormateur'),
+    render: (text) => (
+      <Text strong style={{ fontSize: '16px' }}>
+        {renderText(text, globalSearchText)}
+      </Text>
+    ),
+    ellipsis: true,
+  },
+
   
   
   {
@@ -311,13 +361,28 @@ const CrudTable = () => {
     }, 1100); // Adjust delay time as needed
   };
   
-  
+  const [salleOptions, setSalleOptions] = useState([]);
+  useEffect(() => {
+    const fetchSalleOptions = async () => {
+      try {
+        const response = await axiosInstance.get('/api/salle');
+        setSalleOptions(response.data);
+      } catch (error) {
+        console.error('Error fetching filiere options:', error);
+        message.error('Erreur lors du chargement des options de classe');
+      }
+    };
+
+    fetchSalleOptions();
+  }, []);
 
   const AddUserForm= () => {
     const [classeOptions, setClasseOptions] = useState([]);
-    const [etudiantOptions, setEtudiantOptions] = useState([]);
+    const [matiereOptions, setMatiereOptions] = useState([]);
+    const [formateurOptions, setFormateurOptions] = useState([]);
     const [selectedClasse, setSelectedClasse] = useState(null);
-    const [selectedEtudiant, setSelectedEtudiant] = useState(null);
+    const [selectedMatiere, setSelectedMatiere] = useState(null);
+    const [selectedFormateur, setSelectedFormateur] = useState(null);
   
     useEffect(() => {
       const fetchClasseOptions = async () => {
@@ -336,37 +401,66 @@ const CrudTable = () => {
     }, []);
   
     useEffect(() => {
-      const fetchEtudiants = async (classeId) => {
+      const fetchMatieres = async (classeId) => {
         try {
-          const response = await axiosInstance.get(`/api/jointure/etudiant-classe/${classeId}`);
-          return response.data.map(etudiant => ({
-            id: etudiant.ID_Etudiant,
-            label: `${etudiant.NomEtudiant} ${etudiant.PrenomEtudiant}`,          }));
+          const response = await axiosInstance.get(`/api/jointure/matiere-classe/${classeId}`);
+          return response.data.map(matiere => ({
+            id: matiere.ID_Matiere,
+            label: matiere.NomMatiere        }));
         } catch (error) {
           console.error('Error fetching etudiant options:', error);
           return [];
         }
       };
   
-      const updateEtudiantOptions = async (classeId) => {
+      const updateMatiereOptions = async (classeId) => {
         if (classeId) {
-          const etudiants = await fetchEtudiants(classeId);
-          setEtudiantOptions(etudiants);
+          const matieres = await fetchMatieres(classeId);
+          setMatiereOptions(matieres);
         } else {
-          setEtudiantOptions([]);
+          setMatiereOptions([]);
         }
       };
   
-      updateEtudiantOptions(selectedClasse);
+      updateMatiereOptions(selectedClasse);
     }, [selectedClasse]);
+    
+    useEffect(() => {
+  
+        const fetchFormateurs = async (formateurId) => {
+          try {
+            const response = await axiosInstance.get(`/api/jointure/formateur-matiere/${formateurId}`);
+            return response.data.map(formateur => ({
+              id: formateur.ID_Formateur,
+              label: `${formateur.NomFormateur} ${formateur.PrenomFormateur}`       }));
+          } catch (error) {
+            console.error('Error fetching etudiant options:', error);
+            return [];
+          }
+        };
+  
+      const updateFormateurOptions = async (formateurId) => {
+        if (formateurId) {
+          const formateurs = await fetchFormateurs(formateurId);
+          setFormateurOptions(formateurs);
+        } else {
+          setFormateurOptions([]);
+        }
+      };
+  
+      updateFormateurOptions(selectedMatiere);
+    }, [selectedMatiere]);
   
     const handleClasseChange = (value) => {
       setSelectedClasse(value);
-      setSelectedEtudiant(null);
+      setSelectedMatiere(null);
     };
   
-    const handleEtudiantChange = (value) => {
-      setSelectedEtudiant(value);
+    const handleMatiereChange = (value) => {
+      setSelectedMatiere(value);
+    };
+    const handleFormateurChange = (value) => {
+      setSelectedFormateur(value);
     };
   
     const handleFormSubmit = async (values) => {
@@ -374,10 +468,11 @@ const CrudTable = () => {
         const formData = {
           ...values,
           ID_Classe: selectedClasse,
-          ID_Etudiant: selectedEtudiant,
+          ID_Matiere: selectedMatiere,
+          ID_Formateur: selectedFormateur
         };
         console.log(formData)
-        await axiosInstance.post('/api/absence', formData);
+        await axiosInstance.post('/api/planing', formData);
         message.success('Absence ajoutée avec succès');
         handleCloseDrawer();
         fetchData(); // Refresh data after submission
@@ -389,7 +484,7 @@ const CrudTable = () => {
     return (
       <Form layout="vertical" onFinish={handleFormSubmit}>
        <Form.Item
-  label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
@@ -408,7 +503,7 @@ const CrudTable = () => {
 </Form.Item>
 
 <Form.Item
-  label={<Text strong style={{ fontSize: '16px' }}>Nom Etudiant</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Matiere</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
@@ -418,30 +513,84 @@ const CrudTable = () => {
     }
     style={{ fontSize: '16px' }}
     placeholder="Sélectionner un étudiant"
-    onChange={handleEtudiantChange}
-    value={selectedEtudiant}
+    onChange={handleMatiereChange}
+    value={selectedMatiere}
     disabled={!selectedClasse}
   >
-    {etudiantOptions.map(etudiant => (
-      <Option style={{ fontSize: '16px' }} key={etudiant.id} value={etudiant.id}>{etudiant.label}</Option>
+    {matiereOptions.map(matiere => (
+      <Option style={{ fontSize: '16px' }} key={matiere.id} value={matiere.id}>{matiere.label}</Option>
     ))}
   </Select>
 </Form.Item>
-
+<Form.Item
+  label={<Text strong style={{ fontSize: '16px' }}>Formateur</Text>}
+  rules={[{ required: true, message: 'Champ requis' }]}
+>
+  <Select
+    showSearch
+    filterOption={(input, option) =>
+      (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+    }
+    style={{ fontSize: '16px' }}
+    placeholder="Sélectionner un étudiant"
+    onChange={handleFormateurChange}
+    value={selectedFormateur}
+    disabled={!selectedMatiere}
+  >
+    {formateurOptions.map(formateur => (
+      <Option style={{ fontSize: '16px' }} key={formateur.id} value={formateur.id}>{formateur.label}</Option>
+    ))}
+  </Select>
+</Form.Item>
+<Form.Item
+        name="ID_Salle"
+        label={<Text strong style={{ fontSize: '16px' }}>Salle</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner etudiant' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner un etudiant"
+        >
+          {salleOptions.map(salle => (
+            <Option key={salle.ID_Salle} value={salle.ID_Salle} style={{ fontSize: '16px' }}>
+              {salle.Nom}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
    
+      <Form.Item
+  name="Jour"
+  label={<Text strong style={{ fontSize: '16px' }}>Jour</Text>}
+  rules={[{ required: true, message: 'Champ requis' }]}
+>
+  <Select style={{ fontSize: '16px' }}>
+    <Option value="Lundi">Lundi</Option>
+    <Option value="Mardi">Mardi</Option>
+    <Option value="Mercredi">Mercredi</Option>
+    <Option value="Jeudi">Jeudi</Option>
+    <Option value="Vendredi">Vendredi</Option>
+    <Option value="Samedi">Samedi</Option>
+    <Option value="Dimanche">Dimanche</Option>
+  </Select>
+</Form.Item>
         <Form.Item
-          name="DateDebutAbsence"
-          label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
+
+          name="HeureDebut"
+          label={<Text strong style={{ fontSize: '16px' }}>Heure Début</Text>}
           rules={[{ required: true, message: 'Champ requis' }]}
         >
-          <Input type="date" style={{ fontSize: '16px' }} />
+          <TimePicker             format="HH:mm" 
+ type="time" style={{ fontSize: '16px' }} />
         </Form.Item>
         <Form.Item
-          name="DateFinAbsence"
-          label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}
+          name="HeureFin"
+          label={<Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>}
           rules={[{ required: true, message: 'Champ requis' }]}
         >
-          <Input type="date" style={{ fontSize: '16px' }} />
+          <TimePicker             format="HH:mm" 
+ type="time" style={{ fontSize: '16px' }} />
         </Form.Item>
         <Form.Item
         name="Nb_Heure"
@@ -469,18 +618,21 @@ const EditUserForm = () => {
 
   // State for options and selections
   const [classeOptions, setClasseOptions] = useState([]);
-  const [etudiantOptions, setEtudiantOptions] = useState([]);
+  const [matiereOptions, setMatiereOptions] = useState([]);
+  const [formateurOptions, setFormateurOptions] = useState([]);
   const [selectedClasse, setSelectedClasse] = useState(null);
-  const [selectedEtudiant, setSelectedEtudiant] = useState(null);
+  const [selectedMatiere, setSelectedMatiere] = useState(null);
+  const [selectedFormateur, setSelectedFormateur] = useState(null);
+
  // Format date to yyyy-MM-dd
  const formatDate = (date) => {
-  return moment(date).format('YYYY-MM-DD');
+  return moment(date).format('HH:mm');
 };
   // Function to get initial values excluding sensitive fields
   const getInitialValues = () => {
     const initialValues = { ...selectedRecord };
-    initialValues.DateDebutAbsence = formatDate(initialValues.DateDebutAbsence);
-    initialValues.DateFinAbsence = formatDate(initialValues.DateFinAbsence);
+    initialValues.HeureDebut = formatDate(initialValues.HeureDebut);
+    initialValues.HeureFin = formatDate(initialValues.HeureFin);
 
     return initialValues;
   };
@@ -489,7 +641,7 @@ const EditUserForm = () => {
   useEffect(() => {
     form.setFieldsValue(getInitialValues());
     setSelectedClasse(selectedRecord.ID_Classe);
-    setSelectedEtudiant(selectedRecord.ID_Etudiant);
+    setSelectedMatiere(selectedRecord.ID_Matiere);
   }, [selectedRecord]);
 
   // Fetch class options
@@ -505,45 +657,75 @@ const EditUserForm = () => {
         console.error('Error fetching classe options:', error);
       }
     };
+
     fetchClasseOptions();
   }, []);
 
-  // Fetch student options based on selected class
   useEffect(() => {
-    const fetchEtudiants = async (classeId) => {
+    const fetchMatieres = async (classeId) => {
       try {
-        const response = await axiosInstance.get(`/api/jointure/etudiant-classe/${classeId}`);
-        return response.data.map(etudiant => ({
-          id: etudiant.ID_Etudiant,
-          label: etudiant.NomEtudiant,
-        }));
+        const response = await axiosInstance.get(`/api/jointure/matiere-classe/${classeId}`);
+        return response.data.map(matiere => ({
+          id: matiere.ID_Matiere,
+          label: matiere.NomMatiere        }));
       } catch (error) {
         console.error('Error fetching etudiant options:', error);
         return [];
       }
     };
 
-    const updateEtudiantOptions = async (classeId) => {
+    const updateMatiereOptions = async (classeId) => {
       if (classeId) {
-        const etudiants = await fetchEtudiants(classeId);
-        setEtudiantOptions(etudiants);
+        const matieres = await fetchMatieres(classeId);
+        setMatiereOptions(matieres);
       } else {
-        setEtudiantOptions([]);
+        setMatiereOptions([]);
       }
     };
 
-    updateEtudiantOptions(selectedClasse);
+    updateMatiereOptions(selectedClasse);
   }, [selectedClasse]);
 
-  // Handle class change
-  const handleClasseChange = (value) => {
-    setSelectedClasse(value);
-    setSelectedEtudiant(null);
+
+  useEffect(() => {
+  
+    const fetchFormateurs = async (formateurId) => {
+      try {
+        const response = await axiosInstance.get(`/api/jointure/formateur-matiere/${formateurId}`);
+        return response.data.map(formateur => ({
+          id: formateur.ID_Formateur,
+          label: `${formateur.NomFormateur} ${formateur.PrenomFormateur}`       }));
+      } catch (error) {
+        console.error('Error fetching etudiant options:', error);
+        return [];
+      }
+    };
+
+  const updateFormateurOptions = async (formateurId) => {
+    if (formateurId) {
+      const formateurs = await fetchFormateurs(formateurId);
+      setFormateurOptions(formateurs);
+    } else {
+      setFormateurOptions([]);
+    }
   };
 
-  // Handle student change
-  const handleEtudiantChange = (value) => {
-    setSelectedEtudiant(value);
+  updateFormateurOptions(selectedMatiere);
+}, [selectedMatiere]);
+
+
+  
+  const handleClasseChange = (value) => {
+    setSelectedClasse(value);
+    setSelectedMatiere(null);
+  };
+
+  const handleMatiereChange = (value) => {
+    setSelectedMatiere(value);
+  };
+
+  const handleFormateurChange = (value) => {
+    setSelectedFormateur(value);
   };
 
   // Handle form submission
@@ -553,10 +735,12 @@ const EditUserForm = () => {
         ...selectedRecord,
         ...values,
         ID_Classe: selectedClasse,
-        ID_Etudiant: selectedEtudiant,
+        ID_Matiere: selectedMatiere,
+        ID_Formateur: selectedFormateur
+
       };
       console.log('Form data being submitted:', formData);
-      await axiosInstance.put(`/api/absence/${selectedRecord.ID_Absence}`, formData);
+      await axiosInstance.put(`/api/planing/${selectedRecord.ID_Planning}`, formData);
       message.success('Absence modifiée avec succès');
       handleCloseDrawer();
       fetchData(); // Refresh data after submission
@@ -572,8 +756,8 @@ const EditUserForm = () => {
       onFinish={handleFormSubmit}
       initialValues={getInitialValues()}
     >
-     <Form.Item
-  label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}
+         <Form.Item
+  label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
@@ -592,7 +776,7 @@ const EditUserForm = () => {
 </Form.Item>
 
 <Form.Item
-  label={<Text strong style={{ fontSize: '16px' }}>Nom Etudiant</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Matiere</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
@@ -602,38 +786,91 @@ const EditUserForm = () => {
     }
     style={{ fontSize: '16px' }}
     placeholder="Sélectionner un étudiant"
-    onChange={handleEtudiantChange}
-    value={selectedEtudiant}
+    onChange={handleMatiereChange}
+    value={selectedMatiere}
     disabled={!selectedClasse}
   >
-    {etudiantOptions.map(etudiant => (
-      <Option style={{ fontSize: '16px' }} key={etudiant.id} value={etudiant.id}>{etudiant.label}</Option>
+    {matiereOptions.map(matiere => (
+      <Option style={{ fontSize: '16px' }} key={matiere.id} value={matiere.id}>{matiere.label}</Option>
     ))}
   </Select>
 </Form.Item>
-
-      <Form.Item
-        name="DateDebutAbsence"
-        label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
+<Form.Item
+  label={<Text strong style={{ fontSize: '16px' }}>Formateur</Text>}
+  rules={[{ required: true, message: 'Champ requis' }]}
+>
+  <Select
+    showSearch
+    filterOption={(input, option) =>
+      (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+    }
+    style={{ fontSize: '16px' }}
+    placeholder="Sélectionner un étudiant"
+    onChange={handleFormateurChange}
+    value={selectedFormateur}
+    disabled={!selectedMatiere}
+  >
+    {formateurOptions.map(formateur => (
+      <Option style={{ fontSize: '16px' }} key={formateur.id} value={formateur.id}>{formateur.label}</Option>
+    ))}
+  </Select>
+</Form.Item>
+<Form.Item
+        name="ID_Salle"
+        label={<Text strong style={{ fontSize: '16px' }}>Salle</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner etudiant' }]}
+        style={{ fontSize: '16px' }}
       >
-        <Input type="date" style={{ fontSize: '16px' }} />
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner un etudiant"
+        >
+          {salleOptions.map(salle => (
+            <Option key={salle.ID_Salle} value={salle.ID_Salle} style={{ fontSize: '16px' }}>
+              {salle.Nom}
+            </Option>
+          ))}
+        </Select>
       </Form.Item>
+   
       <Form.Item
-        name="DateFinAbsence"
-        label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
-      >
-        <Input type="date" style={{ fontSize: '16px' }} />
-      </Form.Item>
-      <Form.Item
+  name="Jour"
+  label={<Text strong style={{ fontSize: '16px' }}>Jour</Text>}
+  rules={[{ required: true, message: 'Champ requis' }]}
+>
+  <Select style={{ fontSize: '16px' }}>
+    <Option value="Lundi">Lundi</Option>
+    <Option value="Mardi">Mardi</Option>
+    <Option value="Mercredi">Mercredi</Option>
+    <Option value="Jeudi">Jeudi</Option>
+    <Option value="Vendredi">Vendredi</Option>
+    <Option value="Samedi">Samedi</Option>
+    <Option value="Dimanche">Dimanche</Option>
+  </Select>
+</Form.Item>
+        <Form.Item
+          name="HeureDebut"
+          label={<Text strong style={{ fontSize: '16px' }}>Heure Début</Text>}
+          rules={[{ required: true, message: 'Champ requis' }]}
+        >
+          <TimePicker             format="HH:mm" 
+ type="time" style={{ fontSize: '16px' }} />
+        </Form.Item>
+        <Form.Item
+          name="HeureFin"
+          label={<Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>}
+          rules={[{ required: true, message: 'Champ requis' }]}
+        >
+          <TimePicker             format="HH:mm" 
+ type="time" style={{ fontSize: '16px' }} />
+        </Form.Item>
+        <Form.Item
         name="Nb_Heure"
         label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="number" style={{ fontSize: '16px' }} />
       </Form.Item>
-
       <Form.Item>
         <Button style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px', marginRight: '10px' }} type="primary" htmlType="submit">
           Modifier
@@ -653,7 +890,7 @@ const EditUserForm = () => {
     <div style={{ padding: '40px', fontSize: '16px' }}>
       <Card style={{ borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '2px 6px 14px rgba(0, 0, 0.1, 0.2)' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title level={3} style={{ fontSize: '24px' }}>Listes des absences</Title>
+          <Title level={3} style={{ fontSize: '24px' }}>Listes des emplois du temps</Title>
           <Row justify="end" align="middle" style={{ marginBottom: '16px' }}>
             <Col>
               <Space>
@@ -694,7 +931,7 @@ const EditUserForm = () => {
                     borderRadius: '15px'
                   }}
                 >
-                  Ajouter une absence
+                  Ajouter un emploi du temps
                 </Button>
               </Space>
             </Col>
@@ -709,7 +946,7 @@ const EditUserForm = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter absence' : drawerType === 'edit' ? 'Modifier absence' : 'Afficher absence'}
+ {drawerType === 'add' ? 'Ajouter emploi du temps ' : drawerType === 'edit' ? 'Modifier emploi du temps' : 'Afficher emploi du temps'}
 
     </Text>
   }
@@ -720,22 +957,33 @@ const EditUserForm = () => {
 >
   {drawerType === 'view' ? (
     <Descriptions column={1} bordered>
-        <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Etudiant</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomEtudiant}</Text>
+        <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomClasse}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Prenom Etudiant</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.PrenomEtudiant}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Matiere</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomMatiere}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date Debut</Text>}>
-        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateDebutAbsence).format('DD/MM/YYYY')}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Salle</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Nom}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}>
-        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateFinAbsence).format('DD/MM/YYYY')}</Text>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Jour</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Jour}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Heure Debut</Text>}>
+        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.HeureDebut, 'HH:mm:ss').format('HH:mm')}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>}>
+        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.HeureFin, 'HH:mm:ss').format('HH:mm')}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Nb_Heure}</Text>
       </Descriptions.Item>
-      
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Formateur</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFormateur}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Prenom Formateur</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.PrenomFormateur}</Text>
+      </Descriptions.Item>
     </Descriptions>
   ) : (
     <>
