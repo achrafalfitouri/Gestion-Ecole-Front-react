@@ -149,7 +149,7 @@ if (!user || !token) {
           label: 'Facture',
         },
         {
-          key: '12',
+          key: 'fournisseur',
           label: 'Fournisseur',
         },
         {
@@ -175,7 +175,7 @@ if (!user || !token) {
           ]
         },
         {
-          key: '14',
+          key: 'personnel',
           label: 'Personnel',
         },
       ],
