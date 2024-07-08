@@ -44,7 +44,7 @@ const CrudTable = () => {
   const fetchData = async () => {
     setRefreshLoading(true);
     try {
-      const response = await axiosInstance.get('/api/personnel', {
+      const response = await axiosInstance.get('/api/personnels', {
         params: {
           page: pagination.current,
           pageSize: pagination.pageSize,
@@ -93,7 +93,7 @@ const CrudTable = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/api/personnel/${id}`);
+      await axiosInstance.delete(`/api/personnels/${id}`);
       message.success(' supprimé avec succès');
       fetchData();
     } catch (error) {
@@ -344,8 +344,11 @@ const CrudTable = () => {
     formData.append('EtatPersonnel', values.EtatPersonnel);
     formData.append('NomPersonnel', values.NomPersonnel);
     formData.append('PrenomPersonnel', values.PrenomPersonnel);
+    formData.append('Email', values.Email);
+    formData.append('CIN', values.CIN);
     formData.append('Titre', values.Titre);
     formData.append('Salaire', values.Salaire);
+    formData.append('Contrat', values.Contrat);
     formData.append('DateEmbauche', values.DateEmbauche);
     formData.append('DateNaissance', values.DateNaissance);
 
@@ -356,18 +359,18 @@ const CrudTable = () => {
       formData.append('PhotoProfil', fileList[0].originFileObj);
     }
   
-
+    console.log(...formData.entries());
     try {
       let response;
       if (drawerType === 'add') {
-        response = await axiosInstance.post('/api/personnel', formData, {
+        response = await axiosInstance.post('/api/personnels', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
         message.success(' ajouté avec succès');
       } else if (drawerType === 'edit') {
-        response = await axiosInstance.put(`/api/personnel/${selectedRecord.ID_Personnel}`, formData, {
+        response = await axiosInstance.put(`/api/personnels/${selectedRecord.ID_Personnel}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -405,7 +408,7 @@ const CrudTable = () => {
   useEffect(() => {
     const fetchFiliereOptions = async () => {
       try {
-        const response = await axiosInstance.get('/api/personnel');
+        const response = await axiosInstance.get('/api/personnels');
         setFiliereOptions(response.data);
       } catch (error) {
         console.error('Error fetching filiere options:', error);
@@ -458,6 +461,20 @@ const CrudTable = () => {
         <Input placeholder="Entrez le prenom " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
+        name="CIN"
+        label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input placeholder="Entrez le prenom " style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Email"
+        label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input type='email' placeholder="Entrez le prenom " style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
         name="Titre"
         label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
@@ -489,6 +506,27 @@ const CrudTable = () => {
       >
         <Input  placeholder="Entrez le Salaire " style={{ fontSize: '16px' }} />
       </Form.Item>
+      <Form.Item
+  name="Contrat"
+  label={<Text strong style={{ fontSize: '16px' }}>Contrat</Text>}
+  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
+  style={{ fontSize: '16px' }}
+>
+  <Select
+    style={{ fontSize: '16px', width: '100%', minHeight: '40px' }}
+    placeholder="Sélectionner un contrat"
+  >
+    <Option style={{ fontSize: '16px' }} value="CDI">CDI : Contrat à Durée Indéterminée</Option>
+    <Option style={{ fontSize: '16px' }} value="CDD">CDD : Contrat à Durée Déterminée</Option>
+    <Option style={{ fontSize: '16px' }} value="INT">INT : Contrat d'Intérim</Option>
+    <Option style={{ fontSize: '16px' }} value="STG">STG : Contrat de Stage</Option>
+    <Option style={{ fontSize: '16px' }} value="APP">APP : Contrat d'Apprentissage</Option>
+    <Option style={{ fontSize: '16px' }} value="TP">TP : Contrat de Travail à Temps Partiel</Option>
+    <Option style={{ fontSize: '16px' }} value="PT">PT : Contrat de Travail pour un Projet ou une Mission</Option>
+    <Option style={{ fontSize: '16px' }} value="SAS">SAS : Contrat de Travail Saisonnier</Option>
+  </Select>
+</Form.Item>
+
       <Form.Item
         name="DateEmbauche"
         label={<Text strong style={{ fontSize: '16px' }}>DateEmbauche</Text>}
@@ -712,7 +750,7 @@ const CrudTable = () => {
     <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Photo De Profil</Text>}>
       <div style={{ textAlign: 'center' }}>
         <img
-          src={`http://localhost:3000/api/form/photo/${selectedRecord?.ID_Personnel}`}
+          src={`http://localhost:3000/api/pers/photo/${selectedRecord?.ID_Personnel}`}
           alt="PhotoProfil"
           style={{ width: '100px', height: '100px', borderRadius: '50%', cursor: 'pointer' }}
           onClick={toggleModal}
@@ -725,6 +763,12 @@ const CrudTable = () => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Prénom</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.PrenomPersonnel}</Text>
       </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.CIN}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Email}</Text>
+      </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Titre}</Text>
       </Descriptions.Item>
@@ -734,11 +778,14 @@ const CrudTable = () => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Salaire</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Salaire}</Text>
       </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Contrat</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Contrat}</Text>
+      </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateEmbauche</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.DateEmbauche}</Text>
+        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateEmbauche).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateNaissance</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.DateNaissance}</Text>
+        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateNaissance).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
     </Descriptions>
   ) : (
@@ -757,7 +804,7 @@ const CrudTable = () => {
         centered
       >
         <img
-          src={`http://localhost:3000/api/form/photo/${selectedRecord?.ID_Personnel}`}
+          src={`http://localhost:3000/api/pers/photo/${selectedRecord?.ID_Personnel}`}
           alt="PhotoProfil"
           style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
         />

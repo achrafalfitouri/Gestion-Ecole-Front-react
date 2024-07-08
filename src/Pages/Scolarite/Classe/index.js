@@ -251,7 +251,8 @@ const CrudTable = () => {
         </Dropdown>
       ),
     },
-  
+
+    
     
   ];
   
@@ -537,8 +538,7 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter classe' : drawerType === 'edit' ? 'Modifier classe' : 'Afficher classe'}
-
+      {drawerType === 'add' ? 'Ajouter classe' : drawerType === 'edit' ? 'Modifier classe' : 'Afficher classe'}
     </Text>
   }
   width={drawerType === 'view' ? 720 : 480}
@@ -546,36 +546,89 @@ const CrudTable = () => {
   visible={drawerVisible}
   bodyStyle={{ paddingBottom: 80 }}
 >
-  {drawerType === 'view' ? (
-    
+  {drawerType === 'view' && selectedRecord && (
     <Descriptions column={1} bordered>
- 
-              
- <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomClasse}</Text>
-</Descriptions.Item>
-<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filire</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
-</Descriptions.Item>
-<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>AnneeScolaire</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.AnneeScolaire}</Text>
-</Descriptions.Item>
-<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.Remarques}</Text>
-</Descriptions.Item>
-
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord.NomClasse}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord.NomFiliere}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord.AnneeScolaire}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord.Remarques}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Liste Etudiants</Text>}>
+        <Button
+          icon={<EyeOutlined />}
+          onClick={() => {
+            // Open a drawer to show students
+            setDrawerType('listEtudiants');
+            setDrawerVisible(true);
+          }}
+          style={{ fontWeight: 'bold', fontSize: '14px' }}
+        >
+          Voir Liste Etudiants
+        </Button>
+      </Descriptions.Item>
     </Descriptions>
-  ) : (
-    <>
-      {drawerType === 'add' && <AddUserForm />}
-      {drawerType === 'edit' && <EditUserForm />}
-    </>
   )}
 
+{drawerType === 'listEtudiants' && (
+  <Drawer
+    title={<Text strong style={{ fontSize: '22px' }}>Liste des Etudiants</Text>}
+    width={920}
+    onClose={handleCloseDrawer}
+    visible={drawerVisible}
+    bodyStyle={{ paddingBottom: 80 }}
+  >
+    <div>
+      {selectedRecord && (
+         <Descriptions
+           bordered
+           column={3}
+           layout="vertical"
+           style={{ width: '100%', border: '1px solid #f0f0f0' }}
+         >
+           <Descriptions.Item
+             label={<Text strong style={{ fontSize: '16px' }}>(Numero) Etudiant </Text>}
+             contentStyle={{ fontSize: '16px' }}
+           >
+             <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+               {selectedRecord.NomComplet.split('\n').map((student, index) => (
+                 <div key={index} style={{ borderBottom: '1px solid #ddd', padding: '5px 0' }}>
+                   {student}
+                 </div>
+               ))}
+             </pre>
+           </Descriptions.Item>
+           <Descriptions.Item
+             label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+             contentStyle={{ fontSize: '16px' }}
+           >
+             {selectedRecord.NomFiliere}
+           </Descriptions.Item>
+           <Descriptions.Item
+             label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
+             contentStyle={{ fontSize: '16px' }}
+           >
+             {selectedRecord.AnneeScolaire}
+           </Descriptions.Item>
+         </Descriptions>
+      )}
+    </div>
+  </Drawer>
+)}
 
+
+  {drawerType === 'add' && <AddUserForm />}
+  {drawerType === 'edit' && <EditUserForm />}
 </Drawer>
 
     </div>
+
   );
 };
 

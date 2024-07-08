@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, TimePicker, DatePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../Middleware/axiosInstance';
 import moment from 'moment';
+import frFR from 'antd/es/locale/fr_FR';
+
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -92,7 +94,7 @@ const CrudTable = () => {
       <div style={{ padding: 8 }}>
         <Input
           ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Recherche ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
@@ -106,10 +108,10 @@ const CrudTable = () => {
             size="small"
             style={{ width: 90 }}
           >
-            Search
+            Recherche
           </Button>
           <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-            Reset
+          Réinitialiser
           </Button>
         </Space>
       </div>
@@ -319,21 +321,21 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date" placeholder="Entrez la date" style={{ fontSize: '16px' }} />
+        <DatePicker    placeholder="Entrez la date" style={{ fontSize: '16px' ,width : '100%'}} />
       </Form.Item>
       <Form.Item
         name="HeureDebut"
         label={<Text strong style={{ fontSize: '16px' }}>L'heure du debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
+        <TimePicker    format="HH:mm"  placeholder="Entrez le temps" style={{ fontSize: '16px',width : '100%' }} />
       </Form.Item>
       <Form.Item
         name="HeureFin"
         label={<Text strong style={{ fontSize: '16px' }}>L'heure du fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
+        <TimePicker   format="HH:mm"  placeholder="Entrez le temps" style={{ fontSize: '16px' ,width : '100%'}} />
       </Form.Item>
      
 
