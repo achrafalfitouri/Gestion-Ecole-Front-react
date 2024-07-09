@@ -285,7 +285,7 @@ const CrudTable = () => {
     ellipsis: true,
   },
   {
-    title: <Text strong style={{ fontSize: '16px' }}>Prenom Formateur</Text>,
+    title: <Text strong style={{ fontSize: '16px' }}>Prènom Formateur</Text>,
     dataIndex: 'PrenomFormateur',
     key: 'PrenomFormateur',
     sorter: (a, b) => a.PrenomFormateur.localeCompare(b.PrenomFormateur),
@@ -326,24 +326,7 @@ const CrudTable = () => {
     form.resetFields(); // Reset form fields when closing drawer
   };
 
-  // const handleFormSubmit = async (values) => {
-  //   try {
-        
-  //     if (drawerType === 'add') {
-  //       await axiosInstance.post('/api/absence', values);
-  //       message.success(' ajouté avec succès');
-  //     } else if (drawerType === 'edit' && selectedRecord) {
-  //       const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
-  //       await axiosInstance.put(`/api/absence/${selectedRecord.ID_Absence}`, updatedValues);
-  //       message.success(' modifié avec succès');
-  //     }
-
-  //     handleCloseDrawer();
-  //     fetchData(); // Refresh data after submission
-  //   } catch (error) {
-  //     console.error('Error saving data:', error);
-  //   }
-  // };
+  // 
 
   const handleTableChange = (pagination, filters, sorter) => {
     setPagination(pagination);
@@ -594,7 +577,7 @@ const CrudTable = () => {
         </Form.Item>
         <Form.Item
         name="Nb_Heure"
-        label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Nombre Heure</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="number" style={{ fontSize: '16px' }} />
@@ -866,7 +849,7 @@ const EditUserForm = () => {
         </Form.Item>
         <Form.Item
         name="Nb_Heure"
-        label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Nombre Heure</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="number" style={{ fontSize: '16px' }} />
@@ -975,7 +958,7 @@ const EditUserForm = () => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.HeureFin, 'HH:mm:ss').format('HH:mm')}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nombre Heure</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Nb_Heure}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Formateur</Text>}>

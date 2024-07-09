@@ -66,7 +66,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer cette filiere?',
+      title: 'Êtes-vous sûr de vouloir supprimer ?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -325,7 +325,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
     name="Niveau"
-    label={<Text strong style={{ fontSize: '16px' }}>Nivau</Text>}
+    label={<Text strong style={{ fontSize: '16px' }}>Niveau</Text>}
     rules={[{ required: true, message: 'Champ requis' }]}
   >
     <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
