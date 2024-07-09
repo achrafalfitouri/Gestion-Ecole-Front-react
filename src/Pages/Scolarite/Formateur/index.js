@@ -464,7 +464,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
   name="EtatFormateur"
-  label={<Text strong style={{ fontSize: '16px' }}>etat du formateur</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>état du formateur</Text>}
   rules={[{ required: true, message: 'Veuillez sélectionner' }]}
   style={{ fontSize: '16px' }}
 >
@@ -584,7 +584,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
         name="PrenomFormateur"
-        label={<Text strong style={{ fontSize: '16px' }}>Prenom</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Prénom</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le prenom du formateure" style={{ fontSize: '16px' }} />

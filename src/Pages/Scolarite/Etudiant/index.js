@@ -81,7 +81,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ce étudiant?',
+      title: 'Êtes-vous sûr de vouloir supprimer ?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -94,7 +94,7 @@ const CrudTable = () => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/api/etudiants/${id}`);
-      message.success('etudiant supprimé avec succès');
+      message.success(' supprimé avec succès');
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);

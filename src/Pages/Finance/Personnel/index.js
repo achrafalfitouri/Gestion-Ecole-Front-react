@@ -266,7 +266,7 @@ const CrudTable = () => {
   
     
     {
-        title: <Text strong style={{ fontSize: '16px' }}>DateEmbauche</Text>,
+        title: <Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>,
         dataIndex: 'DateEmbauche',
         key: 'DateEmbauche',
         sorter: (a, b) => a.DateEmbauche.localeCompare(b.DateEmbauche),
@@ -279,7 +279,7 @@ const CrudTable = () => {
         ellipsis: true,
       },
       {
-        title: <Text strong style={{ fontSize: '16px' }}>DateNaissance</Text>,
+        title: <Text strong style={{ fontSize: '16px' }}>Date De Naissance</Text>,
         dataIndex: 'DateNaissance',
         key: 'DateNaissance',
         sorter: (a, b) => a.DateNaissance.localeCompare(b.DateNaissance),
@@ -529,14 +529,14 @@ const CrudTable = () => {
 
       <Form.Item
         name="DateEmbauche"
-        label={<Text strong style={{ fontSize: '16px' }}>DateEmbauche</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="date" placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="DateNaissance"
-        label={<Text strong style={{ fontSize: '16px' }}>DateNaissance</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="date" placeholder="Entrez le  " style={{ fontSize: '16px' }} />
@@ -650,14 +650,14 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
         name="DateEmbauche"
-        label={<Text strong style={{ fontSize: '16px' }}>DateEmbauche</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="date" placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="DateNaissance"
-        label={<Text strong style={{ fontSize: '16px' }}>DateNaissance</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date de naissance</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="date" placeholder="Entrez le  " style={{ fontSize: '16px' }} />
@@ -772,7 +772,7 @@ const CrudTable = () => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Titre}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Etat du formateur</Text>}>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Etat du personnel</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.EtatPersonnel}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Salaire</Text>}>
@@ -781,10 +781,10 @@ const CrudTable = () => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Contrat</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Contrat}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateEmbauche</Text>}>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateEmbauche).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateNaissance</Text>}>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateNaissance).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
     </Descriptions>

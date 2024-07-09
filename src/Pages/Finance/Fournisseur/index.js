@@ -225,7 +225,7 @@ const CrudTable = () => {
       ellipsis: true,
     },
     {
-      title: <Text strong style={{ fontSize: '16px' }}>Tel</Text>,
+      title: <Text strong style={{ fontSize: '16px' }}>Telephone</Text>,
       dataIndex: 'Tel',
       key: 'Tel',
       sorter: (a, b) => a.Tel.localeCompare(b.Tel),

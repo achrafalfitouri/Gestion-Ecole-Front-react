@@ -330,14 +330,14 @@ const CrudTable = () => {
     <Form layout="vertical" onFinish={handleFormSubmit}>
       <Form.Item
         name="DateDebut"
-        label={<Text strong style={{ fontSize: '16px' }}>DateDebut</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date De Debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  placeholder="Entrez la DateDebut" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="DateFin"
-        label={<Text strong style={{ fontSize: '16px' }}>DateFin</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date De Fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker placeholder="Entrez la DateFin" style={{ fontSize: '16px',width:"100%" }} />
@@ -421,14 +421,14 @@ const CrudTable = () => {
       >
              <Form.Item
         name="DateDebut"
-        label={<Text strong style={{ fontSize: '16px' }}>DateDebut</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date De Debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  placeholder="Entrez la DateDebut" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="DateFin"
-        label={<Text strong style={{ fontSize: '16px' }}>DateFin</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date De Fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker placeholder="Entrez la DateFin" style={{ fontSize: '16px',width:"100%" }} />

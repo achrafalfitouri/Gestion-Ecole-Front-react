@@ -177,7 +177,7 @@ const CrudTable = () => {
 
   const columns = [
     {
-        title: <Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>,
+        title: <Text strong style={{ fontSize: '16px' }}>Nom d'etudiant</Text>,
         dataIndex: 'NomEtudiant',
         key: 'NomEtudiant',
         sorter: (a, b) => a.NomEtudiant.localeCompare(b.NomEtudiant),
@@ -190,7 +190,7 @@ const CrudTable = () => {
         ellipsis: true,
       },
     {
-        title: <Text strong style={{ fontSize: '16px' }}>Prenom etudiant</Text>,
+        title: <Text strong style={{ fontSize: '16px' }}>Prenom d'etudiant</Text>,
         dataIndex: 'PrenomEtudiant',
         key: 'PrenomEtudiant',
         sorter: (a, b) => a.PrenomEtudiant.localeCompare(b.PrenomEtudiant),
@@ -230,7 +230,7 @@ const CrudTable = () => {
     ellipsis: true,
   },
   {
-    title: <Text strong style={{ fontSize: '16px' }}>Nb heure</Text>,
+    title: <Text strong style={{ fontSize: '16px' }}>Nombre d'heure</Text>,
     dataIndex: 'Nb_Heure',
     key: 'Nb_Heure',
     sorter: (a, b) => {
@@ -408,7 +408,7 @@ const CrudTable = () => {
 </Form.Item>
 
 <Form.Item
-  label={<Text strong style={{ fontSize: '16px' }}>Nom Etudiant</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Nom de l'Etudiant</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
@@ -444,7 +444,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
         name="Nb_Heure"
-        label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Nombre d'Heure</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="number" style={{ fontSize: '16px' }} />
@@ -588,7 +588,7 @@ const EditUserForm = () => {
 </Form.Item>
 
 <Form.Item
-  label={<Text strong style={{ fontSize: '16px' }}>Nom Etudiant</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Nom de l'etudiant</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
@@ -610,7 +610,7 @@ const EditUserForm = () => {
 
       <Form.Item
         name="DateDebutAbsence"
-        label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date de Début</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
@@ -624,7 +624,7 @@ const EditUserForm = () => {
       </Form.Item>
       <Form.Item
         name="Nb_Heure"
-        label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Nombre Heure</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="number" style={{ fontSize: '16px' }} />
@@ -728,7 +728,7 @@ const EditUserForm = () => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateFinAbsence).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nombre Heure</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Nb_Heure}</Text>
       </Descriptions.Item>
       

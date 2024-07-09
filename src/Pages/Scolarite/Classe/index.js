@@ -66,7 +66,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer cette filiere?',
+      title: 'Êtes-vous sûr de vouloir supprimer ?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -215,7 +215,7 @@ const CrudTable = () => {
    
     {
 
-      title: <Text strong style={{ fontSize: '16px' }}>AnneeScolaire</Text>,
+      title: <Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>,
       dataIndex: 'AnneeScolaire',
       key: 'AnneeScolaire',
       sorter: (a, b) => a.AnneeScolaire.localeCompare(b.AnneeScolaire),

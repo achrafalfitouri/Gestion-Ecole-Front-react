@@ -359,7 +359,7 @@ const CrudTable = () => {
 
   <Form.Item
         name="ID_Etudiant"
-        label={<Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Nom étudiant</Text>}
         rules={[{ required: true, message: 'Veuillez sélectionner etudiant' }]}
         style={{ fontSize: '16px' }}
       >
@@ -380,7 +380,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
         name="DateDebutInscription"
-        label={<Text strong style={{ fontSize: '16px' }}>Date debut</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Date début</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker placeholder="Entrez la date debut" style={{ fontSize: '16px',width:"100%" }} />
@@ -440,7 +440,7 @@ const CrudTable = () => {
         
         <Form.Item
         name="ID_Etudiant"
-        label={<Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Nom étudiant</Text>}
         rules={[{ required: true, message: 'Veuillez sélectionner etudiant' }]}
         style={{ fontSize: '16px' }}
       >
