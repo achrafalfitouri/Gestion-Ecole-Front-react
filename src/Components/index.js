@@ -1,12 +1,13 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, BookOutlined, CalendarOutlined, DashboardOutlined, FileTextOutlined, IdcardOutlined, LineChartOutlined, SnippetsOutlined, UploadOutlined, UserAddOutlined, UserOutlined, VideoCameraOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme, Dropdown, Button, Row, Col, Space, Avatar, Popconfirm, Spin } from 'antd';
+import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, BookOutlined, CalendarOutlined, DashboardOutlined, FileTextOutlined, IdcardOutlined, LineChartOutlined, SnippetsOutlined, UploadOutlined, UserAddOutlined, UserOutlined, VideoCameraOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme, Dropdown, Button, Row, Col, Space, Avatar, Popconfirm, Spin, Typography } from 'antd';
 import './style.css';
 import AppRoutes from '../Routes';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 import { Navigate } from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
+const { Title, Text } = Typography;
 
 const Components = () => {
   const [logoText, setLogoText] = useState("EHPM");
@@ -19,11 +20,21 @@ const Components = () => {
 
   const navigate = useNavigate(); // Initialize useNavigate hook
 
+
+  // const handleMenuClick = (item) => {
+  //   setIsLoading(true); // Set loading state to true when menu item is clicked
+  //   setTimeout(() => {
+  //     navigate(item.key); // Navigate after a short delay to simulate loading
+  //     setIsLoading(false); // Set loading state to false after navigating
+  //   }, 500); // Adjust delay time as needed
+  // };
+
+
   useEffect(() => {
     // Simulate async operation
     setTimeout(() => {
       setIsLoading(false); // Set loading state to false after 2 seconds (simulating data fetch)
-    }, 2000);
+    }, 1000);
   }, []); // Run only once on component mount
 
   const handleLogout = () => {
@@ -57,21 +68,39 @@ if (!user || !token) {
 
   const itemsDropdown = [
     {
-      label: 'Gérer Compte',
+      label: <Text strong style={{ fontSize: '16px' }}>Gérer Compte</Text>,
       key: '1',
       onClick: () => navigate('/manage-account'), // Example navigation with navigate
     },
     {
-      label: 'Déconnexion',
+      label: <Text strong style={{ fontSize: '16px' }}>Déconnexion</Text>,
       key: '2',
       danger: true,
       onClick: handleLogout,
+    },
+  ];
+  
+  const settingsDropdownItems = [
+    {
+      label: <Text strong style={{ fontSize: '16px' }}>Créer Année Scolaire</Text>,
+      key: '1',
+      onClick: () => navigate('/anneescolaire'), // Navigate to the appropriate route
+    },
+    {
+      label: <Text strong style={{ fontSize: '16px' }}>Calendrier</Text>,
+      key: '2',
+      onClick: () => navigate('/calendrier'), // Navigate to the appropriate route
     },
   ];
 
   const menuProps = {
     items: itemsDropdown,
   };
+
+  const settingsMenuProps = {
+    items: settingsDropdownItems,
+  };
+
 
   const items = [
     {
@@ -279,6 +308,22 @@ if (!user || !token) {
           >
             <div style={{ marginRight: '30px', display: 'flex', alignItems: 'center' }}>
               <Space wrap>
+              <Dropdown
+                  overlay={<Menu items={settingsDropdownItems} />}
+                  placement="bottomRight"
+                  arrow
+                >
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon={<SettingOutlined />}
+                    style={{
+                      marginLeft: '10px',
+                      backgroundColor: '#001529', // Dark navy background
+                      borderColor: '#001529',
+                    }}
+                  />
+                </Dropdown>
                 <span
                   style={{
                     padding: '10px 12px',
@@ -293,6 +338,7 @@ if (!user || !token) {
                 >
                   {userLogin ? `${userLogin.PrenomUtilisateur} ${userLogin.NomUtilisateur}` : 'Guest'}
                 </span>
+                
                 <Dropdown
                   style={{
                     fontSize: '16px',
@@ -313,6 +359,7 @@ if (!user || !token) {
                     icon={<UserOutlined />}
                   />
                 </Dropdown>
+               
               </Space>
             </div>
           </Header>
@@ -329,9 +376,9 @@ if (!user || !token) {
                 borderRadius: borderRadiusLG,
               }}
             >
-              <Suspense fallback={<div>Loading...</div>}>
+            
                 <AppRoutes />
-              </Suspense>
+            
             </div>
           </Content>
           <Footer

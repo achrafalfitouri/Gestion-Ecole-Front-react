@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Statistic, Calendar, Table, Badge, Typography, Space } from 'antd';
+import { Row, Col, Card, Statistic, Calendar, Table, Badge, Typography, Space, TimePicker, Form, Input, Modal, Button, DatePicker } from 'antd';
 import { UserOutlined, BankOutlined, LineChartOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import axios from 'axios';
+import axiosInstance from '../../Middleware/axiosInstance';
 
 const Dashboard = () => {
   // Mock data for statistics (replace with actual data)
@@ -127,20 +128,28 @@ function DerniersRv({ cardStyle }) {
 // Le composant de calendrier
 const DashboardCalendar = ({ cardStyle }) => {
   const [eventsData, setEventsData] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [newEvent, setNewEvent] = useState({
+    date: null,
+    title: '',
+    rendezvousHeureDebut: null,
+    rendezvousHeureFin: null,
+  });
 
   useEffect(() => {
     fetchRendezvousData();
   }, []);
 
   const fetchRendezvousData = () => {
-    axios
-      .get('/api/rendezvouses')
+    axiosInstance
+      .get('/api/rendezvous')
       .then((response) => {
-        const rendezvousData = response.data['hydra:member'];
+        const rendezvousData = response.data;
         const events = rendezvousData.map((rendezvous) => ({
-          date: moment(rendezvous.dateRv).format('YYYY-MM-DD'),
-          title: rendezvous.nomPatient,
-          rendezvousDate: rendezvous.dateRv,
+          date: moment(rendezvous.Date).format('YYYY-MM-DD'),
+          title: rendezvous.Sujet,
+          rendezvousHeureDebut: moment(rendezvous.HeureDebut, 'HH:mm:ss'),
+          rendezvousHeureFin: moment(rendezvous.HeureFin, 'HH:mm:ss'),
         }));
         setEventsData(events);
       })
@@ -161,7 +170,7 @@ const DashboardCalendar = ({ cardStyle }) => {
           <div key={index}>
             <Badge
               status='success'
-              text={`${event.title} - ${moment(event.rendezvousDate).format('HH:mm:ss')}`}
+              text={`${event.title} - ${moment(event.rendezvousHeureDebut, 'HH:mm:ss').format('HH:mm')} - ${moment(event.rendezvousHeureFin, 'HH:mm:ss').format('HH:mm')}`}
             />
           </div>
         ))}
@@ -169,9 +178,95 @@ const DashboardCalendar = ({ cardStyle }) => {
     );
   };
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleFormSubmit = () => {
+    const { date, title, rendezvousHeureDebut, rendezvousHeureFin } = newEvent;
+
+    axiosInstance
+      .post('/api/rendezvous', {
+        Date: date,
+        Sujet: title,
+        HeureDebut: rendezvousHeureDebut,
+        HeureFin: rendezvousHeureFin,
+      })
+      .then((response) => {
+        fetchRendezvousData();
+        setIsModalVisible(false);
+        setNewEvent({
+          date: null,
+          title: '',
+          rendezvousHeureDebut: null,
+          rendezvousHeureFin: null,
+        });
+      })
+      .catch((error) => {
+        console.error('Error posting new event:', error);
+      });
+  };
+
+  const handleInputChange = (field, value) => {
+    setNewEvent({
+      ...newEvent,
+      [field]: value,
+    });
+  };
+
   return (
     <Card style={{ ...cardStyle, width: '100%' }} title='Calendrier'>
+      <Button type="primary" onClick={showModal} style={{ marginBottom: 16 }}>
+        Ajouter un événement
+      </Button>
       <Calendar dateCellRender={dateCellRender} />
+      <Modal
+        title="Ajouter un événement"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Annuler
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleFormSubmit}>
+            Ajouter
+          </Button>,
+        ]}
+      >
+        <Form layout="vertical">
+          <Form.Item label="Date">
+            <DatePicker
+             
+              value={newEvent.date}
+              onChange={(e) => handleInputChange('date', e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item label="Titre">
+            <Input
+              value={newEvent.title}
+              onChange={(e) => handleInputChange('title', e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item label="Heure de début">
+            <TimePicker
+              format="HH:mm"
+              value={newEvent.rendezvousHeureDebut ? moment(newEvent.rendezvousHeureDebut, 'HH:mm:ss') : null}
+              onChange={(time, timeString) => handleInputChange('rendezvousHeureDebut', timeString)}
+            />
+          </Form.Item>
+          <Form.Item label="Heure de fin">
+            <TimePicker
+              format="HH:mm"
+              value={newEvent.rendezvousHeureFin ? moment(newEvent.rendezvousHeureFin, 'HH:mm:ss') : null}
+              onChange={(time, timeString) => handleInputChange('rendezvousHeureFin', timeString)}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
     </Card>
   );
 };

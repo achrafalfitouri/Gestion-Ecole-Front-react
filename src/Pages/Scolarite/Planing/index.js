@@ -624,16 +624,12 @@ const EditUserForm = () => {
   const [selectedMatiere, setSelectedMatiere] = useState(null);
   const [selectedFormateur, setSelectedFormateur] = useState(null);
 
- // Format date to yyyy-MM-dd
- const formatDate = (date) => {
-  return moment(date).format('HH:mm');
-};
+ 
   // Function to get initial values excluding sensitive fields
   const getInitialValues = () => {
     const initialValues = { ...selectedRecord };
-    initialValues.HeureDebut = formatDate(initialValues.HeureDebut);
-    initialValues.HeureFin = formatDate(initialValues.HeureFin);
-
+ delete   initialValues.HeureDebut 
+ delete   initialValues.HeureFin
     return initialValues;
   };
 

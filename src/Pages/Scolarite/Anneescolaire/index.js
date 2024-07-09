@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select,DatePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutlined, SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
-
+import moment from 'moment';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -31,7 +31,7 @@ const CrudTable = () => {
   const fetchData = async () => {
     setRefreshLoading(true);
     try {
-        const response = await axiosInstance.get('/api/classes', {
+        const response = await axiosInstance.get('/api/anneescolaire', {
             params: {
                 page: pagination.current,
                 pageSize: pagination.pageSize,
@@ -57,7 +57,7 @@ const CrudTable = () => {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_Classe);
+      showDeleteConfirm(record.ID_AnneeScolaire);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
@@ -78,11 +78,11 @@ const CrudTable = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/api/classes/${id}`);
-      message.success('filiere supprimé avec succès');
+      await axiosInstance.delete(`/api/anneescolaire/${id}`);
+      message.success('Niveau supprimé avec succès');
       fetchData();
     } catch (error) {
-      console.error('Error deleting data:', error);
+        message.error('Impossible de supprimer le niveau. Il existe des enregistrements associés.');
     }
   };
 
@@ -186,36 +186,7 @@ const CrudTable = () => {
   
     {
 
-      title: <Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>,
-      dataIndex: 'NomClasse',
-      key: 'NomClasse',
-      sorter: (a, b) => a.NomClasse.localeCompare(b.NomClasse),
-      ...getColumnSearchProps('NomClasse'),
-      render: (text) => (
-        <Text strong style={{ fontSize: '16px' }}>
-          {renderText(text, globalSearchText)}
-        </Text>
-      ),
-      ellipsis: true,
-    },
-    {
-
-      title: <Text strong style={{ fontSize: '16px' }}>Filiere</Text>,
-      dataIndex: 'NomFiliere',
-      key: 'NomFiliere',
-      sorter: (a, b) => a.NomFiliere.localeCompare(b.NomFiliere),
-      ...getColumnSearchProps('NomFiliere'),
-      render: (text) => (
-        <Text strong style={{ fontSize: '16px' }}>
-          {renderText(text, globalSearchText)}
-        </Text>
-      ),
-      ellipsis: true,
-    },
-   
-    {
-
-      title: <Text strong style={{ fontSize: '16px' }}>AnneeScolaire</Text>,
+      title: <Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>,
       dataIndex: 'AnneeScolaire',
       key: 'AnneeScolaire',
       sorter: (a, b) => a.AnneeScolaire.localeCompare(b.AnneeScolaire),
@@ -228,20 +199,32 @@ const CrudTable = () => {
       ellipsis: true,
     },
     {
-
-      title: <Text strong style={{ fontSize: '16px' }}>Remarques</Text>,
-      dataIndex: 'Remarques',
-      key: 'Remarques',
-      sorter: (a, b) => a.Remarques.localeCompare(b.Remarques),
-      ...getColumnSearchProps('Remarques'),
-      render: (text) => (
-        <Text strong style={{ fontSize: '16px' }}>
-          {renderText(text, globalSearchText)}
-        </Text>
-      ),
-      ellipsis: true,
-    },
-   
+        title: <Text strong style={{ fontSize: '16px' }}>Date Debut </Text>,
+        dataIndex: 'DateDebut',
+        key: 'DateDebut',
+        sorter: (a, b) => a.DateDebut.localeCompare(b.DateDebut),
+        ...getColumnSearchProps('DateDebut'),
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {renderText(moment(text).format('DD/MM/YYYY'), globalSearchText)}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+      {
+        title: <Text strong style={{ fontSize: '16px' }}>Date Fin</Text>,
+        dataIndex: 'DateFin',
+        key: 'DateFin',
+        sorter: (a, b) => a.DateFin.localeCompare(b.DateFin),
+        ...getColumnSearchProps('DateFin'),
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {renderText(moment(text).format('DD/MM/YYYY'), globalSearchText)}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+    
     {
       title: '',
       key: 'action',
@@ -251,8 +234,7 @@ const CrudTable = () => {
         </Dropdown>
       ),
     },
-
-    
+  
     
   ];
   
@@ -281,12 +263,12 @@ const CrudTable = () => {
     try {
         
       if (drawerType === 'add') {
-        await axiosInstance.post('/api/classes', values);
-        message.success('rendez-vous ajouté avec succès');
+        await axiosInstance.post('/api/anneescolaire', values);
+        message.success('Niveau ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
-        await axiosInstance.put(`/api/classes/${selectedRecord.ID_Classe}`, updatedValues);
-        message.success('rendez-vous modifié avec succès');
+        await axiosInstance.put(`/api/anneescolaire/${selectedRecord.ID_AnneeScolaire}`, updatedValues);
+        message.success('Niveau modifié avec succès');
       }
 
       handleCloseDrawer();
@@ -314,100 +296,43 @@ const CrudTable = () => {
     }, 1100); // Adjust delay time as needed
   };
  
-  const [filiereOptions, setFiliereOptions] = useState([]);
-  useEffect(() => {
-    const fetchFiliereOptions = async () => {
-      try {
-        const response = await axiosInstance.get('/api/filiere');
-        setFiliereOptions(response.data);
-      } catch (error) {
-        console.error('Error fetching filiere options:', error);
-        message.error('Erreur lors du chargement des options de filiere');
-      }
-    };
-
-    fetchFiliereOptions();
-  }, []);
   
-  const [anneescolaireOptions, setAnneescolaireOptions] = useState([]);
-  useEffect(() => {
-    const fetchAnneescolaireOptions = async () => {
-      try {
-        const response = await axiosInstance.get('/api/anneescolaire');
-        setAnneescolaireOptions(response.data);
-      } catch (error) {
-        console.error('Error fetching filiere options:', error);
-        message.error('Erreur lors du chargement des options de filiere');
-      }
-    };
-
-    fetchAnneescolaireOptions();
-  }, []);
   
   // Add Form Component for Ajouter Utilisateur
   const AddUserForm = () => (
     <Form layout="vertical" onFinish={handleFormSubmit}>
 
+<Form.Item
+  name="AnneeScolaire"
+  label={<Text strong style={{ fontSize: '16px' }}>Année Scolaire</Text>}
+  rules={[
+    { 
+      required: true, 
+      message: 'Veuillez entrer l\'année scolaire' 
+    },
+    {
+      pattern: /^(19|20)\d{2}-(19|20)\d{2}$/, // Exemple de pattern pour YYYY-YYYY
+      message: 'Format incorrect. Exemple: 2023-2024'
+    }
+  ]}
+>
+  <Input placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
+</Form.Item>
 
 <Form.Item
-    name="NomClasse"
-    label={<Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-  >
-    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
-  </Form.Item>
-  <Form.Item
-        name="ID_Filiere"
-        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
-        style={{ fontSize: '16px' }}
+        name="DateDebut"
+        label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Select
-        showSearch
-        filterOption={(input, option) =>
-          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-        }
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner une filiere"
-        >
-          {filiereOptions.map(filiere => (
-            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
-              {filiere.NomFiliere}
-            </Option>
-          ))}
-        </Select>
+        <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
       </Form.Item>
-  <Form.Item
-        name="ID_AnneeScolaire"
-        label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner ' }]}
-        style={{ fontSize: '16px' }}
+      <Form.Item
+        name="DateFin"
+        label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Select
-        showSearch
-        filterOption={(input, option) =>
-          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-        }
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner une filiere"
-        >
-          {anneescolaireOptions.map(anneescolaire => (
-            <Option key={anneescolaire.ID_AnneeScolaire} value={anneescolaire.ID_AnneeScolaire} style={{ fontSize: '16px' }}>
-              {anneescolaire.AnneeScolaire}
-            </Option>
-          ))}
-        </Select>
+        <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
       </Form.Item>
-    
-
-<Form.Item
-    name="Remarques"
-    label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-  >
-    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
-  </Form.Item>
-
   <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
             Ajouter
@@ -422,11 +347,12 @@ const CrudTable = () => {
   // Edit Form Component for Modifier Utilisateur
   const EditUserForm = () => {
     const [form] = Form.useForm(); // Use Ant Design Form hook
-  
+ 
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-     
+    delete  initialValues.DateDebut 
+  delete  initialValues.DateFin 
       return initialValues;
     };
   
@@ -441,64 +367,39 @@ const CrudTable = () => {
         onFinish={handleFormSubmit}
         initialValues={getInitialValues()}
       >
-       <Form.Item
-    name="NomClasse"
-    label={<Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-  >
-    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
-  </Form.Item>
-  <Form.Item
-        name="ID_Filiere"
-        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
-        style={{ fontSize: '16px' }}
-      >
-        <Select
-        showSearch
-        filterOption={(input, option) =>
-          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-        }
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner une filiere"
-        >
-          {filiereOptions.map(filiere => (
-            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
-              {filiere.NomFiliere}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-  <Form.Item
-        name="ID_AnneeScolaire"
-        label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner ' }]}
-        style={{ fontSize: '16px' }}
-      >
-        <Select
-        showSearch
-        filterOption={(input, option) =>
-          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-        }
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner une filiere"
-        >
-          {anneescolaireOptions.map(anneescolaire => (
-            <Option key={anneescolaire.ID_AnneeScolaire} value={anneescolaire.ID_AnneeScolaire} style={{ fontSize: '16px' }}>
-              {anneescolaire.AnneeScolaire}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-    
+        
+        
+        <Form.Item
+  name="AnneeScolaire"
+  label={<Text strong style={{ fontSize: '16px' }}>Année Scolaire</Text>}
+  rules={[
+    { 
+      required: true, 
+      message: 'Veuillez entrer l\'année scolaire' 
+    },
+    {
+      pattern: /^(19|20)\d{2}-(19|20)\d{2}$/, // Exemple de pattern pour YYYY-YYYY
+      message: 'Format incorrect. Exemple: 2023-2024'
+    }
+  ]}
+>
+  <Input placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
+</Form.Item>
 
 <Form.Item
-    name="Remarques"
-    label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-  >
-    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
-  </Form.Item>
+        name="DateDebut"
+        label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <DatePicker style={{ fontSize: '16px',width : "100%" }} />
+      </Form.Item>
+      <Form.Item
+        name="DateFin"
+        label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
+      </Form.Item>
   <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
             Modifier
@@ -515,7 +416,7 @@ const CrudTable = () => {
     <div style={{ padding: '40px', fontSize: '16px' }}>
       <Card style={{ borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '2px 6px 14px rgba(0, 0, 0.1, 0.2)' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title level={3} style={{ fontSize: '24px' }}>Liste des classes</Title>
+          <Title level={3} style={{ fontSize: '24px' }}>Liste des annees Scolaires</Title>
           <Row justify="end" align="middle" style={{ marginBottom: '16px' }}>
             <Col>
               <Space>
@@ -556,12 +457,12 @@ const CrudTable = () => {
                     borderRadius: '15px'
                   }}
                 >
-                  Ajouter une classe
+                  Ajouter une anneescolaire
                 </Button>
               </Space>
             </Col>
           </Row>
-          <Table columns={columns} dataSource={data} rowKey="ID_Filiere" pagination={pagination} loading={refreshLoading}
+          <Table columns={columns} dataSource={data} rowKey="ID_AnneeScolaire" pagination={pagination} loading={refreshLoading}
             onChange={handleTableChange}  scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
             size="middle" // Optionally change the size of the table (default, middle, small)
             rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}   />
@@ -571,7 +472,8 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
-      {drawerType === 'add' ? 'Ajouter classe' : drawerType === 'edit' ? 'Modifier classe' : 'Afficher classe'}
+ {drawerType === 'add' ? 'Ajouter anneeScolaire' : drawerType === 'edit' ? 'Modifier anneeScolaire' : 'Afficher anneeScolaire'}
+
     </Text>
   }
   width={drawerType === 'view' ? 720 : 480}
@@ -579,89 +481,33 @@ const CrudTable = () => {
   visible={drawerVisible}
   bodyStyle={{ paddingBottom: 80 }}
 >
-  {drawerType === 'view' && selectedRecord && (
+  {drawerType === 'view' ? (
+    
     <Descriptions column={1} bordered>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord.NomClasse}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord.NomFiliere}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord.AnneeScolaire}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord.Remarques}</Text>
-      </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Liste Etudiants</Text>}>
-        <Button
-          icon={<EyeOutlined />}
-          onClick={() => {
-            // Open a drawer to show students
-            setDrawerType('listEtudiants');
-            setDrawerVisible(true);
-          }}
-          style={{ fontWeight: 'bold', fontSize: '14px' }}
-        >
-          Voir Liste Etudiants
-        </Button>
-      </Descriptions.Item>
+ 
+              
+ <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>AnneeScolaire</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.AnneeScolaire}</Text>
+</Descriptions.Item>
+<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date Debut</Text>}>
+  <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateDebut).format('DD/MM/YYYY')}</Text>
+</Descriptions.Item>
+<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}>
+  <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateFin).format('DD/MM/YYYY')}</Text>
+</Descriptions.Item>
+
     </Descriptions>
+  ) : (
+    <>
+      {drawerType === 'add' && <AddUserForm />}
+      {drawerType === 'edit' && <EditUserForm />}
+    </>
   )}
 
-{drawerType === 'listEtudiants' && (
-  <Drawer
-    title={<Text strong style={{ fontSize: '22px' }}>Liste des Etudiants</Text>}
-    width={920}
-    onClose={handleCloseDrawer}
-    visible={drawerVisible}
-    bodyStyle={{ paddingBottom: 80 }}
-  >
-    <div>
-      {selectedRecord && (
-         <Descriptions
-           bordered
-           column={3}
-           layout="vertical"
-           style={{ width: '100%', border: '1px solid #f0f0f0' }}
-         >
-           <Descriptions.Item
-             label={<Text strong style={{ fontSize: '16px' }}>(Numero) Etudiant </Text>}
-             contentStyle={{ fontSize: '16px' }}
-           >
-             <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-               {selectedRecord.NomComplet.split('\n').map((student, index) => (
-                 <div key={index} style={{ borderBottom: '1px solid #ddd', padding: '5px 0' }}>
-                   {student}
-                 </div>
-               ))}
-             </pre>
-           </Descriptions.Item>
-           <Descriptions.Item
-             label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-             contentStyle={{ fontSize: '16px' }}
-           >
-             {selectedRecord.NomFiliere}
-           </Descriptions.Item>
-           <Descriptions.Item
-             label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
-             contentStyle={{ fontSize: '16px' }}
-           >
-             {selectedRecord.AnneeScolaire}
-           </Descriptions.Item>
-         </Descriptions>
-      )}
-    </div>
-  </Drawer>
-)}
 
-
-  {drawerType === 'add' && <AddUserForm />}
-  {drawerType === 'edit' && <EditUserForm />}
 </Drawer>
 
     </div>
-
   );
 };
 

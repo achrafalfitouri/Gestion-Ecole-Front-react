@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, DatePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
@@ -388,7 +388,7 @@ const CrudTable = () => {
   
     return (
       <Form layout="vertical" onFinish={handleFormSubmit}>
-       <Form.Item
+        <Form.Item
   label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
@@ -428,22 +428,21 @@ const CrudTable = () => {
   </Select>
 </Form.Item>
 
-   
-        <Form.Item
-          name="DateDebutAbsence"
-          label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
-        >
-          <Input type="date" style={{ fontSize: '16px' }} />
-        </Form.Item>
-        <Form.Item
-          name="DateFinAbsence"
-          label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
-        >
-          <Input type="date" style={{ fontSize: '16px' }} />
-        </Form.Item>
-        <Form.Item
+      <Form.Item
+        name="DateDebutAbsence"
+        label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
+      </Form.Item>
+      <Form.Item
+        name="DateFinAbsence"
+        label={<Text strong style={{ fontSize: '16px'}}>Date Fin</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
+      </Form.Item>
+      <Form.Item
         name="Nb_Heure"
         label={<Text strong style={{ fontSize: '16px' }}>Nb Heure</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
@@ -454,7 +453,7 @@ const CrudTable = () => {
           <Button type="primary" htmlType="submit" style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px', marginRight: '10px' }}>
             Ajouter
           </Button>
-          <Button style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px' }}>
+          <Button style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px' }} onClick={handleCloseDrawer}>
             Annuler
           </Button>
         </Form.Item>
@@ -472,15 +471,12 @@ const EditUserForm = () => {
   const [etudiantOptions, setEtudiantOptions] = useState([]);
   const [selectedClasse, setSelectedClasse] = useState(null);
   const [selectedEtudiant, setSelectedEtudiant] = useState(null);
- // Format date to yyyy-MM-dd
- const formatDate = (date) => {
-  return moment(date).format('YYYY-MM-DD');
-};
+
   // Function to get initial values excluding sensitive fields
   const getInitialValues = () => {
     const initialValues = { ...selectedRecord };
-    initialValues.DateDebutAbsence = formatDate(initialValues.DateDebutAbsence);
-    initialValues.DateFinAbsence = formatDate(initialValues.DateFinAbsence);
+  delete  initialValues.DateDebutAbsence 
+  delete  initialValues.DateFinAbsence 
 
     return initialValues;
   };
@@ -617,14 +613,14 @@ const EditUserForm = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type="date" style={{ fontSize: '16px' }} />
+        <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
       </Form.Item>
       <Form.Item
         name="DateFinAbsence"
-        label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}
+        label={<Text strong style={{ fontSize: '16px'}}>Date Fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type="date" style={{ fontSize: '16px' }} />
+        <DatePicker  style={{ fontSize: '16px',width : "100%" }}/>
       </Form.Item>
       <Form.Item
         name="Nb_Heure"

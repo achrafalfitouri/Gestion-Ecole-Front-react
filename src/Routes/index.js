@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Unauthorized from "../Pages/Unauthorized";
-import { AnimatePresence } from "framer-motion";
+import  { lazy } from "react";
+
 // import { fetchUserData } from "../interceptors/axios"; // Import fetchUserData from axios.js
 // import DashboardDataProvider from '../../Pages/Dashbaord/DashboardProvider';
 
@@ -15,33 +16,30 @@ import { AnimatePresence } from "framer-motion";
 // const Examen = lazy(() => import("../../Pages/Examen"));
 // const Formateur = lazy(() => import("../../Pages/Formateur"));
 
-import Dashboard from "../Pages/Dashboard";
-import Utilisateur from "../Pages/Utilisateurs/index";
-import Etudiant from "../Pages/Scolarite/Etudiant";
-import Filiere from "../Pages/Scolarite/Filiere";
-import Matiere from "../Pages/Scolarite/Matiere";
-import RendezVous from "../Pages/RendezVous";
-import Classe from "../Pages/Scolarite/Classe";
-import Formateur from "../Pages/Scolarite/Formateur";
-import Inscription from "../Pages/Scolarite/Inscription";
-import Niveau from "../Pages/Scolarite/Classe/Niveau";
-import Stage from "../Pages/Scolarite/Stage";
-import Absence from "../Pages/Scolarite/Abcense";
-import Fournisseur from "../Pages/Finance/Fournisseur";
-import Personnel from "../Pages/Finance/Personnel";
-
-
-
-import Planing from "../Pages/Scolarite/Planing";
-
-
+const Calendrier = lazy(() => import("../Pages/Calendrier"));
+const Utilisateur = lazy(() => import("../Pages/Utilisateurs/index"));
+const Etudiant = lazy(() => import("../Pages/Scolarite/Etudiant"));
+const Filiere = lazy(() => import("../Pages/Scolarite/Filiere"));
+const Matiere = lazy(() => import("../Pages/Scolarite/Matiere"));
+const Classe = lazy(() => import("../Pages/Scolarite/Classe"));
+const Anneescolaire = lazy(() => import("../Pages/Scolarite/Anneescolaire"));
+const Formateur = lazy(() => import("../Pages/Scolarite/Formateur"));
+const Inscription = lazy(() => import("../Pages/Scolarite/Inscription"));
+const Niveau = lazy(() => import("../Pages/Scolarite/Classe/Niveau"));
+const Stage = lazy(() => import("../Pages/Scolarite/Stage"));
+const Absence = lazy(() => import("../Pages/Scolarite/Abcense"));
+const Fournisseur = lazy(() => import("../Pages/Finance/Fournisseur"));
+const Personnel = lazy(() => import("../Pages/Finance/Personnel"));
+const Planing = lazy(() => import("../Pages/Scolarite/Planing"));
+const RendezVous = lazy(() => import("../Pages/RendezVous"));
+const Dashboard = lazy(() => import("../Pages/Dashboard"));
 
 
 
 function AppRoutes() {
 
   return (
-    <AnimatePresence>
+
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           {/* Dashboard */}
@@ -60,13 +58,15 @@ function AppRoutes() {
           <Route path="/absence" element={<Absence />} />
           <Route path="/fournisseur" element={<Fournisseur />} />
           <Route path="/personnel" element={<Personnel />} />
+          <Route path="/anneescolaire" element={<Anneescolaire />} />
+          <Route path="/calendrier" element={<Calendrier />} />
 
           <Route path="/planing" element={<Planing />} />
           {/* Fallback route for unauthorized access */}
           <Route path="*" element={<Unauthorized />} />
         </Routes>
       </Suspense>
-    </AnimatePresence>
+   
   );
 }
 

@@ -502,6 +502,10 @@ const CrudTable = () => {
         style={{ fontSize: '16px' }}
       >
         <Select
+        showSearch
+        filterOption={(input, option) =>
+          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+        }
           style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
           placeholder="Sélectionner une filiere"
         >
@@ -639,6 +643,10 @@ const CrudTable = () => {
         style={{ fontSize: '16px' }}
       >
         <Select
+         showSearch
+         filterOption={(input, option) =>
+           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+         }
           style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
           placeholder="Sélectionner une filiere"
         >

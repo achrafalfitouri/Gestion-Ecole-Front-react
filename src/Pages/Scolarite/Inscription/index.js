@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, DatePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutlined, SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
@@ -364,6 +364,10 @@ const CrudTable = () => {
         style={{ fontSize: '16px' }}
       >
         <Select
+         showSearch
+         filterOption={(input, option) =>
+           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+         }
           style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
           placeholder="Sélectionner un etudiant"
         >
@@ -379,14 +383,14 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date" placeholder="Entrez la date debut" style={{ fontSize: '16px' }} />
+        <DatePicker placeholder="Entrez la date debut" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="DateFinInscription"
         label={<Text strong style={{ fontSize: '16px' }}>Date fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date" placeholder="Entrez la date fin" style={{ fontSize: '16px' }} />
+        <DatePicker placeholder="Entrez la date fin" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="FraisInscription"
@@ -416,7 +420,9 @@ const CrudTable = () => {
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-     
+    delete  initialValues.DateDebutInscription 
+    delete  initialValues.DateFinInscription 
+
       return initialValues;
     };
   
@@ -432,7 +438,6 @@ const CrudTable = () => {
         initialValues={getInitialValues()}
       >
         
-        
         <Form.Item
         name="ID_Etudiant"
         label={<Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>}
@@ -440,6 +445,10 @@ const CrudTable = () => {
         style={{ fontSize: '16px' }}
       >
         <Select
+         showSearch
+         filterOption={(input, option) =>
+           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+         }
           style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
           placeholder="Sélectionner un etudiant"
         >
@@ -455,14 +464,14 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date" placeholder="Entrez la date debut" style={{ fontSize: '16px' }} />
+        <DatePicker placeholder="Entrez la date debut" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="DateFinInscription"
         label={<Text strong style={{ fontSize: '16px' }}>Date fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date" placeholder="Entrez la date fin" style={{ fontSize: '16px' }} />
+        <DatePicker placeholder="Entrez la date fin" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="FraisInscription"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload, DatePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined, RedoOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
@@ -516,7 +516,7 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date" placeholder="Entrez la date de naissance de l'etudiant" style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez la date de naissance de l'etudiant" style={{ fontSize: '16px',width : '100%' }} />
       </Form.Item>
      
       <Form.Item
@@ -556,6 +556,10 @@ const CrudTable = () => {
         style={{ fontSize: '16px' }}
       >
         <Select
+         showSearch
+         filterOption={(input, option) =>
+           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+         }
           style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
           placeholder="Sélectionner une filiere"
         >
@@ -582,11 +586,11 @@ const CrudTable = () => {
   // Edit Form Component for Modifier Utilisateur
   const EditUserForm = () => {
     const [form] = Form.useForm(); // Use Ant Design Form hook
-  
+
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-     
+   delete   initialValues.DateNaissance 
       return initialValues;
     };
   
@@ -667,7 +671,7 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date"  placeholder="Entrez la date de naissance de l'etudiant" style={{ fontSize: '16px' }} />
+        <DatePicker   placeholder="Entrez la date de naissance de l'etudiant" style={{ fontSize: '16px',width: "100%" }} />
       </Form.Item>
      
       <Form.Item
@@ -707,6 +711,10 @@ const CrudTable = () => {
         style={{ fontSize: '16px' }}
       >
         <Select
+         showSearch
+         filterOption={(input, option) =>
+           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+         }
           style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
           placeholder="Sélectionner une filiere"
         >

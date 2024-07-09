@@ -321,7 +321,7 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <DatePicker    placeholder="Entrez la date" style={{ fontSize: '16px' ,width : '100%'}} />
+        <DatePicker   placeholder="Entrez la date" style={{ fontSize: '16px' ,width : '100%'}} />
       </Form.Item>
       <Form.Item
         name="HeureDebut"
@@ -372,12 +372,15 @@ const CrudTable = () => {
   // Edit Form Component for Modifier Utilisateur
   const EditUserForm = () => {
     const [form] = Form.useForm(); // Use Ant Design Form hook
-  
+   
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-      delete initialValues.MotDePasse; // Remove MotDePasse from initial values
-      delete initialValues.ID_Role; // Remove MotDePasse from initial values
+
+     delete   initialValues.Date 
+     delete   initialValues.HeureDebut 
+     delete   initialValues.HeureFin 
+        
       return initialValues;
     };
   
@@ -397,21 +400,21 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "date" placeholder="Entrez la date" style={{ fontSize: '16px' }} />
+        <DatePicker   placeholder="Entrez la date" style={{ fontSize: '16px' ,width : '100%'}} />
       </Form.Item>
       <Form.Item
         name="HeureDebut"
         label={<Text strong style={{ fontSize: '16px' }}>L'heure du debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
+        <TimePicker  placeholder="Entrez le temps" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="HeureFin"
         label={<Text strong style={{ fontSize: '16px' }}>L'heure du fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type = "time" placeholder="Entrez le temps" style={{ fontSize: '16px' }} />
+        <TimePicker  placeholder="Entrez le temps" style={{ fontSize: '16px' ,width:"100%"}} />
       </Form.Item>
      
 
