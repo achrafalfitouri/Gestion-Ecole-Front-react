@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, InputNumber } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutlined, SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
+import jsPDF from 'jspdf';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -10,6 +11,7 @@ const { Option } = Select;
 
 const CrudTable = () => {
   const [data, setData] = useState(null);
+  const [data2, setData2] = useState(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [drawerType, setDrawerType] = useState(null); // Use null for no action
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -24,6 +26,70 @@ const CrudTable = () => {
 
   const searchInput = React.useRef(null);
 
+
+  const [nbSeance, setNbSeance] = useState(0);
+
+  const handlePrint = () => {
+    const doc = new jsPDF();
+    const tableColumn = ['Etudiant', 'Filiere', 'Groupe'];
+    for (let i = 1; i <= nbSeance; i++) {
+      tableColumn.push(`S${i}`);
+    }
+
+    const tableRows = selectedRecord.NomComplet.split('\n').map((student, index) => {
+      const row = [student, selectedRecord.NomFiliere, selectedRecord.Groupe];
+      for (let i = 1; i <= nbSeance; i++) {
+        row.push('');
+      }
+      return row;
+    });
+
+    // Add logo (assuming EHPM is a text logo)
+    const logoText = 'EHPM';
+    const nomClasse = selectedRecord.NomClasse;
+
+    // Set font size and style for logo text
+    doc.setFontSize(24); // Adjust the font size here (bigger)
+    doc.setFont('helvetica', 'bold'); // Set the font and style to bold
+
+    // Calculate logo text width and position it
+    const textWidth = doc.getStringUnitWidth(logoText) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+    const textX = (doc.internal.pageSize.width - textWidth) / 2;
+    const textY = 20; // Adjust Y position as needed
+
+    doc.text(logoText, textX, textY);
+
+    // Add NomClasse below logo text
+    doc.setFontSize(12);
+    const nomClasseWidth = doc.getStringUnitWidth(nomClasse) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+    const nomClasseX = (doc.internal.pageSize.width - nomClasseWidth) / 2;
+    const nomClasseY = textY + 15; // Adjust Y position as needed
+    doc.text(nomClasse, nomClasseX, nomClasseY);
+
+    // Add table
+    doc.autoTable(tableColumn, tableRows, { startY: nomClasseY + 10 });
+
+    // Add Annee Scolaire at the bottom center
+    const pageCount = doc.internal.getNumberOfPages();
+    const lastPage = pageCount + 1;
+    const pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+    const pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+    const middleX = pageWidth / 2;
+    const bottomY = pageHeight - 10;
+
+    doc.setPage(lastPage);
+    doc.setFontSize(12);
+    doc.text('Annee Scolaire: ' + selectedRecord.AnneeScolaire, middleX, bottomY, { align: 'center' });
+
+    // Save PDF
+    doc.save('liste_de_presence.pdf');
+  };
+
+
+
+
+
+  
   useEffect(() => {
     fetchData();
   }, [pagination.current, pagination.pageSize]);
@@ -50,6 +116,35 @@ const CrudTable = () => {
         setRefreshLoading(false);
     }
 };
+  const fetchData2 = async () => {
+    setRefreshLoading(true);
+    try {
+        const response = await axiosInstance.get('/api/classes/all', {
+            params: {
+                page: pagination.current,
+                pageSize: pagination.pageSize,
+            },
+        });
+
+
+      
+            setData2(response.data);
+       
+
+        setPagination({ ...pagination, total: response.data.total });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    } finally {
+        setRefreshLoading(false);
+    }
+};
+
+useEffect(() => {
+  fetchData2();
+}, [pagination.current, pagination.pageSize]);
+
+
+
 
   const handleMenuClick = (record, action) => {
     setSelectedRecord(record);
@@ -61,6 +156,7 @@ const CrudTable = () => {
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
+      fetchData()
     }
   };
 
@@ -89,6 +185,12 @@ const CrudTable = () => {
   const menu = (record) => (
     <Menu onClick={({ key }) => handleMenuClick(record, key)}>
       <Menu.Item key="view" icon={<EyeOutlined />} style={{ fontSize: '16px' }}>Afficher</Menu.Item>
+      <Menu.Item key="edit" icon={<EditOutlined />} style={{ fontSize: '16px' }}>Modifier</Menu.Item>
+      <Menu.Item key="delete" icon={<DeleteOutlined />} style={{ fontSize: '16px' }}>Supprimer</Menu.Item>
+    </Menu>
+  );
+  const menu2 = (record) => (
+    <Menu onClick={({ key }) => handleMenuClick(record, key)}>
       <Menu.Item key="edit" icon={<EditOutlined />} style={{ fontSize: '16px' }}>Modifier</Menu.Item>
       <Menu.Item key="delete" icon={<DeleteOutlined />} style={{ fontSize: '16px' }}>Supprimer</Menu.Item>
     </Menu>
@@ -200,6 +302,20 @@ const CrudTable = () => {
     },
     {
 
+      title: <Text strong style={{ fontSize: '16px' }}>Groupe</Text>,
+      dataIndex: 'Groupe',
+      key: 'Groupe',
+      sorter: (a, b) => a.Groupe.localeCompare(b.Groupe),
+      ...getColumnSearchProps('Groupe'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+
       title: <Text strong style={{ fontSize: '16px' }}>Filiere</Text>,
       dataIndex: 'NomFiliere',
       key: 'NomFiliere',
@@ -247,6 +363,93 @@ const CrudTable = () => {
       key: 'action',
       render: (text, record) => (
         <Dropdown overlay={menu(record)} trigger={['click']}>
+          <Button icon={<EllipsisOutlined />} style={{ fontWeight: 'bold', fontSize: '16px' }} />
+        </Dropdown>
+      ),
+    },
+
+    
+    
+  ];
+  const columns2 = [
+  
+    {
+
+      title: <Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>,
+      dataIndex: 'NomClasse',
+      key: 'NomClasse',
+      sorter: (a, b) => a.NomClasse.localeCompare(b.NomClasse),
+      ...getColumnSearchProps('NomClasse'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+
+      title: <Text strong style={{ fontSize: '16px' }}>Groupe</Text>,
+      dataIndex: 'Groupe',
+      key: 'Groupe',
+      sorter: (a, b) => a.Groupe.localeCompare(b.Groupe),
+      ...getColumnSearchProps('Groupe'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+
+      title: <Text strong style={{ fontSize: '16px' }}>Filiere</Text>,
+      dataIndex: 'NomFiliere',
+      key: 'NomFiliere',
+      sorter: (a, b) => a.NomFiliere.localeCompare(b.NomFiliere),
+      ...getColumnSearchProps('NomFiliere'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+   
+    {
+
+      title: <Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>,
+      dataIndex: 'AnneeScolaire',
+      key: 'AnneeScolaire',
+      sorter: (a, b) => a.AnneeScolaire.localeCompare(b.AnneeScolaire),
+      ...getColumnSearchProps('AnneeScolaire'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+
+      title: <Text strong style={{ fontSize: '16px' }}>Remarques</Text>,
+      dataIndex: 'Remarques',
+      key: 'Remarques',
+      sorter: (a, b) => a.Remarques.localeCompare(b.Remarques),
+      ...getColumnSearchProps('Remarques'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+   
+    {
+      title: '',
+      key: 'action',
+      render: (text, record) => (
+        <Dropdown overlay={menu2(record)} trigger={['click']}>
           <Button icon={<EllipsisOutlined />} style={{ fontWeight: 'bold', fontSize: '16px' }} />
         </Dropdown>
       ),
@@ -378,6 +581,25 @@ const CrudTable = () => {
         </Select>
       </Form.Item>
   <Form.Item
+        name="Groupe"
+        label={<Text strong style={{ fontSize: '16px' }}>Groupe</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Groupe' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+        showSearch
+        filterOption={(input, option) =>
+          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+        }
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner un Groupe"
+        >
+<Option value="G1">G1</Option>
+  <Option value="G2">G2</Option>
+  <Option value="G3">G3</Option>
+  <Option value="G4">G4</Option>        </Select>
+      </Form.Item>
+  <Form.Item
         name="ID_AnneeScolaire"
         label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
         rules={[{ required: true, message: 'Veuillez sélectionner ' }]}
@@ -468,6 +690,25 @@ const CrudTable = () => {
             </Option>
           ))}
         </Select>
+      </Form.Item>
+      <Form.Item
+        name="Groupe"
+        label={<Text strong style={{ fontSize: '16px' }}>Groupe</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Groupe' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+        showSearch
+        filterOption={(input, option) =>
+          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+        }
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner un Groupe"
+        >
+<Option value="G1">G1</Option>
+  <Option value="G2">G2</Option>
+  <Option value="G3">G3</Option>
+  <Option value="G4">G4</Option>        </Select>
       </Form.Item>
   <Form.Item
         name="ID_AnneeScolaire"
@@ -561,10 +802,21 @@ const CrudTable = () => {
               </Space>
             </Col>
           </Row>
-          <Table columns={columns} dataSource={data} rowKey="ID_Filiere" pagination={pagination} loading={refreshLoading}
+          
+
+<Title level={3} style={{ fontSize: '20px' }}>Liste des classes qui n'avaient pas encore d'étudiants</Title><br/>
+
+          <Table columns={columns2} dataSource={data2} rowKey="ID_Classe" pagination={pagination} loading={refreshLoading}
             onChange={handleTableChange}  scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
             size="middle" // Optionally change the size of the table (default, middle, small)
             rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}   />
+            <Title level={3} style={{ fontSize: '20px' }}>Liste des classes qui avaient des étudiants</Title><br/>
+
+<Table columns={columns} dataSource={data} rowKey="ID_Classe" pagination={pagination} loading={refreshLoading}
+  onChange={handleTableChange}  scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
+  size="middle" // Optionally change the size of the table (default, middle, small)
+  rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}   />
+
         </Space>
       </Card>
 
@@ -610,50 +862,64 @@ const CrudTable = () => {
   )}
 
 {drawerType === 'listEtudiants' && (
-  <Drawer
-    title={<Text strong style={{ fontSize: '22px' }}>Liste des Etudiants</Text>}
-    width={920}
-    onClose={handleCloseDrawer}
-    visible={drawerVisible}
-    bodyStyle={{ paddingBottom: 80 }}
-  >
-    <div>
-      {selectedRecord && (
-         <Descriptions
-           bordered
-           column={3}
-           layout="vertical"
-           style={{ width: '100%', border: '1px solid #f0f0f0' }}
-         >
-           <Descriptions.Item
-             label={<Text strong style={{ fontSize: '16px' }}>(Numero) Etudiant </Text>}
-             contentStyle={{ fontSize: '16px' }}
-           >
-             <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-               {selectedRecord.NomComplet.split('\n').map((student, index) => (
-                 <div key={index} style={{ borderBottom: '1px solid #ddd', padding: '5px 0' }}>
-                   {student}
-                 </div>
-               ))}
-             </pre>
-           </Descriptions.Item>
-           <Descriptions.Item
-             label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-             contentStyle={{ fontSize: '16px' }}
-           >
-             {selectedRecord.NomFiliere}
-           </Descriptions.Item>
-           <Descriptions.Item
-             label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
-             contentStyle={{ fontSize: '16px' }}
-           >
-             {selectedRecord.AnneeScolaire}
-           </Descriptions.Item>
-         </Descriptions>
-      )}
-    </div>
-  </Drawer>
-)}
+      <Drawer
+      
+        title={<Text strong style={{ fontSize: '22px' }}>Liste des Etudiants</Text>}
+        width={920}
+        onClose={handleCloseDrawer}
+        visible={drawerVisible}
+        bodyStyle={{ paddingBottom: 80 }}
+      >
+        <div>
+          {selectedRecord && (
+            <>
+              <Descriptions
+                bordered
+                column={4}
+                layout="vertical"
+                style={{ width: '100%', border: '1px solid #f0f0f0' }}
+              >
+                <Descriptions.Item
+                  label={<Text strong style={{ fontSize: '16px' }}>(Numero) Etudiant </Text>}
+                  contentStyle={{ fontSize: '16px' }}
+                >
+                  <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+                    {selectedRecord.NomComplet.split('\n').map((student, index) => (
+                      <div key={index} style={{ borderBottom: '1px solid #ddd', padding: '5px 0' }}>
+                        {student}
+                      </div>
+                    ))}
+                  </pre>
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+                  contentStyle={{ fontSize: '16px' }}
+                >
+                  {selectedRecord.NomFiliere}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={<Text strong style={{ fontSize: '16px' }}>Groupe</Text>}
+                  contentStyle={{ fontSize: '16px' }}
+                >
+                  {selectedRecord.Groupe}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
+                  contentStyle={{ fontSize: '16px' }}
+                >
+                  {selectedRecord.AnneeScolaire}
+                </Descriptions.Item>
+              </Descriptions>
+              <div style={{ marginTop: 20 }}>
+                <Text strong style={{ fontSize: '16px' }}>Nombre de Séances:</Text>
+                <InputNumber min={1} max={20} value={nbSeance} onChange={setNbSeance} style={{ marginLeft: 10 }} />
+                <Button type="primary" onClick={handlePrint}style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px',marginLeft: 20 }} >Creer une liste de présence</Button>
+              </div>
+            </>
+          )}
+        </div>
+      </Drawer>
+    )}
 
 
   {drawerType === 'add' && <AddUserForm />}

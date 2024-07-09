@@ -224,12 +224,56 @@ const CrudTable = () => {
       ),
       ellipsis: true,
     },
+
+
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Email</Text>,
+      dataIndex: 'Email',
+      key: 'Email',
+      sorter: (a, b) => a.Email.localeCompare(b.Email),
+      ...getColumnSearchProps('Email'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>CIN</Text>,
+      dataIndex: 'CIN',
+      key: 'CIN',
+      sorter: (a, b) => a.CIN.localeCompare(b.CIN),
+      ...getColumnSearchProps('CIN'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+
+
+
     {
       title: <Text strong style={{ fontSize: '16px' }}>Titre</Text>,
       dataIndex: 'Titre',
       key: 'Titre',
       sorter: (a, b) => a.Titre.localeCompare(b.Titre),
       ...getColumnSearchProps('Titre'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Diplome</Text>,
+      dataIndex: 'Diplome',
+      key: 'Diplome',
+      sorter: (a, b) => a.Diplome.localeCompare(b.Diplome),
+      ...getColumnSearchProps('Diplome'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
           {renderText(text, globalSearchText)}
@@ -346,6 +390,9 @@ const CrudTable = () => {
     formData.append('Adresse', values.Adresse);
     formData.append('Tel', values.Tel);
     formData.append('ID_Filiere', values.ID_Filiere);
+    formData.append('Email', values.Email);
+    formData.append('CIN', values.CIN);
+    formData.append('Diplome', values.Diplome);
 
     
   
@@ -456,6 +503,20 @@ const CrudTable = () => {
         <Input placeholder="Entrez le prenom du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
+        name="Email"
+        label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input type='email'  placeholder="Entrez l'email du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="CIN"
+        label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le CIN du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
         name="Titre"
         label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
@@ -463,8 +524,15 @@ const CrudTable = () => {
         <Input  placeholder="Entrez le titre du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
+        name="Diplome"
+        label={<Text strong style={{ fontSize: '16px' }}>Diplome</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le diplome du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
   name="EtatFormateur"
-  label={<Text strong style={{ fontSize: '16px' }}>état du formateur</Text>}
+  label={<Text strong style={{ fontSize: '16px' }}>Etat du formateur</Text>}
   rules={[{ required: true, message: 'Veuillez sélectionner' }]}
   style={{ fontSize: '16px' }}
 >
@@ -590,11 +658,32 @@ const CrudTable = () => {
         <Input placeholder="Entrez le prenom du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
+        name="Email"
+        label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input type='email'  placeholder="Entrez l'email du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="CIN"
+        label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le CIN du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
         name="Titre"
         label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le titre du formateure" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Diplome"
+        label={<Text strong style={{ fontSize: '16px' }}>Diplome</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le diplome du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
   name="EtatFormateur"

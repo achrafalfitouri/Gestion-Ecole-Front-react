@@ -238,6 +238,32 @@ const CrudTable = () => {
       ellipsis: true,
     },
     {
+      title: <Text strong style={{ fontSize: '16px' }}>Email</Text>,
+      dataIndex: 'Email',
+      key: 'Email',
+      sorter: (a, b) => a.Email.localeCompare(b.Email),
+      ...getColumnSearchProps('Email'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>CIN</Text>,
+      dataIndex: 'CIN',
+      key: 'CIN',
+      sorter: (a, b) => a.CIN.localeCompare(b.CIN),
+      ...getColumnSearchProps('CIN'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
       title: <Text strong style={{ fontSize: '16px' }}>Sexe</Text>,
       dataIndex: 'Sexe',
       key: 'Sexe',
@@ -382,6 +408,8 @@ const CrudTable = () => {
     formData.append('Tel', values.Tel);
     formData.append('Nationalite', values.Nationalite);
     formData.append('ID_Filiere', values.ID_Filiere);
+    formData.append('Email', values.Email);
+    formData.append('CIN', values.CIN);
   
     // Check if a file is selected before appending
     if (fileList.length > 0) {
@@ -495,6 +523,20 @@ const CrudTable = () => {
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le prenom de l'etudiant" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Email"
+        label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input type='email'  placeholder="Entrez l'email de l'etudiant" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="CIN"
+        label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le CIN de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
   name="Sexe"
@@ -649,6 +691,20 @@ const CrudTable = () => {
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le prenom de l'etudiant" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Email"
+        label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input type='email'  placeholder="Entrez l'email de l'etudiant" style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="CIN"
+        label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input  placeholder="Entrez le CIN de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
   name="Sexe"

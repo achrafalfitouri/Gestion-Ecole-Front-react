@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload, DatePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined, RedoOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
@@ -238,6 +238,32 @@ const CrudTable = () => {
       ellipsis: true,
     },
     {
+      title: <Text strong style={{ fontSize: '16px' }}>Email</Text>,
+      dataIndex: 'Email',
+      key: 'Email',
+      sorter: (a, b) => a.Email.localeCompare(b.Email),
+      ...getColumnSearchProps('Email'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>CIN</Text>,
+      dataIndex: 'CIN',
+      key: 'CIN',
+      sorter: (a, b) => a.CIN.localeCompare(b.CIN),
+      ...getColumnSearchProps('CIN'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
       title: <Text strong style={{ fontSize: '16px' }}>Titre</Text>,
       dataIndex: 'Titre',
       key: 'Titre',
@@ -256,6 +282,19 @@ const CrudTable = () => {
       key: 'Salaire',
       sorter: (a, b) => a.Salaire.localeCompare(b.Salaire),
       ...getColumnSearchProps('Salaire'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Contrat</Text>,
+      dataIndex: 'Contrat',
+      key: 'Contrat',
+      sorter: (a, b) => a.Contrat.localeCompare(b.Contrat),
+      ...getColumnSearchProps('Contrat'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
           {renderText(text, globalSearchText)}
@@ -532,14 +571,14 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type="date" placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="DateNaissance"
         label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type="date" placeholder="Entrez le  " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px' }} />
       </Form.Item>
       
      
@@ -564,7 +603,8 @@ const CrudTable = () => {
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-     
+     delete initialValues.DateEmbauche
+     delete initialValues.DateNaissance
       return initialValues;
     };
   
@@ -602,7 +642,7 @@ const CrudTable = () => {
               <img alt="PhotoProfil" style={{ width: '100%' }} src={previewImage} />
             </Modal>
           </Form.Item>
-      <Form.Item
+          <Form.Item
         name="NomPersonnel"
         label={<Text strong style={{ fontSize: '16px' }}>Nom  </Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
@@ -615,6 +655,20 @@ const CrudTable = () => {
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le prenom " style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="CIN"
+        label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input placeholder="Entrez le prenom " style={{ fontSize: '16px' }} />
+      </Form.Item>
+      <Form.Item
+        name="Email"
+        label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <Input type='email' placeholder="Entrez le prenom " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Titre"
@@ -649,19 +703,39 @@ const CrudTable = () => {
         <Input  placeholder="Entrez le Salaire " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
+  name="Contrat"
+  label={<Text strong style={{ fontSize: '16px' }}>Contrat</Text>}
+  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
+  style={{ fontSize: '16px' }}
+>
+  <Select
+    style={{ fontSize: '16px', width: '100%', minHeight: '40px' }}
+    placeholder="Sélectionner un contrat"
+  >
+    <Option style={{ fontSize: '16px' }} value="CDI">CDI : Contrat à Durée Indéterminée</Option>
+    <Option style={{ fontSize: '16px' }} value="CDD">CDD : Contrat à Durée Déterminée</Option>
+    <Option style={{ fontSize: '16px' }} value="INT">INT : Contrat d'Intérim</Option>
+    <Option style={{ fontSize: '16px' }} value="STG">STG : Contrat de Stage</Option>
+    <Option style={{ fontSize: '16px' }} value="APP">APP : Contrat d'Apprentissage</Option>
+    <Option style={{ fontSize: '16px' }} value="TP">TP : Contrat de Travail à Temps Partiel</Option>
+    <Option style={{ fontSize: '16px' }} value="PT">PT : Contrat de Travail pour un Projet ou une Mission</Option>
+    <Option style={{ fontSize: '16px' }} value="SAS">SAS : Contrat de Travail Saisonnier</Option>
+  </Select>
+</Form.Item>
+
+      <Form.Item
         name="DateEmbauche"
         label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input type="date" placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="DateNaissance"
-        label={<Text strong style={{ fontSize: '16px' }}>Date de naissance</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
+        label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
       >
-        <Input type="date" placeholder="Entrez le  " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px' }} />
       </Form.Item>
+      
         <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
             Modifier
