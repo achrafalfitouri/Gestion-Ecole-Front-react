@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select,DatePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutlined, SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import axiosInstance from '../../../../Middleware/axiosInstance';
-
+import axiosInstance from '../../../Middleware/axiosInstance';
+import moment from 'moment';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -31,7 +31,7 @@ const CrudTable = () => {
   const fetchData = async () => {
     setRefreshLoading(true);
     try {
-        const response = await axiosInstance.get('/api/niveau', {
+        const response = await axiosInstance.get('/api/salle', {
             params: {
                 page: pagination.current,
                 pageSize: pagination.pageSize,
@@ -57,7 +57,7 @@ const CrudTable = () => {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_Niveau);
+      showDeleteConfirm(record.ID_Salle);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
@@ -66,7 +66,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ?',
+      title: 'Êtes-vous sûr de vouloir supprimer cette salle?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -78,7 +78,7 @@ const CrudTable = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/api/niveau/${id}`);
+      await axiosInstance.delete(`/api/salle/${id}`);
       message.success('Niveau supprimé avec succès');
       fetchData();
     } catch (error) {
@@ -186,11 +186,11 @@ const CrudTable = () => {
   
     {
 
-      title: <Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>,
-      dataIndex: 'NomClasse',
-      key: 'NomClasse',
-      sorter: (a, b) => a.NomClasse.localeCompare(b.NomClasse),
-      ...getColumnSearchProps('NomClasse'),
+      title: <Text strong style={{ fontSize: '16px' }}>Nom</Text>,
+      dataIndex: 'Nom',
+      key: 'Nom',
+      sorter: (a, b) => a.Nom.localeCompare(b.Nom),
+      ...getColumnSearchProps('Nom'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
           {renderText(text, globalSearchText)}
@@ -198,21 +198,47 @@ const CrudTable = () => {
       ),
       ellipsis: true,
     },
+    
     {
-
-      title: <Text strong style={{ fontSize: '16px' }}>Niveau</Text>,
-      dataIndex: 'Niveau',
-      key: 'Niveau',
-      sorter: (a, b) => a.Niveau.localeCompare(b.Niveau),
-      ...getColumnSearchProps('Niveau'),
-      render: (text) => (
-        <Text strong style={{ fontSize: '16px' }}>
-          {renderText(text, globalSearchText)}
-        </Text>
-      ),
-      ellipsis: true,
-    },
-   
+        title: <Text strong style={{ fontSize: '16px' }}>Capacite</Text>,
+        dataIndex: 'Capacite',
+        key: 'Capacite',
+        sorter: (a, b) => {
+          if (typeof a.Capacite === 'number' && typeof b.Capacite === 'number') {
+            return a.Capacite - b.Capacite;
+          }
+          return a.Capacite.toString().localeCompare(b.Capacite.toString());
+        },
+        ...getColumnSearchProps('Capacite'),
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {renderText(text, globalSearchText)}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+ 
+      {
+        title: <Text strong style={{ fontSize: '16px' }}>Creneaux Affectes</Text>,
+        dataIndex: 'CreneauxAffectes',
+        key: 'CreneauxAffectes',
+        sorter: (a, b) => a.CreneauxAffectes.localeCompare(b.CreneauxAffectes),
+        ...getColumnSearchProps('CreneauxAffectes'),
+        render: (text) => (
+          <>
+            {text.split(',').map((creneau, index) => (
+              <div key={index}>
+                <Text strong style={{ fontSize: '16px' }}>
+                  {renderText(creneau.trim(), globalSearchText)}
+                </Text>
+              </div>
+            ))}
+          </>
+        ),
+        ellipsis: true,
+      },
+      
+ 
     
     {
       title: '',
@@ -252,12 +278,12 @@ const CrudTable = () => {
     try {
         
       if (drawerType === 'add') {
-        await axiosInstance.post('/api/niveau', values);
-        message.success('Niveau ajouté avec succès');
+        await axiosInstance.post('/api/salle', values);
+        message.success('salle ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
-        await axiosInstance.put(`/api/niveau/${selectedRecord.ID_Niveau}`, updatedValues);
-        message.success('Niveau modifié avec succès');
+        await axiosInstance.put(`/api/salle/${selectedRecord.ID_Salle}`, updatedValues);
+        message.success('salle modifié avec succès');
       }
 
       handleCloseDrawer();
@@ -285,55 +311,40 @@ const CrudTable = () => {
     }, 1100); // Adjust delay time as needed
   };
  
-  const [classeOptions, setClasseOptions] = useState([]);
-  useEffect(() => {
-    const fetchClasseOptions = async () => {
-      try {
-        const response = await axiosInstance.get('/api/classes');
-        setClasseOptions(response.data);
-      } catch (error) {
-        console.error('Error fetching filiere options:', error);
-        message.error('Erreur lors du chargement des options de classe');
-      }
-    };
-
-    fetchClasseOptions();
-  }, []);
+  
   
   // Add Form Component for Ajouter Utilisateur
   const AddUserForm = () => (
     <Form layout="vertical" onFinish={handleFormSubmit}>
 
+<Form.Item
+  name="Nom"
+  label={<Text strong style={{ fontSize: '16px' }}>Nom</Text>}
+  rules={[
+    { 
+      required: true, 
+      message: 'Veuillez entrer le nom de salle '
+    },
+   
+  ]}
+>
+  <Input placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
+</Form.Item>
 
+<Form.Item
+  name="Capacite"
+  label={<Text strong style={{ fontSize: '16px' }}>Capacite</Text>}
+  rules={[
+    { 
+      required: true, 
+      message: 'Veuillez entrer le nom de salle '
+    },
+   
+  ]}
+>
+  <Input type='number'  placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
+</Form.Item>
 
-  <Form.Item
-        name="ID_Classe"
-        label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Classe' }]}
-        style={{ fontSize: '16px' }}
-      >
-        <Select
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner une classe"
-        >
-          {classeOptions.map(classe => (
-           <Option key={classe.ID_Classe} value={classe.ID_Classe} style={{ fontSize: '16px' }}>
-           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-             <span>{classe.NomClasse}</span>
-             <span>{classe.Groupe}</span>
-             <span>{classe.AnneeScolaire}</span>
-           </div>
-         </Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item
-    name="Niveau"
-    label={<Text strong style={{ fontSize: '16px' }}>Niveau</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-  >
-    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
-  </Form.Item>
 
   <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
@@ -349,11 +360,12 @@ const CrudTable = () => {
   // Edit Form Component for Modifier Utilisateur
   const EditUserForm = () => {
     const [form] = Form.useForm(); // Use Ant Design Form hook
-  
+ 
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-     
+    delete  initialValues.DateDebut 
+  delete  initialValues.DateFin 
       return initialValues;
     };
   
@@ -370,31 +382,34 @@ const CrudTable = () => {
       >
         
         
-  <Form.Item
-        name="ID_Classe"
-        label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Classe' }]}
-        style={{ fontSize: '16px' }}
-      >
-        <Select
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner une classe"
-        >
-          {classeOptions.map(classe => (
-            <Option key={classe.ID_Classe} value={classe.ID_Classe} style={{ fontSize: '16px' }}>
-              {classe.NomClasse}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
+        <Form.Item
+  name="Nom"
+  label={<Text strong style={{ fontSize: '16px' }}>Nom</Text>}
+  rules={[
+    { 
+      required: true, 
+      message: 'Veuillez entrer le nom de salle '
+    },
+   
+  ]}
+>
+  <Input placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
+</Form.Item>
 
-      <Form.Item
-    name="Niveau"
-    label={<Text strong style={{ fontSize: '16px' }}>Nivau</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
-  >
-    <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
-  </Form.Item>
+<Form.Item
+  name="Capacite"
+  label={<Text strong style={{ fontSize: '16px' }}>Capacite</Text>}
+  rules={[
+    { 
+      required: true, 
+      message: 'Veuillez entrer le nom de salle '
+    },
+   
+  ]}
+>
+  <Input type='number'  placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
+</Form.Item>
+
   <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
             Modifier
@@ -411,7 +426,7 @@ const CrudTable = () => {
     <div style={{ padding: '40px', fontSize: '16px' }}>
       <Card style={{ borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '2px 6px 14px rgba(0, 0, 0.1, 0.2)' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title level={3} style={{ fontSize: '24px' }}>Liste des niveaux</Title>
+          <Title level={3} style={{ fontSize: '24px' }}>Liste des salles</Title>
           <Row justify="end" align="middle" style={{ marginBottom: '16px' }}>
             <Col>
               <Space>
@@ -452,12 +467,12 @@ const CrudTable = () => {
                     borderRadius: '15px'
                   }}
                 >
-                  Ajouter un niveau
+                  Ajouter une salle
                 </Button>
               </Space>
             </Col>
           </Row>
-          <Table columns={columns} dataSource={data} rowKey="ID_Niveau" pagination={pagination} loading={refreshLoading}
+          <Table columns={columns} dataSource={data} rowKey="ID_Salle" pagination={pagination} loading={refreshLoading}
             onChange={handleTableChange}  scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
             size="middle" // Optionally change the size of the table (default, middle, small)
             rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}   />
@@ -467,7 +482,7 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter niveau' : drawerType === 'edit' ? 'Modifier niveau' : 'Afficher niveau'}
+ {drawerType === 'add' ? 'Ajouter salle' : drawerType === 'edit' ? 'Modifier salle' : 'Afficher salle'}
 
     </Text>
   }
@@ -481,12 +496,17 @@ const CrudTable = () => {
     <Descriptions column={1} bordered>
  
               
- <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomClasse}</Text>
+ <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.Nom}</Text>
 </Descriptions.Item>
-<Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Niveau</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.Niveau}</Text>
+ <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Capacite</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.Capacite}</Text>
 </Descriptions.Item>
+ <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Creneaux Affectes</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.CreneauxAffectes}</Text>
+</Descriptions.Item>
+
+
 
     </Descriptions>
   ) : (

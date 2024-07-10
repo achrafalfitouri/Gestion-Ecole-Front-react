@@ -366,7 +366,7 @@ const CrudTable = () => {
     const [selectedClasse, setSelectedClasse] = useState(null);
     const [selectedMatiere, setSelectedMatiere] = useState(null);
     const [selectedFormateur, setSelectedFormateur] = useState(null);
-  
+
     useEffect(() => {
       const fetchClasseOptions = async () => {
         try {
@@ -447,6 +447,9 @@ const CrudTable = () => {
     };
   
     const handleFormSubmit = async (values) => {
+
+
+     
       try {
         const formData = {
           ...values,
@@ -464,8 +467,28 @@ const CrudTable = () => {
       }
     };
   
+
+    const calculateDuration = () => {
+      const values = form.getFieldsValue();
+      const start = values.HeureDebut;
+      const end = values.HeureFin;
+    
+      if (start && end) {
+        const duration = moment.duration(end.diff(start));
+        const hours = duration.hours();
+        const minutes = duration.minutes();
+        const totalHours = (hours + minutes / 60).toFixed(2); // Convert minutes to decimal and format
+    
+        form.setFieldsValue({
+          Nb_Heure: totalHours
+        });
+      }
+    };
+    
+
+
     return (
-      <Form layout="vertical" onFinish={handleFormSubmit}>
+      <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
        <Form.Item
   label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
@@ -558,24 +581,21 @@ const CrudTable = () => {
     <Option value="Dimanche">Dimanche</Option>
   </Select>
 </Form.Item>
-        <Form.Item
-
-          name="HeureDebut"
-          label={<Text strong style={{ fontSize: '16px' }}>Heure Début</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
-        >
-          <TimePicker             format="HH:mm" 
- type="time" style={{ fontSize: '16px' }} />
-        </Form.Item>
-        <Form.Item
-          name="HeureFin"
-          label={<Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
-        >
-          <TimePicker             format="HH:mm" 
- type="time" style={{ fontSize: '16px' }} />
-        </Form.Item>
-        <Form.Item
+<Form.Item
+        name="HeureDebut"
+        label={<Text strong style={{ fontSize: '16px' }}>Heure Début</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <TimePicker format="HH:mm" style={{ fontSize: '16px',width: "100%" }} onChange={calculateDuration} />
+      </Form.Item>
+      <Form.Item
+        name="HeureFin"
+        label={<Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <TimePicker format="HH:mm" style={{ fontSize: '16px',width: "100%" }} onChange={calculateDuration} />
+      </Form.Item>
+      <Form.Item
         name="Nb_Heure"
         label={<Text strong style={{ fontSize: '16px' }}>Nombre Heure</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
@@ -586,7 +606,7 @@ const CrudTable = () => {
           <Button type="primary" htmlType="submit" style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px', marginRight: '10px' }}>
             Ajouter
           </Button>
-          <Button style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px' }}>
+          <Button style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px' }} onClick={handleCloseDrawer}>
             Annuler
           </Button>
         </Form.Item>

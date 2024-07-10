@@ -87,8 +87,13 @@ if (!user || !token) {
       onClick: () => navigate('/anneescolaire'), // Navigate to the appropriate route
     },
     {
-      label: <Text strong style={{ fontSize: '16px' }}>Calendrier</Text>,
+      label: <Text strong style={{ fontSize: '16px' }}>Créer Salle</Text>,
       key: '2',
+      onClick: () => navigate('/salle'), // Navigate to the appropriate route
+    },
+    {
+      label: <Text strong style={{ fontSize: '16px' }}>Calendrier</Text>,
+      key: '3',
       onClick: () => navigate('/calendrier'), // Navigate to the appropriate route
     },
   ];
@@ -143,12 +148,25 @@ if (!user || !token) {
         },
         { 
           key: 'classe',
-          label: 'Classe',
-        },
-        { 
-          key: 'niveau',
-          label: 'Niveau',
-        },
+          label: 'Classe & Niveau',
+          children: [
+            {
+             
+                key: 'classe',
+                label: 'Classe',
+            
+            },
+            {
+             
+                key: 'niveau',
+                label: 'Niveau',
+            
+            },
+          
+          
+          
+          ] },
+       
         {
           key: 'matiere',
           label: 'Matière',
@@ -309,6 +327,7 @@ if (!user || !token) {
             <div style={{ marginRight: '30px', display: 'flex', alignItems: 'center' }}>
               <Space wrap>
               <Dropdown
+              
                   overlay={<Menu items={settingsDropdownItems} />}
                   placement="bottomRight"
                   arrow

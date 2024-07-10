@@ -210,7 +210,7 @@ const CrudTable = () => {
       ...getColumnSearchProps('NombreEtudiant'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
-          {renderText(text, globalSearchText)}
+          {`${text || 0} ${globalSearchText}`}
         </Text>
       ),
       ellipsis: true,
@@ -228,11 +228,12 @@ const CrudTable = () => {
       ...getColumnSearchProps('NombreClasse'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
-          {renderText(text, globalSearchText)}
+          {`${text || 0} ${globalSearchText}`}
         </Text>
       ),
       ellipsis: true,
     },
+    
     {
       title: '',
       key: 'action',

@@ -33,6 +33,7 @@ const Personnel = lazy(() => import("../Pages/Finance/Personnel"));
 const Planing = lazy(() => import("../Pages/Scolarite/Planing"));
 const RendezVous = lazy(() => import("../Pages/RendezVous"));
 const Dashboard = lazy(() => import("../Pages/Dashboard"));
+const Salle = lazy(() => import("../Pages/Scolarite/Salle"));
 
 
 
@@ -60,6 +61,7 @@ function AppRoutes() {
           <Route path="/personnel" element={<Personnel />} />
           <Route path="/anneescolaire" element={<Anneescolaire />} />
           <Route path="/calendrier" element={<Calendrier />} />
+          <Route path="/salle" element={<Salle />} />
 
           <Route path="/planing" element={<Planing />} />
           {/* Fallback route for unauthorized access */}

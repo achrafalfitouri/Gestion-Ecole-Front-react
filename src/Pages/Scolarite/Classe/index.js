@@ -4,6 +4,7 @@ import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutli
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -47,44 +48,36 @@ const CrudTable = () => {
     // Add logo (assuming EHPM is a text logo)
     const logoText = 'EHPM';
     const nomClasse = selectedRecord.NomClasse;
-
+    const niveau = selectedRecord.Niveau;
+   
     // Set font size and style for logo text
     doc.setFontSize(24); // Adjust the font size here (bigger)
     doc.setFont('helvetica', 'bold'); // Set the font and style to bold
 
-    // Calculate logo text width and position it
-    const textWidth = doc.getStringUnitWidth(logoText) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-    const textX = (doc.internal.pageSize.width - textWidth) / 2;
-    const textY = 20; // Adjust Y position as needed
+    // Position logo text at the top left
+    doc.text(logoText, 10, 20);
 
-    doc.text(logoText, textX, textY);
-
-    // Add NomClasse below logo text
+    // Set font size for class and level
     doc.setFontSize(12);
-    const nomClasseWidth = doc.getStringUnitWidth(nomClasse) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-    const nomClasseX = (doc.internal.pageSize.width - nomClasseWidth) / 2;
-    const nomClasseY = textY + 15; // Adjust Y position as needed
-    doc.text(nomClasse, nomClasseX, nomClasseY);
+    
+    // Add Classe | Niveau below the logo text
+    doc.text(`Classe: ${nomClasse} | Niveau: ${niveau}`, 10, 30);
 
     // Add table
-    doc.autoTable(tableColumn, tableRows, { startY: nomClasseY + 10 });
+    doc.autoTable(tableColumn, tableRows, { startY: 40 });
 
     // Add Annee Scolaire at the bottom center
-    const pageCount = doc.internal.getNumberOfPages();
-    const lastPage = pageCount + 1;
     const pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     const pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
     const middleX = pageWidth / 2;
     const bottomY = pageHeight - 10;
 
-    doc.setPage(lastPage);
     doc.setFontSize(12);
     doc.text('Annee Scolaire: ' + selectedRecord.AnneeScolaire, middleX, bottomY, { align: 'center' });
 
     // Save PDF
     doc.save('liste_de_presence.pdf');
   };
-
 
 
 
@@ -316,6 +309,21 @@ useEffect(() => {
     },
     {
 
+      title: <Text strong style={{ fontSize: '16px' }}>Niveau</Text>,
+      dataIndex: 'Niveau',
+      key: 'Niveau',
+      sorter: (a, b) => a.Niveau.localeCompare(b.Niveau),
+      ...getColumnSearchProps('Niveau'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+   
+    {
+
       title: <Text strong style={{ fontSize: '16px' }}>Filiere</Text>,
       dataIndex: 'NomFiliere',
       key: 'NomFiliere',
@@ -403,6 +411,20 @@ useEffect(() => {
     },
     {
 
+      title: <Text strong style={{ fontSize: '16px' }}>Niveau</Text>,
+      dataIndex: 'Niveau',
+      key: 'Niveau',
+      sorter: (a, b) => a.Niveau.localeCompare(b.Niveau),
+      ...getColumnSearchProps('Niveau'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+
       title: <Text strong style={{ fontSize: '16px' }}>Filiere</Text>,
       dataIndex: 'NomFiliere',
       key: 'NomFiliere',
@@ -415,7 +437,7 @@ useEffect(() => {
       ),
       ellipsis: true,
     },
-   
+    
     {
 
       title: <Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>,
@@ -494,6 +516,7 @@ useEffect(() => {
 
       handleCloseDrawer();
       fetchData(); // Refresh data after submission
+      fetchData2(); // Refresh data after submission
     } catch (error) {
       console.error('Error saving data:', error);
     }
@@ -510,6 +533,7 @@ useEffect(() => {
   
     // Simulate a delay of 1 second (1000ms) before fetching data
     setTimeout(() => {
+      fetchData2();
       fetchData(); // Fetch data after delay
       setSearchText(''); // Clear column search text
       setSearchedColumn(''); // Clear column searchedColumn
@@ -736,7 +760,6 @@ useEffect(() => {
 <Form.Item
     name="Remarques"
     label={<Text strong style={{ fontSize: '16px' }}>Remarques</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
   >
     <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
   </Form.Item>
@@ -839,6 +862,12 @@ useEffect(() => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord.NomFiliere}</Text>
       </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Groupe</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord.Groupe}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Niveau</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord.Niveau}</Text>
+      </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord.AnneeScolaire}</Text>
       </Descriptions.Item>
@@ -902,6 +931,12 @@ useEffect(() => {
                   contentStyle={{ fontSize: '16px' }}
                 >
                   {selectedRecord.Groupe}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={<Text strong style={{ fontSize: '16px' }}>Niveau</Text>}
+                  contentStyle={{ fontSize: '16px' }}
+                >
+                  {selectedRecord.Niveau}
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
