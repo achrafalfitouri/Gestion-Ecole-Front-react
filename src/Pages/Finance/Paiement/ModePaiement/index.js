@@ -31,7 +31,7 @@ const CrudTable = () => {
   const fetchData = async () => {
     setRefreshLoading(true);
     try {
-        const response = await axiosInstance.get('/api/typepaiement', {
+        const response = await axiosInstance.get('/api/modepaiement', {
             params: {
                 page: pagination.current,
                 pageSize: pagination.pageSize,
@@ -57,7 +57,7 @@ const CrudTable = () => {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_TypePaiement);
+      showDeleteConfirm(record.ID_ModePaiement);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
@@ -78,7 +78,7 @@ const CrudTable = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/api/typepaiement/${id}`);
+      await axiosInstance.delete(`/api/modepaiement/${id}`);
       message.success('type de paiement supprimé avec succès');
       fetchData();
     } catch (error) {
@@ -186,11 +186,11 @@ const CrudTable = () => {
   
     {
 
-      title: <Text strong style={{ fontSize: '16px' }}>type de paiement</Text>,
-      dataIndex: 'TypePaiement',
-      key: 'TypePaiement',
-      sorter: (a, b) => a.TypePaiement.localeCompare(b.TypePaiement),
-      ...getColumnSearchProps('TypePaiement'),
+      title: <Text strong style={{ fontSize: '16px' }}>Mode de paiement</Text>,
+      dataIndex: 'ModePaiement',
+      key: 'ModePaiement',
+      sorter: (a, b) => a.ModePaiement.localeCompare(b.ModePaiement),
+      ...getColumnSearchProps('ModePaiement'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
           {renderText(text, globalSearchText)}
@@ -240,13 +240,13 @@ const CrudTable = () => {
         
       if (drawerType === 'add') {
   
-        await axiosInstance.post('/api/typepaiement', values);
+        await axiosInstance.post('/api/modepaiement', values);
         message.success('Ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
 
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
 
-        await axiosInstance.put(`/api/typepaiement/${selectedRecord.ID_TypePaiement}`, updatedValues);
+        await axiosInstance.put(`/api/modepaiement/${selectedRecord.ID_ModePaiement}`, updatedValues);
         message.success('Modifié avec succès');
       }
 
@@ -281,23 +281,22 @@ const CrudTable = () => {
 
 const AddUserForm = () => (
   <Form layout="vertical" onFinish={handleFormSubmit}>
-    <Form.Item
-      name="TypePaiement"
-      label={<Text strong style={{ fontSize: '16px' }}>Type de Paiement</Text>}
-      rules={[{ required: true, message: 'Veuillez sélectionner' }]}
-      style={{ fontSize: '16px' }}
-    >
-      <Select
-        style={{ fontSize: '16px', width: '100%', minHeight: '40px' }}
-        placeholder="Sélectionner un type de paiement"
+     <Form.Item
+        name="ModePaiement"
+        label={<Text strong style={{ fontSize: '16px' }}>Mode de Paiement</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner' }]}
+        style={{ fontSize: '16px' }}
       >
-         <Option style={{ fontSize: '16px' }} value="Espèces">Espèces</Option>
-          <Option style={{ fontSize: '16px' }} value="Carte de crédit">Carte de crédit</Option>
-          <Option style={{ fontSize: '16px' }} value="Virement bancaire">Virement bancaire</Option>
-          <Option style={{ fontSize: '16px' }} value="Chèque">Chèque</Option>
-          <Option style={{ fontSize: '16px' }} value="Paiement mobile">Paiement mobile</Option>
-      </Select>
-    </Form.Item>
+        <Select
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }}
+          placeholder="Sélectionner un type de paiement"
+        >
+          <Option style={{ fontSize: '16px' }} value="Sur place">Sur place</Option>
+          <Option style={{ fontSize: '16px' }} value="A la livraison">A la livraison</Option>
+      
+        </Select>
+      </Form.Item>
+    
 
     <Form.Item>
       <Button
@@ -342,8 +341,8 @@ const AddUserForm = () => (
         
         
         <Form.Item
-        name="TypePaiement"
-        label={<Text strong style={{ fontSize: '16px' }}>Type de Paiement</Text>}
+        name="ModePaiement"
+        label={<Text strong style={{ fontSize: '16px' }}>Mode de Paiement</Text>}
         rules={[{ required: true, message: 'Veuillez sélectionner' }]}
         style={{ fontSize: '16px' }}
       >
@@ -351,11 +350,9 @@ const AddUserForm = () => (
           style={{ fontSize: '16px', width: '100%', minHeight: '40px' }}
           placeholder="Sélectionner un type de paiement"
         >
-          <Option style={{ fontSize: '16px' }} value="Espèces">Espèces</Option>
-          <Option style={{ fontSize: '16px' }} value="Carte de crédit">Carte de crédit</Option>
-          <Option style={{ fontSize: '16px' }} value="Virement bancaire">Virement bancaire</Option>
-          <Option style={{ fontSize: '16px' }} value="Chèque">Chèque</Option>
-          <Option style={{ fontSize: '16px' }} value="Paiement mobile">Paiement mobile</Option>
+          <Option style={{ fontSize: '16px' }} value="Sur place">Sur place</Option>
+          <Option style={{ fontSize: '16px' }} value="A la livraison">A la livraison</Option>
+      
         </Select>
       </Form.Item>
     
@@ -376,7 +373,7 @@ const AddUserForm = () => (
     <div style={{ padding: '40px', fontSize: '16px' }}>
       <Card style={{ borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '2px 6px 14px rgba(0, 0, 0.1, 0.2)' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title level={3} style={{ fontSize: '24px' }}>Liste des Types de Paiement</Title>
+          <Title level={3} style={{ fontSize: '24px' }}>Liste des Modes de Paiement</Title>
           <Row justify="end" align="middle" style={{ marginBottom: '16px' }}>
             <Col>
               <Space>
@@ -417,12 +414,12 @@ const AddUserForm = () => (
                     borderRadius: '15px'
                   }}
                 >
-                  Ajouter un type de paiement
+                  Ajouter un mode paiement
                 </Button>
               </Space>
             </Col>
           </Row>
-          <Table columns={columns} dataSource={data} rowKey="ID_TypePaiement" pagination={pagination} loading={refreshLoading}
+          <Table columns={columns} dataSource={data} rowKey="ID_ModePaiement" pagination={pagination} loading={refreshLoading}
             onChange={handleTableChange}  scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
             size="middle" // Optionally change the size of the table (default, middle, small)
             rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}   />
@@ -446,8 +443,8 @@ const AddUserForm = () => (
     <Descriptions column={1} bordered>
  
               
- <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Type de paiement</Text>}>
-  <Text style={{ fontSize: '16px' }}>{selectedRecord?.TypePaiement}</Text>
+ <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Mode de paiement</Text>}>
+  <Text style={{ fontSize: '16px' }}>{selectedRecord?.ModePaiement}</Text>
 </Descriptions.Item>
 
 

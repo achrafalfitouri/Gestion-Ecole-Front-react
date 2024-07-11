@@ -87,13 +87,27 @@ if (!user || !token) {
       onClick: () => navigate('/anneescolaire'), // Navigate to the appropriate route
     },
     {
-      label: <Text strong style={{ fontSize: '16px' }}>Créer Salle</Text>,
       key: '2',
       onClick: () => navigate('/salle'), // Navigate to the appropriate route
     },
     {
-      label: <Text strong style={{ fontSize: '16px' }}>Calendrier</Text>,
+      label: <Text strong style={{ fontSize: '16px' }}>Créer Type de Paiement</Text>,
+
       key: '3',
+      onClick: () => navigate('/typepaiement'), // Navigate to the appropriate route
+
+    },
+    {
+      label: <Text strong style={{ fontSize: '16px' }}>Créer Mode de Paiement</Text>,
+
+      key: '4',
+      onClick: () => navigate('/modepaiement'), // Navigate to the appropriate route
+
+    },
+
+    {
+      label: <Text strong style={{ fontSize: '16px' }}>Calendrier</Text>,
+      key: '5',
       onClick: () => navigate('/calendrier'), // Navigate to the appropriate route
     },
   ];
@@ -203,10 +217,7 @@ if (!user || !token) {
           key: '13',
           label: 'Paiement',
           children: [
-            {
-              key: '131',
-              label: 'Mode de Paiement',
-            },
+        
             {
               key: '132',
               label: 'Paiement Personnel',
@@ -215,10 +226,7 @@ if (!user || !token) {
               key: '133',
               label: 'Paiement Etudiant',
             },
-            {
-              key: 'typepaiement',
-              label: 'Type de Paiement',
-            },
+           
           ]
         },
         {

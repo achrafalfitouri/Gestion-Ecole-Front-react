@@ -35,6 +35,7 @@ const RendezVous = lazy(() => import("../Pages/RendezVous"));
 const Dashboard = lazy(() => import("../Pages/Dashboard"));
 const Salle = lazy(() => import("../Pages/Scolarite/Salle"));
 const TypePaiement = lazy(() => import("../Pages/Finance/Paiement/TypePaiement"));
+const ModePaiement = lazy(() => import("../Pages/Finance/Paiement/ModePaiement"));
 
 
 
@@ -65,6 +66,7 @@ function AppRoutes() {
           <Route path="/calendrier" element={<Calendrier />} />
           <Route path="/salle" element={<Salle />} />
           <Route path="/typepaiement" element={<TypePaiement/>} />
+          <Route path="/modepaiement" element={<ModePaiement/>} />
 
 
           <Route path="/planing" element={<Planing />} />
