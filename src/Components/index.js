@@ -216,7 +216,7 @@ if (!user || !token) {
               label: 'Paiement Etudiant',
             },
             {
-              key: '134',
+              key: 'typepaiement',
               label: 'Type de Paiement',
             },
           ]
