@@ -8,7 +8,9 @@ const { Title, Text } = Typography;
 const Calendrier = ({ cardStyle }) => {
   const [eventsData, setEventsData] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null); // State to track selected date
   const [newEvent, setNewEvent] = useState({
+    id: null,
     date: null,
     title: '',
     description: '',
@@ -26,6 +28,7 @@ const Calendrier = ({ cardStyle }) => {
       .then((response) => {
         const rendezvousData = response.data;
         const events = rendezvousData.map((rendezvous) => ({
+          id: rendezvous.id,
           date: moment(rendezvous.Date).format('YYYY-MM-DD'),
           title: rendezvous.Sujet,
           description: rendezvous.Description,
@@ -48,7 +51,7 @@ const Calendrier = ({ cardStyle }) => {
     return (
       <div className={`events ${cellClass}`}>
         {events.map((event, index) => (
-          <div key={index} style={{ marginBottom: 8 }}>
+          <div key={index} style={{ marginBottom: 8 }} onClick={() => handleEventClick(event)}>
             <Badge
               status="success"
               text={
@@ -67,6 +70,15 @@ const Calendrier = ({ cardStyle }) => {
     );
   };
 
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    setNewEvent({
+      ...newEvent,
+      date: date,
+    });
+    showModal();
+  };
+
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -76,20 +88,30 @@ const Calendrier = ({ cardStyle }) => {
   };
 
   const handleFormSubmit = () => {
-    const { date, title, description, rendezvousHeureDebut, rendezvousHeureFin } = newEvent;
+    const { id, date, title, description, rendezvousHeureDebut, rendezvousHeureFin } = newEvent;
 
-    axiosInstance
-      .post('/api/rendezvous', {
-        Date: date.format('YYYY-MM-DD'),
-        Sujet: title,
-        Description: description,
-        HeureDebut: rendezvousHeureDebut.format('HH:mm:ss'),
-        HeureFin: rendezvousHeureFin.format('HH:mm:ss'),
-      })
+    const apiCall = id
+      ? axiosInstance.put(`/api/rendezvous/${id}`, {
+          Date: date.format('YYYY-MM-DD'),
+          Sujet: title,
+          Description: description,
+          HeureDebut: rendezvousHeureDebut.format('HH:mm:ss'),
+          HeureFin: rendezvousHeureFin.format('HH:mm:ss'),
+        })
+      : axiosInstance.post('/api/rendezvous', {
+          Date: date.format('YYYY-MM-DD'),
+          Sujet: title,
+          Description: description,
+          HeureDebut: rendezvousHeureDebut.format('HH:mm:ss'),
+          HeureFin: rendezvousHeureFin.format('HH:mm:ss'),
+        });
+
+    apiCall
       .then((response) => {
         fetchRendezvousData();
         setIsModalVisible(false);
         setNewEvent({
+          id: null,
           date: null,
           title: '',
           description: '',
@@ -98,7 +120,7 @@ const Calendrier = ({ cardStyle }) => {
         });
       })
       .catch((error) => {
-        console.error('Error posting new event:', error);
+        console.error('Error submitting event:', error);
       });
   };
 
@@ -109,14 +131,26 @@ const Calendrier = ({ cardStyle }) => {
     });
   };
 
+  const handleEventClick = (event) => {
+    setNewEvent({
+      id: event.id,
+      date: moment(event.date, 'YYYY-MM-DD'),
+      title: event.title,
+      description: event.description,
+      rendezvousHeureDebut: event.rendezvousHeureDebut,
+      rendezvousHeureFin: event.rendezvousHeureFin,
+    });
+    setIsModalVisible(true);
+  };
+
   return (
     <Card style={{ ...cardStyle, width: '100%' }} title={<Title style={{ fontSize: '24px', fontWeight: 'bold' }}>Calendrier</Title>}>
       <Button type="primary" onClick={showModal} style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px', marginBottom: 16 }}>
         Ajouter un événement
       </Button>
-      <Calendar dateCellRender={dateCellRender} />
+      <Calendar dateCellRender={dateCellRender} onSelect={handleDateSelect} />
       <Modal
-        title={<Title style={{ fontSize: '24px', fontWeight: 'bold' }}>Ajouter un événement</Title>}
+        title={<Title style={{ fontSize: '24px', fontWeight: 'bold' }}>{newEvent.id ? 'Modifier' : 'Ajouter'} un événement</Title>}
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={[
@@ -124,7 +158,7 @@ const Calendrier = ({ cardStyle }) => {
             Annuler
           </Button>,
           <Button key="submit" type="primary" onClick={handleFormSubmit} style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px' }}>
-            Ajouter
+            {newEvent.id ? 'Modifier' : 'Ajouter'}
           </Button>,
         ]}
       >
@@ -132,7 +166,7 @@ const Calendrier = ({ cardStyle }) => {
           <Form.Item label={<Text style={{ fontSize: '16px', fontWeight: 'bold' }}>Date</Text>}>
             <DatePicker
               style={{ fontSize: '16px', width: '100%' }}
-              value={newEvent.date}
+              value={newEvent.date || selectedDate} // Set initial value from selected date
               onChange={(date) => handleInputChange('date', date)}
             />
           </Form.Item>
@@ -154,7 +188,7 @@ const Calendrier = ({ cardStyle }) => {
             <TimePicker
               style={{ fontSize: '16px', width: '100%' }}
               format="HH:mm"
-              value={newEvent.rendezvousHeureDebut ? moment(newEvent.rendezvousHeureDebut, 'HH:mm:ss') : null}
+              value={newEvent.rendezvousHeureDebut}
               onChange={(time) => handleInputChange('rendezvousHeureDebut', time)}
             />
           </Form.Item>
@@ -162,7 +196,7 @@ const Calendrier = ({ cardStyle }) => {
             <TimePicker
               style={{ fontSize: '16px', width: '100%' }}
               format="HH:mm"
-              value={newEvent.rendezvousHeureFin ? moment(newEvent.rendezvousHeureFin, 'HH:mm:ss') : null}
+              value={newEvent.rendezvousHeureFin}
               onChange={(time) => handleInputChange('rendezvousHeureFin', time)}
             />
           </Form.Item>

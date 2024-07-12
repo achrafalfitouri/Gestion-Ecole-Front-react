@@ -571,14 +571,14 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <DatePicker  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le telephpne " style={{ fontSize: '16px',width:'100%' }} />
       </Form.Item>
       <Form.Item
         name="DateNaissance"
         label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px' ,width:'100%'}} />
       </Form.Item>
       
      
@@ -727,13 +727,13 @@ const CrudTable = () => {
         name="DateEmbauche"
         label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
       >
-        <DatePicker  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le telephpne " style={{ fontSize: '16px',width:'100%' }} />
       </Form.Item>
       <Form.Item
         name="DateNaissance"
         label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
       >
-        <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px',width:'100%' }} />
       </Form.Item>
       
         <Form.Item>

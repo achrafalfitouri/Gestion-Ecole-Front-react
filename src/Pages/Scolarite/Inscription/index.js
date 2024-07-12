@@ -373,7 +373,7 @@ const CrudTable = () => {
         >
           {etudiantOptions.map(etudiant => (
             <Option key={etudiant.ID_Etudiant} value={etudiant.ID_Etudiant} style={{ fontSize: '16px' }}>
-              {etudiant.NomEtudiant}
+              {etudiant.NomEtudiant} {etudiant.PrenomEtudiant}
             </Option>
           ))}
         </Select>
@@ -454,8 +454,8 @@ const CrudTable = () => {
         >
           {etudiantOptions.map(etudiant => (
             <Option key={etudiant.ID_Etudiant} value={etudiant.ID_Etudiant} style={{ fontSize: '16px' }}>
-              {etudiant.NomEtudiant}
-            </Option>
+        {etudiant.NomEtudiant} {etudiant.PrenomEtudiant}
+        </Option>
           ))}
         </Select>
       </Form.Item>

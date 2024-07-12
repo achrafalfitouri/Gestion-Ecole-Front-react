@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload } from 'antd';
+import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select, Upload, DatePicker } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, PlusOutlined, RedoOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
@@ -282,6 +282,20 @@ const CrudTable = () => {
       ellipsis: true,
     },
     {
+      title: <Text strong style={{ fontSize: '16px' }}>Nom filiere</Text>,
+      dataIndex: 'NomFiliere',
+      key: 'NomFiliere',
+      sorter: (a, b) => a.NomFiliere.localeCompare(b.NomFiliere),
+      ...getColumnSearchProps('NomFiliere'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    
+    {
       title: <Text strong style={{ fontSize: '16px' }}>Etat de formateure</Text>,
       dataIndex: 'EtatFormateur',
       key: 'EtatFormateur',
@@ -322,11 +336,23 @@ const CrudTable = () => {
     },
     
     {
-      title: <Text strong style={{ fontSize: '16px' }}>Nom filiere</Text>,
-      dataIndex: 'NomFiliere',
-      key: 'NomFiliere',
-      sorter: (a, b) => a.NomFiliere.localeCompare(b.NomFiliere),
-      ...getColumnSearchProps('NomFiliere'),
+      title: <Text strong style={{ fontSize: '16px' }}>Date Naissance</Text>,
+      dataIndex: 'DateNaissance',
+      key: 'DateNaissance',
+      sorter: (a, b) => a.DateNaissance.localeCompare(b.DateNaissance),
+      ...getColumnSearchProps('DateNaissance'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+ {renderText(moment(text).format('DD/MM/YYYY'), globalSearchText)}        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Salaire</Text>,
+      dataIndex: 'Salaire',
+      key: 'Salaire',
+      sorter: (a, b) => a.Salaire.localeCompare(b.Salaire),
+      ...getColumnSearchProps('Salaire'),
       render: (text) => (
         <Text strong style={{ fontSize: '16px' }}>
           {renderText(text, globalSearchText)}
@@ -334,6 +360,32 @@ const CrudTable = () => {
       ),
       ellipsis: true,
     },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Contrat</Text>,
+      dataIndex: 'Contrat',
+      key: 'Contrat',
+      sorter: (a, b) => a.Contrat.localeCompare(b.Contrat),
+      ...getColumnSearchProps('Contrat'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Date embauche</Text>,
+      dataIndex: 'DateEmbauche',
+      key: 'DateEmbauche',
+      sorter: (a, b) => a.DateEmbauche.localeCompare(b.DateEmbauche),
+      ...getColumnSearchProps('DateEmbauche'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+ {renderText(moment(text).format('DD/MM/YYYY'), globalSearchText)}        </Text>
+      ),
+      ellipsis: true,
+    },
+    
     
       
      
@@ -393,6 +445,10 @@ const CrudTable = () => {
     formData.append('Email', values.Email);
     formData.append('CIN', values.CIN);
     formData.append('Diplome', values.Diplome);
+    formData.append('DateEmbauche', values.DateEmbauche);
+    formData.append('Contrat', values.Contrat);
+    formData.append('Salaire', values.Salaire);
+    formData.append('DateNaissance', values.DateNaissance);
 
     
   
@@ -531,6 +587,30 @@ const CrudTable = () => {
         <Input  placeholder="Entrez le diplome du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
+        name="ID_Filiere"
+        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+        showSearch
+        filterOption={(input, option) =>
+          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+        }
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner une filiere"
+        >
+          {filiereOptions.map(filiere => (
+            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
+              {filiere.NomFiliere}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+
+
+
+      <Form.Item
   name="EtatFormateur"
   label={<Text strong style={{ fontSize: '16px' }}>Etat du formateur</Text>}
   rules={[{ required: true, message: 'Veuillez sélectionner' }]}
@@ -562,28 +642,50 @@ const CrudTable = () => {
       >
         <Input  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
+      <Form.Item
+        name="DateNaissance"
+        label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px',width:'100%' }} />
+      </Form.Item>
       
       <Form.Item
-        name="ID_Filiere"
-        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
-        style={{ fontSize: '16px' }}
+        name="Salaire"
+        label={<Text strong style={{ fontSize: '16px' }}>Salaire</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Select
-        showSearch
-        filterOption={(input, option) =>
-          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-        }
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner une filiere"
-        >
-          {filiereOptions.map(filiere => (
-            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
-              {filiere.NomFiliere}
-            </Option>
-          ))}
-        </Select>
+        <Input  placeholder="Entrez le Salaire " style={{ fontSize: '16px' }} />
       </Form.Item>
+      <Form.Item
+  name="Contrat"
+  label={<Text strong style={{ fontSize: '16px' }}>Contrat</Text>}
+  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
+  style={{ fontSize: '16px' }}
+>
+  <Select
+    style={{ fontSize: '16px', width: '100%', minHeight: '40px' }}
+    placeholder="Sélectionner un contrat"
+  >
+    <Option style={{ fontSize: '16px' }} value="CDI">CDI : Contrat à Durée Indéterminée</Option>
+    <Option style={{ fontSize: '16px' }} value="CDD">CDD : Contrat à Durée Déterminée</Option>
+    <Option style={{ fontSize: '16px' }} value="INT">INT : Contrat d'Intérim</Option>
+    <Option style={{ fontSize: '16px' }} value="STG">STG : Contrat de Stage</Option>
+    <Option style={{ fontSize: '16px' }} value="APP">APP : Contrat d'Apprentissage</Option>
+    <Option style={{ fontSize: '16px' }} value="TP">TP : Contrat de Travail à Temps Partiel</Option>
+    <Option style={{ fontSize: '16px' }} value="PT">PT : Contrat de Travail pour un Projet ou une Mission</Option>
+    <Option style={{ fontSize: '16px' }} value="SAS">SAS : Contrat de Travail Saisonnier</Option>
+  </Select>
+</Form.Item>
+
+<Form.Item
+        name="DateEmbauche"
+        label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <DatePicker placeholder="Entrez le telephpne " style={{ fontSize: '16px',width:'100%' }} />
+      </Form.Item>
+    
 
      
 
@@ -605,7 +707,8 @@ const CrudTable = () => {
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-     
+     delete initialValues.DateNaissance
+     delete initialValues.DateEmbauche
       return initialValues;
     };
   
@@ -643,7 +746,7 @@ const CrudTable = () => {
               <img alt="PhotoProfil" style={{ width: '100%' }} src={previewImage} />
             </Modal>
           </Form.Item>
-      <Form.Item
+          <Form.Item
         name="NomFormateur"
         label={<Text strong style={{ fontSize: '16px' }}>Nom </Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
@@ -652,7 +755,7 @@ const CrudTable = () => {
       </Form.Item>
       <Form.Item
         name="PrenomFormateur"
-        label={<Text strong style={{ fontSize: '16px' }}>Prénom</Text>}
+        label={<Text strong style={{ fontSize: '16px' }}>Prenom</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le prenom du formateure" style={{ fontSize: '16px' }} />
@@ -686,6 +789,30 @@ const CrudTable = () => {
         <Input  placeholder="Entrez le diplome du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
+        name="ID_Filiere"
+        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
+        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
+        style={{ fontSize: '16px' }}
+      >
+        <Select
+        showSearch
+        filterOption={(input, option) =>
+          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+        }
+          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
+          placeholder="Sélectionner une filiere"
+        >
+          {filiereOptions.map(filiere => (
+            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
+              {filiere.NomFiliere}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+
+
+
+      <Form.Item
   name="EtatFormateur"
   label={<Text strong style={{ fontSize: '16px' }}>Etat du formateur</Text>}
   rules={[{ required: true, message: 'Veuillez sélectionner' }]}
@@ -695,8 +822,8 @@ const CrudTable = () => {
     style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
     placeholder="Sélectionner un rôle"
   >
-    <Option style={{ fontSize: '16px' }} value="Actif">Actif</Option>
-    <Option style={{ fontSize: '16px' }} value="Inactif">Inactif</Option>
+    <Option style={{ fontSize: '16px' }} value="actif">actif</Option>
+    <Option style={{ fontSize: '16px' }} value="inactif">inactif</Option>
   </Select>
 </Form.Item>
 
@@ -718,34 +845,50 @@ const CrudTable = () => {
         <Input  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
-        name="Titre"
-        label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
+        name="DateNaissance"
+        label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Input  placeholder="Entrez le titre " style={{ fontSize: '16px' }} />
+        <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px',width:'100%' }} />
       </Form.Item>
       
       <Form.Item
-        name="ID_Filiere"
-        label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
-        style={{ fontSize: '16px' }}
+        name="Salaire"
+        label={<Text strong style={{ fontSize: '16px' }}>Salaire</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <Select
-         showSearch
-         filterOption={(input, option) =>
-           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-         }
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner une filiere"
-        >
-          {filiereOptions.map(filiere => (
-            <Option key={filiere.ID_Filiere} value={filiere.ID_Filiere} style={{ fontSize: '16px' }}>
-              {filiere.NomFiliere}
-            </Option>
-          ))}
-        </Select>
+        <Input  placeholder="Entrez le Salaire " style={{ fontSize: '16px' }} />
       </Form.Item>
+      <Form.Item
+  name="Contrat"
+  label={<Text strong style={{ fontSize: '16px' }}>Contrat</Text>}
+  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
+  style={{ fontSize: '16px' }}
+>
+  <Select
+    style={{ fontSize: '16px', width: '100%', minHeight: '40px' }}
+    placeholder="Sélectionner un contrat"
+  >
+    <Option style={{ fontSize: '16px' }} value="CDI">CDI : Contrat à Durée Indéterminée</Option>
+    <Option style={{ fontSize: '16px' }} value="CDD">CDD : Contrat à Durée Déterminée</Option>
+    <Option style={{ fontSize: '16px' }} value="INT">INT : Contrat d'Intérim</Option>
+    <Option style={{ fontSize: '16px' }} value="STG">STG : Contrat de Stage</Option>
+    <Option style={{ fontSize: '16px' }} value="APP">APP : Contrat d'Apprentissage</Option>
+    <Option style={{ fontSize: '16px' }} value="TP">TP : Contrat de Travail à Temps Partiel</Option>
+    <Option style={{ fontSize: '16px' }} value="PT">PT : Contrat de Travail pour un Projet ou une Mission</Option>
+    <Option style={{ fontSize: '16px' }} value="SAS">SAS : Contrat de Travail Saisonnier</Option>
+  </Select>
+</Form.Item>
+
+<Form.Item
+        name="DateEmbauche"
+        label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
+        rules={[{ required: true, message: 'Champ requis' }]}
+      >
+        <DatePicker placeholder="Entrez le telephpne " style={{ fontSize: '16px',width:'100%' }} />
+      </Form.Item>
+    
+
         <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
             Modifier
@@ -850,6 +993,12 @@ const CrudTable = () => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Titre}</Text>
       </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Diplome</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Diplome}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
+      </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Etat du formateur</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.EtatFormateur}</Text>
       </Descriptions.Item>
@@ -859,8 +1008,18 @@ const CrudTable = () => {
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Telephone</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Tel}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
+     
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateNaissance</Text>}>
+        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateNaissance).format('DD/MM/YYYY')}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Salaire</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Salaire}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Contrat</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Contrat}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateEmbauche</Text>}>
+        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateEmbauche).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
     </Descriptions>
   ) : (
