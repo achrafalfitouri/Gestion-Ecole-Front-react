@@ -385,13 +385,7 @@ const CrudTable = () => {
         <Form.Item
   name="Nom"
   label={<Text strong style={{ fontSize: '16px' }}>Nom</Text>}
-  rules={[
-    { 
-      required: true, 
-      message: 'Veuillez entrer le nom de salle '
-    },
-   
-  ]}
+ 
 >
   <Input placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
 </Form.Item>
@@ -399,13 +393,7 @@ const CrudTable = () => {
 <Form.Item
   name="Capacite"
   label={<Text strong style={{ fontSize: '16px' }}>Capacite</Text>}
-  rules={[
-    { 
-      required: true, 
-      message: 'Veuillez entrer le nom de salle '
-    },
-   
-  ]}
+ 
 >
   <Input type='number'  placeholder="Entrez l'année scolaire (ex: 2023-2024)" style={{ fontSize: '16px' }} />
 </Form.Item>

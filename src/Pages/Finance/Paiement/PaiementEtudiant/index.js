@@ -676,7 +676,6 @@ const EditUserForm = () => {
       <Form.Item
       name="ID_Etudiant"
   label={<Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -696,7 +695,6 @@ const EditUserForm = () => {
 <Form.Item
   name='ID_Inscription'
   label={<Text strong style={{ fontSize: '16px' }}>l'inscription</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -717,7 +715,6 @@ const EditUserForm = () => {
 <Form.Item
         name="ID_TypePaiement"
         label={<Text strong style={{ fontSize: '16px' }}>Type Paiement</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
@@ -745,7 +742,6 @@ const EditUserForm = () => {
       <Form.Item
         name="Montant"
         label={<Text strong style={{ fontSize: '16px' }}>Montant</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="number" style={{ fontSize: '16px' }} />
       </Form.Item>

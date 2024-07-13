@@ -656,7 +656,6 @@ const handleFormSubmit = async (values) => {
            <Form.Item
      name='ID_Classe'
   label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -676,7 +675,6 @@ const handleFormSubmit = async (values) => {
 <Form.Item
 name='ID_Etudiant'
   label={<Text strong style={{ fontSize: '16px' }}>Nom de l'etudiant</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -698,14 +696,12 @@ name='ID_Etudiant'
       <Form.Item
         name="DateDebut"
         label={<Text strong style={{ fontSize: '16px' }}>Date De Debut</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  placeholder="Entrez la DateDebut" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="DateFin"
         label={<Text strong style={{ fontSize: '16px' }}>Date De Fin</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker placeholder="Entrez la DateFin" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
@@ -716,7 +712,6 @@ name='ID_Etudiant'
       <Form.Item
         name="Entreprise"
         label={<Text strong style={{ fontSize: '16px' }}>Entreprise</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le Entreprise" style={{ fontSize: '16px' }} />
       </Form.Item>
@@ -724,7 +719,6 @@ name='ID_Etudiant'
       <Form.Item
         name="Tuteur"
         label={<Text strong style={{ fontSize: '16px' }}>Tuteur</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le Tuteur" style={{ fontSize: '16px' }} />
       </Form.Item>

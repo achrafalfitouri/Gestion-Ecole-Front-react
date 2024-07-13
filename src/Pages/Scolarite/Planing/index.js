@@ -760,7 +760,6 @@ const EditUserForm = () => {
          <Form.Item
          name="ID_Classe"
   label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -780,7 +779,6 @@ const EditUserForm = () => {
 <Form.Item
 name="ID_Matiere"
   label={<Text strong style={{ fontSize: '16px' }}>Matiere</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -801,7 +799,6 @@ name="ID_Matiere"
 <Form.Item
 name='ID_Formateur'
   label={<Text strong style={{ fontSize: '16px' }}>Formateur</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -822,7 +819,6 @@ name='ID_Formateur'
 <Form.Item
         name="ID_Salle"
         label={<Text strong style={{ fontSize: '16px' }}>Salle</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Salle' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
@@ -840,7 +836,6 @@ name='ID_Formateur'
       <Form.Item
   name="Jour"
   label={<Text strong style={{ fontSize: '16px' }}>Jour</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select style={{ fontSize: '16px' }}>
     <Option value="Lundi">Lundi</Option>
@@ -855,7 +850,6 @@ name='ID_Formateur'
         <Form.Item
           name="HeureDebut"
           label={<Text strong style={{ fontSize: '16px' }}>Heure Début</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
         >
           <TimePicker             format="HH:mm" 
  type="time" style={{ fontSize: '16px' }} />
@@ -863,7 +857,6 @@ name='ID_Formateur'
         <Form.Item
           name="HeureFin"
           label={<Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
         >
           <TimePicker             format="HH:mm" 
  type="time" style={{ fontSize: '16px' }} />
@@ -871,7 +864,6 @@ name='ID_Formateur'
         <Form.Item
         name="Nb_Heure"
         label={<Text strong style={{ fontSize: '16px' }}>Nombre Heure</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="number" style={{ fontSize: '16px' }} />
       </Form.Item>

@@ -752,49 +752,42 @@ const CrudTable = () => {
           <Form.Item
         name="NomFormateur"
         label={<Text strong style={{ fontSize: '16px' }}>Nom </Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le nom du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="PrenomFormateur"
         label={<Text strong style={{ fontSize: '16px' }}>Prenom</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le prenom du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Email"
         label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type='email'  placeholder="Entrez l'email du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="CIN"
         label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le CIN du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Titre"
         label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le titre du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Diplome"
         label={<Text strong style={{ fontSize: '16px' }}>Diplome</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le diplome du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="ID_Filiere"
         label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
@@ -818,7 +811,6 @@ const CrudTable = () => {
       <Form.Item
   name="EtatFormateur"
   label={<Text strong style={{ fontSize: '16px' }}>Etat du formateur</Text>}
-  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
   style={{ fontSize: '16px' }}
 >
   <Select
@@ -836,21 +828,18 @@ const CrudTable = () => {
       <Form.Item
         name="Adresse"
         label={<Text strong style={{ fontSize: '16px' }}>Adresse</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez l'Adresse du formateure" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Tel"
         label={<Text strong style={{ fontSize: '16px' }}>Telephone</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="DateNaissance"
         label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  placeholder="Entrez le  " style={{ fontSize: '16px',width:'100%' }} />
       </Form.Item>
@@ -858,14 +847,12 @@ const CrudTable = () => {
       <Form.Item
         name="Salaire"
         label={<Text strong style={{ fontSize: '16px' }}>Salaire</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le Salaire " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
   name="Contrat"
   label={<Text strong style={{ fontSize: '16px' }}>Contrat</Text>}
-  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
   style={{ fontSize: '16px' }}
 >
   <Select
@@ -886,7 +873,6 @@ const CrudTable = () => {
 <Form.Item
         name="DateEmbauche"
         label={<Text strong style={{ fontSize: '16px' }}>Date d'embauche</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker placeholder="Entrez le telephpne " style={{ fontSize: '16px',width:'100%' }} />
       </Form.Item>

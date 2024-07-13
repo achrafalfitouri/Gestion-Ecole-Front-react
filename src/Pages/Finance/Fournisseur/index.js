@@ -424,21 +424,18 @@ const CrudTable = () => {
        <Form.Item
         name="NomFournisseur"
         label={<Text strong style={{ fontSize: '16px' }}>Nom </Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le nom " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Adresse"
         label={<Text strong style={{ fontSize: '16px' }}>Adresse</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez l'Adresse " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Tel"
         label={<Text strong style={{ fontSize: '16px' }}>Telephone</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le Telephone du " style={{ fontSize: '16px' }} />
       </Form.Item>
@@ -450,7 +447,6 @@ const CrudTable = () => {
       <Form.Item
         name="Email"
         label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez l'Email du " style={{ fontSize: '16px' }} />
       </Form.Item>

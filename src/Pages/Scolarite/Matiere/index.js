@@ -425,7 +425,6 @@ const CrudTable = () => {
         <Form.Item
     name="NomMatiere"
     label={<Text strong style={{ fontSize: '16px' }}>Nom matiere</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
   >
     <Input placeholder="Entrez le nom de la matiere" style={{ fontSize: '16px' }} />
   </Form.Item>
@@ -433,7 +432,6 @@ const CrudTable = () => {
   <Form.Item
         name="ID_Classe"
         label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Classe' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
@@ -450,7 +448,6 @@ const CrudTable = () => {
   <Form.Item
         name="ID_Formateur"
         label={<Text strong style={{ fontSize: '16px' }}>Formateur</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Classe' }]}
         style={{ fontSize: '16px' }}
       >
         <Select

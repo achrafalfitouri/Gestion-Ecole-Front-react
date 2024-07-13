@@ -690,14 +690,12 @@ useEffect(() => {
        <Form.Item
     name="NomClasse"
     label={<Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
   >
     <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
   </Form.Item>
   <Form.Item
         name="ID_Filiere"
         label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
@@ -718,7 +716,6 @@ useEffect(() => {
       <Form.Item
         name="Groupe"
         label={<Text strong style={{ fontSize: '16px' }}>Groupe</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Groupe' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
@@ -737,7 +734,6 @@ useEffect(() => {
   <Form.Item
         name="ID_AnneeScolaire"
         label={<Text strong style={{ fontSize: '16px' }}>Annee Scolaire</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner ' }]}
         style={{ fontSize: '16px' }}
       >
         <Select

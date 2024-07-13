@@ -572,7 +572,6 @@ const EditUserForm = () => {
      <Form.Item
      name='ID_Classe'
   label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -592,7 +591,6 @@ const EditUserForm = () => {
 <Form.Item
 name='ID_Etudiant'
   label={<Text strong style={{ fontSize: '16px' }}>Nom de l'etudiant</Text>}
-  rules={[{ required: true, message: 'Champ requis' }]}
 >
   <Select
     showSearch
@@ -614,21 +612,18 @@ name='ID_Etudiant'
       <Form.Item
         name="DateDebutAbsence"
         label={<Text strong style={{ fontSize: '16px' }}>Date de Début</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
       </Form.Item>
       <Form.Item
         name="DateFinAbsence"
         label={<Text strong style={{ fontSize: '16px'}}>Date Fin</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  style={{ fontSize: '16px',width : "100%" }}/>
       </Form.Item>
       <Form.Item
         name="Nb_Heure"
         label={<Text strong style={{ fontSize: '16px' }}>Nombre Heure</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type="number" style={{ fontSize: '16px' }} />
       </Form.Item>

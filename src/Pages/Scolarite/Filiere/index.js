@@ -362,7 +362,6 @@ const CrudTable = () => {
         <Form.Item
     name="NomFiliere"
     label={<Text strong style={{ fontSize: '16px' }}>Nom Filiere</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
   >
     <Input placeholder="Entrez le nom de la filiere" style={{ fontSize: '16px' }} />
   </Form.Item>

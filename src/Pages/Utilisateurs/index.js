@@ -361,21 +361,18 @@ const CrudTable = () => {
         <Form.Item
           name="NomUtilisateur"
           label={<Text strong style={{ fontSize: '16px' }}>Nom</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
         >
           <Input placeholder="Entrez le nom de l'utilisateur" style={{ fontSize: '16px' }} />
         </Form.Item>
         <Form.Item
           name="PrenomUtilisateur"
           label={<Text strong style={{ fontSize: '16px' }}>Prénom</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
         >
           <Input placeholder="Entrez le prénom de l'utilisateur" style={{ fontSize: '16px' }} />
         </Form.Item>
         <Form.Item
           name="Email"
           label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
-          rules={[{ required: true, message: 'Champ requis' }]}
         >
           <Input type="email" placeholder="Entrez l'email de l'utilisateur" style={{ fontSize: '16px' }} />
         </Form.Item>
@@ -392,7 +389,6 @@ const CrudTable = () => {
         <Form.Item
           name="ID_Role"
           label={<Text strong style={{ fontSize: '16px' }}>Rôle</Text>}
-          rules={[{ required: true, message: 'Veuillez sélectionner le rôle de l\'utilisateur' }]}
           style={{ fontSize: '16px' }}
           initialValue={selectedRecord?.NomRole}
         >

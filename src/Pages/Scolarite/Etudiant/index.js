@@ -676,42 +676,36 @@ const CrudTable = () => {
         <Form.Item
         name="NumEtudiant"
         label={<Text strong style={{ fontSize: '16px' }}>Numero</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le numero de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="NomEtudiant"
         label={<Text strong style={{ fontSize: '16px' }}>Nom</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le nom de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="PrenomEtudiant"
         label={<Text strong style={{ fontSize: '16px' }}>Prenom</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le prenom de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Email"
         label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type='email'  placeholder="Entrez l'email de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="CIN"
         label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le CIN de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
   name="Sexe"
   label={<Text strong style={{ fontSize: '16px' }}>Sexe</Text>}
-  rules={[{ required: true, message: 'Veuillez sélectionner le sexe de l\'etudiant' }]}
   style={{ fontSize: '16px' }}
 >
   <Select
@@ -727,7 +721,6 @@ const CrudTable = () => {
       <Form.Item
         name="DateNaissance"
         label={<Text strong style={{ fontSize: '16px' }}>Date de Naissance</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker   placeholder="Entrez la date de naissance de l'etudiant" style={{ fontSize: '16px',width: "100%" }} />
       </Form.Item>
@@ -735,7 +728,6 @@ const CrudTable = () => {
       <Form.Item
         name="LieuNaissance"
         label={<Text strong style={{ fontSize: '16px' }}>Lieu de Naissance</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le lieu de naissance de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
@@ -743,21 +735,18 @@ const CrudTable = () => {
       <Form.Item
         name="Adresse"
         label={<Text strong style={{ fontSize: '16px' }}>Adresse</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez l'Adresse de l'etudiant" style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Tel"
         label={<Text strong style={{ fontSize: '16px' }}>Telephone</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le telephpne " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Nationalite"
         label={<Text strong style={{ fontSize: '16px' }}>Nationalite</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez la Nationalite " style={{ fontSize: '16px' }} />
       </Form.Item>
@@ -765,7 +754,6 @@ const CrudTable = () => {
       <Form.Item
         name="ID_Filiere"
         label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Filiere' }]}
         style={{ fontSize: '16px' }}
       >
         <Select

@@ -389,14 +389,12 @@ const CrudTable = () => {
 <Form.Item
         name="DateDebut"
         label={<Text strong style={{ fontSize: '16px' }}>Date Début</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker style={{ fontSize: '16px',width : "100%" }} />
       </Form.Item>
       <Form.Item
         name="DateFin"
         label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
       </Form.Item>

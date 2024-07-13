@@ -648,7 +648,6 @@ const CrudTable = () => {
           <Form.Item
         name="NomPersonnel"
         label={<Text strong style={{ fontSize: '16px' }}>Nom  </Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input placeholder="Entrez le nom " style={{ fontSize: '16px' }} />
       </Form.Item>
@@ -669,21 +668,18 @@ const CrudTable = () => {
       <Form.Item
         name="Email"
         label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input type='email' placeholder="Entrez le prenom " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
         name="Titre"
         label={<Text strong style={{ fontSize: '16px' }}>Titre</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le titre " style={{ fontSize: '16px' }} />
       </Form.Item>
       <Form.Item
   name="EtatPersonnel"
   label={<Text strong style={{ fontSize: '16px' }}>Etat Personnel</Text>}
-  rules={[{ required: true, message: 'Veuillez sélectionner' }]}
   style={{ fontSize: '16px' }}
 >
   <Select
@@ -701,7 +697,6 @@ const CrudTable = () => {
       <Form.Item
         name="Salaire"
         label={<Text strong style={{ fontSize: '16px' }}>Salaire</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez le Salaire " style={{ fontSize: '16px' }} />
       </Form.Item>

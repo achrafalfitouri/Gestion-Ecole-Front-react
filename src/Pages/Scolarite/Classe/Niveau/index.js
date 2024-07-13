@@ -373,7 +373,6 @@ const CrudTable = () => {
   <Form.Item
         name="ID_Classe"
         label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner Classe' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
@@ -391,7 +390,6 @@ const CrudTable = () => {
       <Form.Item
     name="Niveau"
     label={<Text strong style={{ fontSize: '16px' }}>Nivau</Text>}
-    rules={[{ required: true, message: 'Champ requis' }]}
   >
     <Input placeholder="Entrez le nom de la classe" style={{ fontSize: '16px' }} />
   </Form.Item>

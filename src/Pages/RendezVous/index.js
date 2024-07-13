@@ -399,21 +399,18 @@ const CrudTable = () => {
         <Form.Item
         name="Date"
         label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker   placeholder="Entrez la date" style={{ fontSize: '16px' ,width : '100%'}} />
       </Form.Item>
       <Form.Item
         name="HeureDebut"
         label={<Text strong style={{ fontSize: '16px' }}>L'heure du debut</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <TimePicker format="HH:mm"   placeholder="Entrez le temps" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="HeureFin"
         label={<Text strong style={{ fontSize: '16px' }}>L'heure du fin</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <TimePicker format="HH:mm"  placeholder="Entrez le temps" style={{ fontSize: '16px' ,width:"100%"}} />
       </Form.Item>
@@ -422,7 +419,6 @@ const CrudTable = () => {
       <Form.Item
         name="Sujet"
         label={<Text strong style={{ fontSize: '16px' }}>Sujet du rendez-vous</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez lae sujet" style={{ fontSize: '16px' }} />
       </Form.Item>
@@ -430,7 +426,6 @@ const CrudTable = () => {
       <Form.Item
         name="Description"
         label={<Text strong style={{ fontSize: '16px' }}>La description du sujet</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <Input  placeholder="Entrez la description" style={{ fontSize: '16px' }} />
       </Form.Item>

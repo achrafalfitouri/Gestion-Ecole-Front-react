@@ -343,7 +343,6 @@ const AddUserForm = () => (
         <Form.Item
         name="ModePaiement"
         label={<Text strong style={{ fontSize: '16px' }}>Mode de Paiement</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
