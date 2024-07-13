@@ -4,6 +4,7 @@ import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlin
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../../Middleware/axiosInstance';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -195,6 +196,32 @@ const CrudTable = () => {
         key: 'PrenomEtudiant',
         sorter: (a, b) => a.PrenomEtudiant.localeCompare(b.PrenomEtudiant),
         ...getColumnSearchProps('PrenomEtudiant'),
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {renderText(text, globalSearchText)}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+    {
+        title: <Text strong style={{ fontSize: '16px' }}>CIN</Text>,
+        dataIndex: 'CIN',
+        key: 'CIN',
+        sorter: (a, b) => a.CIN.localeCompare(b.CIN),
+        ...getColumnSearchProps('CIN'),
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {renderText(text, globalSearchText)}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+    {
+        title: <Text strong style={{ fontSize: '16px' }}>Email</Text>,
+        dataIndex: 'Email',
+        key: 'Email',
+        sorter: (a, b) => a.Email.localeCompare(b.Email),
+        ...getColumnSearchProps('Email'),
         render: (text) => (
           <Text strong style={{ fontSize: '16px' }}>
             {renderText(text, globalSearchText)}
@@ -554,8 +581,8 @@ const EditUserForm = () => {
   // Function to get initial values excluding sensitive fields
   const getInitialValues = () => {
     const initialValues = { ...selectedRecord };
-  delete  initialValues.DateDebutAbsence 
-  delete  initialValues.DateFinAbsence 
+  initialValues.DatePaiementEtudiants = dayjs(initialValues.DatePaiementEtudiants);
+
 
     return initialValues;
   };
@@ -574,7 +601,7 @@ const EditUserForm = () => {
         const response = await axiosInstance.get('/api/etudiants');
         setEtudiantOptions(response.data.map(etudiant => ({
           id: etudiant.ID_Etudiant,
-          label: etudiant.NomEtudiant,
+          label: `${etudiant.NomEtudiant} ${etudiant.PrenomEtudiant}`,
         })));
       } catch (error) {
         console.error('Error fetching classe options:', error);
@@ -590,8 +617,7 @@ const EditUserForm = () => {
         const response = await axiosInstance.get(`/api/jointure/inscription-etudiant/${etudiantId}`);
         return response.data.map(inscription => ({
           id: inscription.ID_Inscription,
-          label: inscription.NomEtudiant,
-        }));
+          label: `${inscription.NomEtudiant} ${inscription.PrenomEtudiant} : EHPM-INS-${inscription.ID_Inscription}`        }));
       } catch (error) {
         console.error('Error fetching etudiant options:', error);
         return [];
@@ -648,6 +674,7 @@ const EditUserForm = () => {
       initialValues={getInitialValues()}
     >
       <Form.Item
+      name="ID_Etudiant"
   label={<Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
@@ -667,6 +694,7 @@ const EditUserForm = () => {
 </Form.Item>
 
 <Form.Item
+  name='ID_Inscription'
   label={<Text strong style={{ fontSize: '16px' }}>l'inscription</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
@@ -710,7 +738,6 @@ const EditUserForm = () => {
       <Form.Item
         name="DatePaiementEtudiants"
         label={<Text strong style={{ fontSize: '16px' }}>Date Paiement</Text>}
-        rules={[{ required: true, message: 'Champ requis' }]}
       >
         <DatePicker  style={{ fontSize: '16px',width : "100%" }} />
       </Form.Item>
@@ -813,6 +840,12 @@ const EditUserForm = () => {
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Prenom Etudiant</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.PrenomEtudiant}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>CIN</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.CIN}</Text>
+      </Descriptions.Item>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Email</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Email}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date Paiement</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DatePaiementEtudiants).format('DD/MM/YYYY')}</Text>

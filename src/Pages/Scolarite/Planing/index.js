@@ -4,6 +4,7 @@ import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlin
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -631,8 +632,9 @@ const EditUserForm = () => {
   // Function to get initial values excluding sensitive fields
   const getInitialValues = () => {
     const initialValues = { ...selectedRecord };
- delete   initialValues.HeureDebut 
- delete   initialValues.HeureFin
+
+ initialValues.HeureDebut = dayjs(initialValues.HeureDebut, 'HH:mm');
+ initialValues.HeureFin = dayjs(initialValues.HeureFin, 'HH:mm');
     return initialValues;
   };
 
@@ -756,6 +758,7 @@ const EditUserForm = () => {
       initialValues={getInitialValues()}
     >
          <Form.Item
+         name="ID_Classe"
   label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
@@ -775,6 +778,7 @@ const EditUserForm = () => {
 </Form.Item>
 
 <Form.Item
+name="ID_Matiere"
   label={<Text strong style={{ fontSize: '16px' }}>Matiere</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
@@ -795,6 +799,7 @@ const EditUserForm = () => {
   </Select>
 </Form.Item>
 <Form.Item
+name='ID_Formateur'
   label={<Text strong style={{ fontSize: '16px' }}>Formateur</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >

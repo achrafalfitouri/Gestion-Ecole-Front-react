@@ -4,6 +4,7 @@ import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlin
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -475,8 +476,9 @@ const EditUserForm = () => {
   // Function to get initial values excluding sensitive fields
   const getInitialValues = () => {
     const initialValues = { ...selectedRecord };
-  delete  initialValues.DateDebutAbsence 
-  delete  initialValues.DateFinAbsence 
+ 
+  initialValues.DateDebutAbsence = dayjs(initialValues.DateDebutAbsence);
+  initialValues.DateFinAbsence = dayjs(initialValues.DateFinAbsence);
 
     return initialValues;
   };
@@ -511,8 +513,7 @@ const EditUserForm = () => {
         const response = await axiosInstance.get(`/api/jointure/etudiant-classe/${classeId}`);
         return response.data.map(etudiant => ({
           id: etudiant.ID_Etudiant,
-          label: etudiant.NomEtudiant,
-        }));
+          label: `${etudiant.NomEtudiant} ${etudiant.PrenomEtudiant}`        }));
       } catch (error) {
         console.error('Error fetching etudiant options:', error);
         return [];
@@ -569,6 +570,7 @@ const EditUserForm = () => {
       initialValues={getInitialValues()}
     >
      <Form.Item
+     name='ID_Classe'
   label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >
@@ -588,6 +590,7 @@ const EditUserForm = () => {
 </Form.Item>
 
 <Form.Item
+name='ID_Etudiant'
   label={<Text strong style={{ fontSize: '16px' }}>Nom de l'etudiant</Text>}
   rules={[{ required: true, message: 'Champ requis' }]}
 >

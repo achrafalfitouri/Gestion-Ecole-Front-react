@@ -5,6 +5,7 @@ import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../Middleware/axiosInstance';
 import moment from 'moment';
 import frFR from 'antd/es/locale/fr_FR';
+import dayjs from 'dayjs';
 
 
 const { Title, Text } = Typography;
@@ -196,11 +197,11 @@ const CrudTable = () => {
     title: <Text strong style={{ fontSize: '16px' }}>Heure Debut</Text>,
     dataIndex: 'HeureDebut',
     key: 'HeureDebut',
-    sorter: (a, b) => a.HeureDebut.localeCompare(b.HeureDebut),
+    sorter: (a, b) => dayjs(a.HeureDebut, 'HH:mm').unix() - dayjs(b.HeureDebut, 'HH:mm').unix(),
     ...getColumnSearchProps('HeureDebut'),
     render: (text) => (
       <Text strong style={{ fontSize: '16px' }}>
-        {renderText(text, globalSearchText)}
+        {renderText(dayjs(text, 'HH:mm').format('HH:mm'), globalSearchText)}
       </Text>
     ),
     ellipsis: true,
@@ -209,11 +210,11 @@ const CrudTable = () => {
     title: <Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>,
     dataIndex: 'HeureFin',
     key: 'HeureFin',
-    sorter: (a, b) => a.HeureFin.localeCompare(b.HeureFin),
+    sorter: (a, b) => dayjs(a.HeureFin, 'HH:mm').unix() - dayjs(b.HeureFin, 'HH:mm').unix(),
     ...getColumnSearchProps('HeureFin'),
     render: (text) => (
       <Text strong style={{ fontSize: '16px' }}>
-        {renderText(text, globalSearchText)}
+        {renderText(dayjs(text, 'HH:mm').format('HH:mm'), globalSearchText)}
       </Text>
     ),
     ellipsis: true,
@@ -377,10 +378,10 @@ const CrudTable = () => {
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
 
-     delete   initialValues.Date 
-     delete   initialValues.HeureDebut 
-     delete   initialValues.HeureFin 
-        
+    
+     initialValues.Date = dayjs(initialValues.Date);
+     initialValues.HeureDebut = dayjs(initialValues.HeureDebut, 'HH:mm');
+    initialValues.HeureFin = dayjs(initialValues.HeureFin, 'HH:mm');
       return initialValues;
     };
   
@@ -407,14 +408,14 @@ const CrudTable = () => {
         label={<Text strong style={{ fontSize: '16px' }}>L'heure du debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <TimePicker  placeholder="Entrez le temps" style={{ fontSize: '16px',width:"100%" }} />
+        <TimePicker format="HH:mm"   placeholder="Entrez le temps" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       <Form.Item
         name="HeureFin"
         label={<Text strong style={{ fontSize: '16px' }}>L'heure du fin</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
       >
-        <TimePicker  placeholder="Entrez le temps" style={{ fontSize: '16px' ,width:"100%"}} />
+        <TimePicker format="HH:mm"  placeholder="Entrez le temps" style={{ fontSize: '16px' ,width:"100%"}} />
       </Form.Item>
      
 
@@ -521,10 +522,10 @@ const CrudTable = () => {
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Date}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>HeureDebut</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.HeureDebut}</Text>
+        <Text style={{ fontSize: '16px' }}>{dayjs(selectedRecord?.HeureDebut).format("HH:mm")}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>HeureFin</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.HeureFin}</Text>
+        <Text style={{ fontSize: '16px' }}>{dayjs(selectedRecord?.HeureFin).format("HH:mm")}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Sujet</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Sujet}</Text>

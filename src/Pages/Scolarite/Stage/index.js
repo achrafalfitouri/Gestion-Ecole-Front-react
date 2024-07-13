@@ -4,6 +4,7 @@ import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined, RedoOutlin
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -176,6 +177,84 @@ const CrudTable = () => {
   );
 
   const columns = [
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Nom de l'etudiant</Text>,
+      dataIndex: 'NomEtudiant',
+      key: 'NomEtudiant',
+      sorter: (a, b) => a.NomEtudiant.localeCompare(b.NomEtudiant),
+      ...getColumnSearchProps('NomEtudiant'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Prenom de l'etudiant</Text>,
+      dataIndex: 'PrenomEtudiant',
+      key: 'PrenomEtudiant',
+      sorter: (a, b) => a.PrenomEtudiant.localeCompare(b.PrenomEtudiant),
+      ...getColumnSearchProps('PrenomEtudiant'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Classe</Text>,
+      dataIndex: 'NomClasse',
+      key: 'NomClasse',
+      sorter: (a, b) => a.NomClasse.localeCompare(b.NomClasse),
+      ...getColumnSearchProps('NomClasse'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Groupe</Text>,
+      dataIndex: 'Groupe',
+      key: 'Groupe',
+      sorter: (a, b) => a.Groupe.localeCompare(b.Groupe),
+      ...getColumnSearchProps('Groupe'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Niveau</Text>,
+      dataIndex: 'Niveau',
+      key: 'Niveau',
+      sorter: (a, b) => a.Niveau.localeCompare(b.Niveau),
+      ...getColumnSearchProps('Niveau'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
+    {
+      title: <Text strong style={{ fontSize: '16px' }}>Filiere</Text>,
+      dataIndex: 'NomFiliere',
+      key: 'NomFiliere',
+      sorter: (a, b) => a.NomFiliere.localeCompare(b.NomFiliere),
+      ...getColumnSearchProps('NomFiliere'),
+      render: (text) => (
+        <Text strong style={{ fontSize: '16px' }}>
+          {renderText(text, globalSearchText)}
+        </Text>
+      ),
+      ellipsis: true,
+    },
   
   {
     title: <Text strong style={{ fontSize: '16px' }}>DateDebut</Text>,
@@ -203,19 +282,7 @@ const CrudTable = () => {
     ),
     ellipsis: true,
   },
-  {
-    title: <Text strong style={{ fontSize: '16px' }}>Nom de l'etudiant</Text>,
-    dataIndex: 'NomEtudiant',
-    key: 'NomEtudiant',
-    sorter: (a, b) => a.NomEtudiant.localeCompare(b.NomEtudiant),
-    ...getColumnSearchProps('NomEtudiant'),
-    render: (text) => (
-      <Text strong style={{ fontSize: '16px' }}>
-        {renderText(text, globalSearchText)}
-      </Text>
-    ),
-    ellipsis: true,
-  },
+
   {
     title: <Text strong style={{ fontSize: '16px' }}>Entreprise</Text>,
     dataIndex: 'Entreprise',
@@ -275,25 +342,7 @@ const CrudTable = () => {
     form.resetFields(); // Reset form fields when closing drawer
   };
 
-  const handleFormSubmit = async (values) => {
-    try {
-        
-      if (drawerType === 'add') {
-        await axiosInstance.post('/api/stages', values);
-        message.success('stage ajouté avec succès');
-      } else if (drawerType === 'edit' && selectedRecord) {
-        const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
-        await axiosInstance.put(`/api/stages/${selectedRecord.ID_Stage}`, updatedValues);
-        message.success('stage modifié avec succès');
-      }
-
-      handleCloseDrawer();
-      fetchData(); // Refresh data after submission
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  };
-
+ 
   const handleTableChange = (pagination, filters, sorter) => {
     setPagination(pagination);
   };
@@ -310,24 +359,136 @@ const CrudTable = () => {
     }, 1100); // Adjust delay time as needed
   };
   
-  const [etudiantOptions, setEtudiantOptions] = useState([]);
+ 
+  // Add Form Component for Ajouter Utilisateur
+  const AddUserForm = () => {
+
+
+
+ // State for options and selections
+ const [classeOptions, setClasseOptions] = useState([]);
+ const [etudiantOptions, setEtudiantOptions] = useState([]);
+ const [selectedClasse, setSelectedClasse] = useState(null);
+ const [selectedEtudiant, setSelectedEtudiant] = useState(null);
+
+ 
+
+  // Fetch class options
   useEffect(() => {
-    const fetchEtudiantOptions = async () => {
+    const fetchClasseOptions = async () => {
       try {
-        const response = await axiosInstance.get('/api/etudiants');
-        setEtudiantOptions(response.data);
+        const response = await axiosInstance.get('/api/classes');
+        setClasseOptions(response.data.map(classe => ({
+          id: classe.ID_Classe,
+          label: classe.NomClasse,
+        })));
       } catch (error) {
-        console.error('Error fetching filiere options:', error);
-        message.error('Erreur lors du chargement des options de classe');
+        console.error('Error fetching classe options:', error);
+      }
+    };
+    fetchClasseOptions();
+  }, []);
+
+  // Fetch student options based on selected class
+  useEffect(() => {
+    const fetchEtudiants = async (classeId) => {
+      try {
+        const response = await axiosInstance.get(`/api/jointure/etudiant-classe/${classeId}`);
+        return response.data.map(etudiant => ({
+          id: etudiant.ID_Etudiant,
+          label: `${etudiant.NomEtudiant} ${etudiant.PrenomEtudiant}`        }));
+      } catch (error) {
+        console.error('Error fetching etudiant options:', error);
+        return [];
       }
     };
 
-    fetchEtudiantOptions();
-  }, []);
+    const updateEtudiantOptions = async (classeId) => {
+      if (classeId) {
+        const etudiants = await fetchEtudiants(classeId);
+        setEtudiantOptions(etudiants);
+      } else {
+        setEtudiantOptions([]);
+      }
+    };
 
-  // Add Form Component for Ajouter Utilisateur
-  const AddUserForm = () => (
+    updateEtudiantOptions(selectedClasse);
+  }, [selectedClasse]);
+
+  // Handle class change
+  const handleClasseChange = (value) => {
+    setSelectedClasse(value);
+    setSelectedEtudiant(null);
+  };
+
+  // Handle student change
+  const handleEtudiantChange = (value) => {
+    setSelectedEtudiant(value);
+  };
+
+  const handleFormSubmit = async (values) => {
+    try {
+      const formData = {
+        ...values,
+        ID_Classe: selectedClasse,
+        ID_Etudiant: selectedEtudiant,
+      };
+      console.log(formData)
+      await axiosInstance.post('/api/stages', formData);
+      message.success('Absence ajoutée avec succès');
+      handleCloseDrawer();
+      fetchData(); // Refresh data after submission
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
+
+    return (
     <Form layout="vertical" onFinish={handleFormSubmit}>
+
+
+<Form.Item
+     name='ID_Classe'
+  label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}
+  rules={[{ required: true, message: 'Champ requis' }]}
+>
+  <Select
+    showSearch
+    filterOption={(input, option) =>
+      (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+    }
+    style={{ fontSize: '16px' }}
+    placeholder="Sélectionner une classe"
+    onChange={handleClasseChange}
+  >
+    {classeOptions.map(classe => (
+      <Option style={{ fontSize: '16px' }} key={classe.id} value={classe.id}>{classe.label}</Option>
+    ))}
+  </Select>
+</Form.Item>
+
+<Form.Item
+name='ID_Etudiant'
+  label={<Text strong style={{ fontSize: '16px' }}>Nom de l'etudiant</Text>}
+  rules={[{ required: true, message: 'Champ requis' }]}
+>
+  <Select
+    showSearch
+    filterOption={(input, option) =>
+      (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+    }
+    style={{ fontSize: '16px' }}
+    placeholder="Sélectionner un étudiant"
+    onChange={handleEtudiantChange}
+    value={selectedEtudiant}
+    disabled={!selectedClasse}
+  >
+    {etudiantOptions.map(etudiant => (
+      <Option style={{ fontSize: '16px' }} key={etudiant.id} value={etudiant.id}>{etudiant.label}</Option>
+    ))}
+  </Select>
+</Form.Item>
+
       <Form.Item
         name="DateDebut"
         label={<Text strong style={{ fontSize: '16px' }}>Date De Debut</Text>}
@@ -343,27 +504,7 @@ const CrudTable = () => {
         <DatePicker placeholder="Entrez la DateFin" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       
-      <Form.Item
-        name="ID_Etudiant"
-        label={<Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner etudiant' }]}
-        style={{ fontSize: '16px' }}
-      >
-        <Select
-         showSearch
-         filterOption={(input, option) =>
-           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-         }
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner un etudiant"
-        >
-          {etudiantOptions.map(etudiant => (
-            <Option key={etudiant.ID_Etudiant} value={etudiant.ID_Etudiant} style={{ fontSize: '16px' }}>
-              {etudiant.NomEtudiant}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
+     
      
 
       <Form.Item
@@ -393,8 +534,8 @@ const CrudTable = () => {
           Annuler
         </Button>
       </Form.Item>
-    </Form>
-  );
+    </Form> )
+  };
 
   // Edit Form Component for Modifier Utilisateur
   const EditUserForm = () => {
@@ -403,15 +544,108 @@ const CrudTable = () => {
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-      delete initialValues.DateDebut; // Remove MotDePasse from initial values
-      delete initialValues.DateFin; // Remove MotDePasse from initial values
+  
+      initialValues.DateDebut = dayjs(initialValues.DateDebut);
+      initialValues.DateFin = dayjs(initialValues.DateFin);
+
       return initialValues;
     };
   
-    useEffect(() => {
-      form.setFieldsValue(getInitialValues());
-    }, [selectedRecord]); // Update form fields when selectedRecord changes
+   
   
+
+// State for options and selections
+const [classeOptions, setClasseOptions] = useState([]);
+const [etudiantOptions, setEtudiantOptions] = useState([]);
+const [selectedClasse, setSelectedClasse] = useState(null);
+const [selectedEtudiant, setSelectedEtudiant] = useState(null);
+
+
+
+// Set initial form values when selectedRecord changes
+useEffect(() => {
+  form.setFieldsValue(getInitialValues());
+  setSelectedClasse(selectedRecord.ID_Classe);
+  setSelectedEtudiant(selectedRecord.ID_Etudiant);
+}, [selectedRecord]);
+
+// Fetch class options
+useEffect(() => {
+  const fetchClasseOptions = async () => {
+    try {
+      const response = await axiosInstance.get('/api/classes');
+      setClasseOptions(response.data.map(classe => ({
+        id: classe.ID_Classe,
+        label: classe.NomClasse,
+      })));
+    } catch (error) {
+      console.error('Error fetching classe options:', error);
+    }
+  };
+  fetchClasseOptions();
+}, []);
+
+// Fetch student options based on selected class
+useEffect(() => {
+  const fetchEtudiants = async (classeId) => {
+    try {
+      const response = await axiosInstance.get(`/api/jointure/etudiant-classe/${classeId}`);
+      return response.data.map(etudiant => ({
+        id: etudiant.ID_Etudiant,
+        label: `${etudiant.NomEtudiant} ${etudiant.PrenomEtudiant}`      }));
+    } catch (error) {
+      console.error('Error fetching etudiant options:', error);
+      return [];
+    }
+  };
+
+  const updateEtudiantOptions = async (classeId) => {
+    if (classeId) {
+      const etudiants = await fetchEtudiants(classeId);
+      setEtudiantOptions(etudiants);
+    } else {
+      setEtudiantOptions([]);
+    }
+  };
+
+  updateEtudiantOptions(selectedClasse);
+}, [selectedClasse]);
+
+// Handle class change
+const handleClasseChange = (value) => {
+  setSelectedClasse(value);
+  setSelectedEtudiant(null);
+};
+
+// Handle student change
+const handleEtudiantChange = (value) => {
+  setSelectedEtudiant(value);
+};
+
+// Handle form submission
+const handleFormSubmit = async (values) => {
+  try {
+    const formData = {
+      ...selectedRecord,
+      ...values,
+      ID_Classe: selectedClasse,
+      ID_Etudiant: selectedEtudiant,
+    };
+    console.log('Form data being submitted:', formData);
+    await axiosInstance.put(`/api/stages/${selectedRecord.ID_Stage}`, formData);
+    message.success('Absence modifiée avec succès');
+    handleCloseDrawer();
+    fetchData(); // Refresh data after submission
+  } catch (error) {
+    console.error('Error saving data:', error);
+  }
+};
+
+
+
+
+
+
     return (
       <Form
         form={form}
@@ -419,7 +653,49 @@ const CrudTable = () => {
         onFinish={handleFormSubmit}
         initialValues={getInitialValues()}
       >
-             <Form.Item
+           <Form.Item
+     name='ID_Classe'
+  label={<Text strong style={{ fontSize: '16px' }}>Nom Classe</Text>}
+  rules={[{ required: true, message: 'Champ requis' }]}
+>
+  <Select
+    showSearch
+    filterOption={(input, option) =>
+      (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+    }
+    style={{ fontSize: '16px' }}
+    placeholder="Sélectionner une classe"
+    onChange={handleClasseChange}
+  >
+    {classeOptions.map(classe => (
+      <Option style={{ fontSize: '16px' }} key={classe.id} value={classe.id}>{classe.label}</Option>
+    ))}
+  </Select>
+</Form.Item>
+
+<Form.Item
+name='ID_Etudiant'
+  label={<Text strong style={{ fontSize: '16px' }}>Nom de l'etudiant</Text>}
+  rules={[{ required: true, message: 'Champ requis' }]}
+>
+  <Select
+    showSearch
+    filterOption={(input, option) =>
+      (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+    }
+    style={{ fontSize: '16px' }}
+    placeholder="Sélectionner un étudiant"
+    onChange={handleEtudiantChange}
+    value={selectedEtudiant}
+    disabled={!selectedClasse}
+  >
+    {etudiantOptions.map(etudiant => (
+      <Option style={{ fontSize: '16px' }} key={etudiant.id} value={etudiant.id}>{etudiant.label}</Option>
+    ))}
+  </Select>
+</Form.Item>
+
+      <Form.Item
         name="DateDebut"
         label={<Text strong style={{ fontSize: '16px' }}>Date De Debut</Text>}
         rules={[{ required: true, message: 'Champ requis' }]}
@@ -434,27 +710,7 @@ const CrudTable = () => {
         <DatePicker placeholder="Entrez la DateFin" style={{ fontSize: '16px',width:"100%" }} />
       </Form.Item>
       
-      <Form.Item
-        name="ID_Etudiant"
-        label={<Text strong style={{ fontSize: '16px' }}>Nom etudiant</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner etudiant' }]}
-        style={{ fontSize: '16px' }}
-      >
-        <Select
-         showSearch
-         filterOption={(input, option) =>
-           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-         }
-          style={{ fontSize: '16px', width: '100%', minHeight: '40px' }} // Adjust width and minHeight as needed
-          placeholder="Sélectionner un etudiant"
-        >
-          {etudiantOptions.map(etudiant => (
-            <Option key={etudiant.ID_Etudiant} value={etudiant.ID_Etudiant} style={{ fontSize: '16px' }}>
-              {etudiant.NomEtudiant}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
+     
      
 
       <Form.Item
@@ -472,6 +728,7 @@ const CrudTable = () => {
       >
         <Input  placeholder="Entrez le Tuteur" style={{ fontSize: '16px' }} />
       </Form.Item>
+      
       
         <Form.Item>
           <Button  style={{ fontSize: '16px', fontWeight: 'bold', borderRadius: '10px',marginRight: '10px' }} type="primary" htmlType="submit" >
@@ -556,16 +813,31 @@ const CrudTable = () => {
 >
   {drawerType === 'view' ? (
     <Descriptions column={1} bordered>
-            
+         <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Etudiant</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomEtudiant}</Text>
+      </Descriptions.Item>   
+         <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Prenom Etudiant</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.PrenomEtudiant}</Text>
+      </Descriptions.Item>   
+         <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Classe</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomClasse}</Text>
+      </Descriptions.Item>   
+         <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Groupe</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Groupe}</Text>
+      </Descriptions.Item>   
+         <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Niveau</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Niveau}</Text>
+      </Descriptions.Item>   
+         <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
+      </Descriptions.Item>   
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateDebut</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateDebut).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateFin</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateFin).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Nom Etudiant</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomEtudiant}</Text>
-      </Descriptions.Item>
+      
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Entreprise</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Entreprise}</Text>
       </Descriptions.Item>

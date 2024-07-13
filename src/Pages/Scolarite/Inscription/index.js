@@ -4,6 +4,7 @@ import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutli
 import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -420,8 +421,9 @@ const CrudTable = () => {
     // Function to get initial values excluding MotDePasse
     const getInitialValues = () => {
       const initialValues = { ...selectedRecord };
-    delete  initialValues.DateDebutInscription 
-    delete  initialValues.DateFinInscription 
+  
+    initialValues.DateDebutInscription = dayjs(initialValues.DateDebutInscription);
+    initialValues.DateFinInscription = dayjs(initialValues.DateFinInscription);
 
       return initialValues;
     };
