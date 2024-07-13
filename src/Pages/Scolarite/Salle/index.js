@@ -79,10 +79,10 @@ const CrudTable = () => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/api/salle/${id}`);
-      message.success('Niveau supprimé avec succès');
+      message.success('salle supprimé avec succès');
       fetchData();
     } catch (error) {
-        message.error('Impossible de supprimer le niveau. Il existe des enregistrements associés.');
+        message.error('Impossible de supprimer la salle. Il existe des enregistrements associés.');
     }
   };
 

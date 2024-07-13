@@ -66,7 +66,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer cette type de paiement?',
+      title: 'Êtes-vous sûr de vouloir supprimer ce type de paiement?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -241,13 +241,13 @@ const CrudTable = () => {
       if (drawerType === 'add') {
   
         await axiosInstance.post('/api/typepaiement', values);
-        message.success('Ajouté avec succès');
+        message.success('type de paiement Ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
 
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
 
         await axiosInstance.put(`/api/typepaiement/${selectedRecord.ID_TypePaiement}`, updatedValues);
-        message.success('Modifié avec succès');
+        message.success('type de paiement Modifié avec succès');
       }
 
       handleCloseDrawer();

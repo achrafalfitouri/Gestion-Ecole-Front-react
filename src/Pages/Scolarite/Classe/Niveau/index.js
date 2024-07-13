@@ -66,7 +66,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ?',
+      title: 'Êtes-vous sûr de vouloir supprimer Niveau?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',

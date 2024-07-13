@@ -66,7 +66,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer cette filiere?',
+      title: 'Êtes-vous sûr de vouloir supprimer cette annee scolaire?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -79,10 +79,10 @@ const CrudTable = () => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/api/anneescolaire/${id}`);
-      message.success('Niveau supprimé avec succès');
+      message.success('annee scolaire supprimé avec succès');
       fetchData();
     } catch (error) {
-        message.error('Impossible de supprimer le niveau. Il existe des enregistrements associés.');
+        message.error('Impossible de supprimer annee scolaire. Il existe des enregistrements associés.');
     }
   };
 
@@ -264,11 +264,11 @@ const CrudTable = () => {
         
       if (drawerType === 'add') {
         await axiosInstance.post('/api/anneescolaire', values);
-        message.success('Niveau ajouté avec succès');
+        message.success('annee scolaire ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
         await axiosInstance.put(`/api/anneescolaire/${selectedRecord.ID_AnneeScolaire}`, updatedValues);
-        message.success('Niveau modifié avec succès');
+        message.success('annee scolaire modifié avec succès');
       }
 
       handleCloseDrawer();
@@ -472,7 +472,7 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter anneeScolaire' : drawerType === 'edit' ? 'Modifier anneeScolaire' : 'Afficher anneeScolaire'}
+ {drawerType === 'add' ? 'Ajouter annee Scolaire' : drawerType === 'edit' ? 'Modifier annee scolaire' : 'Afficher annee scolaire'}
 
     </Text>
   }

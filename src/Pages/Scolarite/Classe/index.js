@@ -155,7 +155,7 @@ useEffect(() => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ?',
+      title: 'Êtes-vous sûr de vouloir supprimer cette classe ?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -168,7 +168,7 @@ useEffect(() => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/api/classes/${id}`);
-      message.success('filiere supprimé avec succès');
+      message.success('classe supprimé avec succès');
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -507,11 +507,11 @@ useEffect(() => {
         
       if (drawerType === 'add') {
         await axiosInstance.post('/api/classes', values);
-        message.success('rendez-vous ajouté avec succès');
+        message.success('classe ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
         await axiosInstance.put(`/api/classes/${selectedRecord.ID_Classe}`, updatedValues);
-        message.success('rendez-vous modifié avec succès');
+        message.success('classe modifié avec succès');
       }
 
       handleCloseDrawer();
@@ -548,7 +548,7 @@ useEffect(() => {
         const response = await axiosInstance.get('/api/filiere');
         setFiliereOptions(response.data);
       } catch (error) {
-        console.error('Error fetching filiere options:', error);
+        console.error('Error fetching classes options:', error);
         message.error('Erreur lors du chargement des options de filiere');
       }
     };
@@ -563,7 +563,7 @@ useEffect(() => {
         const response = await axiosInstance.get('/api/anneescolaire');
         setAnneescolaireOptions(response.data);
       } catch (error) {
-        console.error('Error fetching filiere options:', error);
+        console.error('Error fetching classes options:', error);
         message.error('Erreur lors du chargement des options de filiere');
       }
     };

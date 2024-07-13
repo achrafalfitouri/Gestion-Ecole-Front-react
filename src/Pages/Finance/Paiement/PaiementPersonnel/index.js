@@ -60,7 +60,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ?',
+      title: 'Êtes-vous sûr de vouloir supprimerpaiement personnel ?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -73,7 +73,7 @@ const CrudTable = () => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/api/paiementpersonnel/${id}`);
-      message.success(' supprimé avec succès');
+      message.success(' paiement personnel supprimé avec succès');
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -360,11 +360,11 @@ const CrudTable = () => {
         
       if (drawerType === 'add') {
         await axiosInstance.post('/api/paiementpersonnel', values);
-        message.success(' ajouté avec succès');
+        message.success(' paiement personnel ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
         await axiosInstance.put(`/api/paiementpersonnel/${selectedRecord.ID_PaiementPersonnel}`, updatedValues);
-        message.success(' modifié avec succès');
+        message.success('paiement personnel modifié avec succès');
       }
 
       handleCloseDrawer();

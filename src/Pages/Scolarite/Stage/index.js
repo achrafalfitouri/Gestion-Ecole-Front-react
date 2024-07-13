@@ -257,7 +257,7 @@ const CrudTable = () => {
     },
   
   {
-    title: <Text strong style={{ fontSize: '16px' }}>DateDebut</Text>,
+    title: <Text strong style={{ fontSize: '16px' }}>Date Debut</Text>,
     dataIndex: 'DateDebut',
     key: 'DateDebut',
     sorter: (a, b) => a.DateDebut.localeCompare(b.DateDebut),
@@ -270,7 +270,7 @@ const CrudTable = () => {
     ellipsis: true,
   },
   {
-    title: <Text strong style={{ fontSize: '16px' }}>DateFin</Text>,
+    title: <Text strong style={{ fontSize: '16px' }}>Date Fin</Text>,
     dataIndex: 'DateFin',
     key: 'DateFin',
     sorter: (a, b) => a.DateFin.localeCompare(b.DateFin),
@@ -435,7 +435,7 @@ const CrudTable = () => {
       };
       console.log(formData)
       await axiosInstance.post('/api/stages', formData);
-      message.success('Absence ajoutée avec succès');
+      message.success('stage ajoutée avec succès');
       handleCloseDrawer();
       fetchData(); // Refresh data after submission
     } catch (error) {
@@ -633,7 +633,7 @@ const handleFormSubmit = async (values) => {
     };
     console.log('Form data being submitted:', formData);
     await axiosInstance.put(`/api/stages/${selectedRecord.ID_Stage}`, formData);
-    message.success('Absence modifiée avec succès');
+    message.success('stage modifiée avec succès');
     handleCloseDrawer();
     fetchData(); // Refresh data after submission
   } catch (error) {
@@ -831,10 +831,10 @@ name='ID_Etudiant'
          <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Filiere</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.NomFiliere}</Text>
       </Descriptions.Item>   
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateDebut</Text>}>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date Debut</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateDebut).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
-      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>DateFin</Text>}>
+      <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date Fin</Text>}>
         <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.DateFin).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
       

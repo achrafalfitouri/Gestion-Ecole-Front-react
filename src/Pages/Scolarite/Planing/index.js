@@ -60,7 +60,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ?',
+      title: 'Êtes-vous sûr de vouloir supprimer planing?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -73,7 +73,7 @@ const CrudTable = () => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/api/planing/${id}`);
-      message.success(' supprimé avec succès');
+      message.success(' planing supprimé avec succès');
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -255,7 +255,7 @@ const CrudTable = () => {
   },
   
   {
-    title: <Text strong style={{ fontSize: '16px' }}>Nb heure</Text>,
+    title: <Text strong style={{ fontSize: '16px' }}>Nombre heure</Text>,
     dataIndex: 'Nb_Heure',
     key: 'Nb_Heure',
     sorter: (a, b) => {
@@ -460,7 +460,7 @@ const CrudTable = () => {
         };
         console.log(formData)
         await axiosInstance.post('/api/planing', formData);
-        message.success('Absence ajoutée avec succès');
+        message.success('planing ajoutée avec succès');
         handleCloseDrawer();
         fetchData(); // Refresh data after submission
       } catch (error) {
@@ -519,7 +519,7 @@ const CrudTable = () => {
       (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
     }
     style={{ fontSize: '16px' }}
-    placeholder="Sélectionner un étudiant"
+    placeholder="Sélectionner un Matiere"
     onChange={handleMatiereChange}
     value={selectedMatiere}
     disabled={!selectedClasse}
@@ -539,7 +539,7 @@ const CrudTable = () => {
       (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
     }
     style={{ fontSize: '16px' }}
-    placeholder="Sélectionner un étudiant"
+    placeholder="Sélectionner un Formateur"
     onChange={handleFormateurChange}
     value={selectedFormateur}
     disabled={!selectedMatiere}
@@ -552,7 +552,7 @@ const CrudTable = () => {
 <Form.Item
         name="ID_Salle"
         label={<Text strong style={{ fontSize: '16px' }}>Salle</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner etudiant' }]}
+        rules={[{ required: true, message: 'Veuillez sélectionner Salle' }]}
         style={{ fontSize: '16px' }}
       >
         <Select
@@ -742,7 +742,7 @@ const EditUserForm = () => {
       };
       console.log('Form data being submitted:', formData);
       await axiosInstance.put(`/api/planing/${selectedRecord.ID_Planning}`, formData);
-      message.success('Absence modifiée avec succès');
+      message.success('planing modifiée avec succès');
       handleCloseDrawer();
       fetchData(); // Refresh data after submission
     } catch (error) {
@@ -788,7 +788,7 @@ name="ID_Matiere"
       (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
     }
     style={{ fontSize: '16px' }}
-    placeholder="Sélectionner un étudiant"
+    placeholder="Sélectionner une Matiere"
     onChange={handleMatiereChange}
     value={selectedMatiere}
     disabled={!selectedClasse}
@@ -809,7 +809,7 @@ name='ID_Formateur'
       (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
     }
     style={{ fontSize: '16px' }}
-    placeholder="Sélectionner un étudiant"
+    placeholder="Sélectionner un Formateur"
     onChange={handleFormateurChange}
     value={selectedFormateur}
     disabled={!selectedMatiere}
@@ -822,7 +822,7 @@ name='ID_Formateur'
 <Form.Item
         name="ID_Salle"
         label={<Text strong style={{ fontSize: '16px' }}>Salle</Text>}
-        rules={[{ required: true, message: 'Veuillez sélectionner etudiant' }]}
+        rules={[{ required: true, message: 'Veuillez sélectionner Salle' }]}
         style={{ fontSize: '16px' }}
       >
         <Select

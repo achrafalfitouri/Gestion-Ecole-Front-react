@@ -82,7 +82,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ?',
+      title: 'Êtes-vous sûr de vouloir supprimer ce personnel ?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -95,7 +95,7 @@ const CrudTable = () => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/api/personnels/${id}`);
-      message.success(' supprimé avec succès');
+      message.success(' personnel supprimé avec succès');
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -408,14 +408,14 @@ const CrudTable = () => {
             'Content-Type': 'multipart/form-data'
           }
         });
-        message.success(' ajouté avec succès');
+        message.success(' personnel ajouté avec succès');
       } else if (drawerType === 'edit') {
         response = await axiosInstance.put(`/api/personnels/${selectedRecord.ID_Personnel}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-        message.success(' mis à jour avec succès');
+        message.success('personnel  mis à jour avec succès');
       }
       console.log('Response from server:', response.data);
       setDrawerVisible(false);
@@ -811,7 +811,7 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter ' : drawerType === 'edit' ? 'Modifier ' : 'Afficher '}
+ {drawerType === 'add' ? 'Ajouter personnel ' : drawerType === 'edit' ? 'Modifier personnel' : 'Afficher personnel '}
 
     </Text>
   }

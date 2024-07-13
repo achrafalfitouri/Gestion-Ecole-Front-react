@@ -16,14 +16,14 @@ const Login = () => {
     try {
       const response = await axiosInstance.post('/api/auth/login', values);
       localStorage.setItem('token', response.data.token);
-      message.success('Login successful!');
+      message.success('Connexion réussie!');
 
       const userResponse = await axiosInstance.get('/api/auth/me');
       localStorage.setItem('user', JSON.stringify(userResponse.data)); // Store as JSON string
 
       setNavigate(true); // Redirect to home or dashboard
     } catch (error) {
-      message.error('Login failed. Please check your credentials.');
+      message.error('Échec de la connexion. Veuillez vérifier vos identifiants.');
     }
   };
 

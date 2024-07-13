@@ -241,13 +241,13 @@ const CrudTable = () => {
       if (drawerType === 'add') {
   
         await axiosInstance.post('/api/modepaiement', values);
-        message.success('Ajouté avec succès');
+        message.success('type de paiement Ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
 
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
 
         await axiosInstance.put(`/api/modepaiement/${selectedRecord.ID_ModePaiement}`, updatedValues);
-        message.success('Modifié avec succès');
+        message.success('type de paiement Modifié avec succès');
       }
 
       handleCloseDrawer();
@@ -429,7 +429,7 @@ const AddUserForm = () => (
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter ' : drawerType === 'edit' ? 'Modifier ' : 'Afficher '}
+ {drawerType === 'add' ? 'Ajouter type de paiement' : drawerType === 'edit' ? 'Modifier type de paiement' : 'Afficher type de paiement'}
 
     </Text>
   }

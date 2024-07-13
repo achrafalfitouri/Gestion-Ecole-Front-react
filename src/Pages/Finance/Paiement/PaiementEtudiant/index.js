@@ -60,7 +60,7 @@ const CrudTable = () => {
 
   const showDeleteConfirm = (id) => {
     Modal.confirm({
-      title: 'Êtes-vous sûr de vouloir supprimer ?',
+      title: 'Êtes-vous sûr de vouloir supprimer ce paiement etudiant ?',
       okText: 'Oui',
       okType: 'danger',
       cancelText: 'Non',
@@ -73,7 +73,7 @@ const CrudTable = () => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/api/paiementetudiant/${id}`);
-      message.success(' supprimé avec succès');
+      message.success(' paiement etudiant supprimé avec succès');
       fetchData();
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -658,7 +658,7 @@ const EditUserForm = () => {
       };
       console.log('Form data being submitted:', formData);
       await axiosInstance.put(`/api/paiementetudiant/${selectedRecord.ID_PaiementEtudiants}`, formData);
-      message.success('Absence modifiée avec succès');
+      message.success('ce paiement etudiant modifiée avec succès');
       handleCloseDrawer();
       fetchData(); // Refresh data after submission
     } catch (error) {

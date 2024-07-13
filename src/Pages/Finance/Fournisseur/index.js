@@ -306,11 +306,11 @@ const CrudTable = () => {
        
   
         await axiosInstance.post('/api/fournisseurs', values);
-        message.success(' ajouté avec succès');
+        message.success('fournisseur ajouté avec succès');
       } else if (drawerType === 'edit' && selectedRecord) {
         const updatedValues = { ...selectedRecord, ...values }; // Ensure ID is included
         await axiosInstance.put(`/api/fournisseurs/${selectedRecord.ID_Fournisseur}`, updatedValues);
-        message.success(' modifié avec succès');
+        message.success(' fournisseur modifié avec succès');
       }
 
       handleCloseDrawer();
@@ -527,7 +527,7 @@ const CrudTable = () => {
       <Drawer
   title={
     <Text strong style={{ fontSize: '22px' }}>
- {drawerType === 'add' ? 'Ajouter ' : drawerType === 'edit' ? 'Modifier ' : 'Afficher '}
+ {drawerType === 'add' ? 'Ajouter fournisseurs' : drawerType === 'edit' ? 'Modifier fournisseurs' : 'Afficher fournisseurs'}
 
     </Text>
   }
