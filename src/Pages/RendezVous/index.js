@@ -514,13 +514,13 @@ const CrudTable = () => {
     <Descriptions column={1} bordered>
             
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Date</Text>}>
-        <Text style={{ fontSize: '16px' }}>{selectedRecord?.Date}</Text>
+        <Text style={{ fontSize: '16px' }}>{moment(selectedRecord?.Date).format('DD/MM/YYYY')}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>HeureDebut</Text>}>
-        <Text style={{ fontSize: '16px' }}>{dayjs(selectedRecord?.HeureDebut).format("HH:mm")}</Text>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.HeureDebut}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>HeureFin</Text>}>
-        <Text style={{ fontSize: '16px' }}>{dayjs(selectedRecord?.HeureFin).format("HH:mm")}</Text>
+        <Text style={{ fontSize: '16px' }}>{selectedRecord?.HeureFin}</Text>
       </Descriptions.Item>
       <Descriptions.Item label={<Text strong style={{ fontSize: '16px' }}>Sujet</Text>}>
         <Text style={{ fontSize: '16px' }}>{selectedRecord?.Sujet}</Text>

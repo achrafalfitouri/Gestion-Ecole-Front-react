@@ -38,6 +38,8 @@ const TypePaiement = lazy(() => import("../Pages/Finance/Paiement/TypePaiement")
 const ModePaiement = lazy(() => import("../Pages/Finance/Paiement/ModePaiement"));
 const PaiementEtudiant = lazy(() => import("../Pages/Finance/Paiement/PaiementEtudiant"));
 const PaiementPersonnel = lazy(() => import("../Pages/Finance/Paiement/PaiementPersonnel"));
+const FactureFournisseur = lazy(() => import("../Pages/Finance/Facture/FactureFournisseur"));
+const FactureEtudiant = lazy(() => import("../Pages/Finance/Facture/FactureEtudiant"));
 
 
 
@@ -71,6 +73,8 @@ function AppRoutes() {
           <Route path="/modepaiement" element={<ModePaiement/>} />
           <Route path="/paiementetudiant" element={<PaiementEtudiant/>} />
           <Route path="/paiementpersonnel" element={<PaiementPersonnel/>} />
+          <Route path="/facturefournisseur" element={<FactureFournisseur/>} />
+          <Route path="/factureetudiant" element={<FactureEtudiant/>} />
 
 
           <Route path="/planing" element={<Planing />} />
