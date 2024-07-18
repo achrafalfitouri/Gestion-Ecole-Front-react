@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Unauthorized from "../Pages/Unauthorized";
 import  { lazy } from "react";
+import Test from "../Pages/Test";
 
 // import { fetchUserData } from "../interceptors/axios"; // Import fetchUserData from axios.js
 // import DashboardDataProvider from '../../Pages/Dashbaord/DashboardProvider';
@@ -75,6 +76,7 @@ function AppRoutes() {
           <Route path="/paiementpersonnel" element={<PaiementPersonnel/>} />
           <Route path="/facturefournisseur" element={<FactureFournisseur/>} />
           <Route path="/factureetudiant" element={<FactureEtudiant/>} />
+          <Route path="/test" element={<Test/>} />
 
 
           <Route path="/planing" element={<Planing />} />

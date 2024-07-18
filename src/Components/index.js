@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, BookOutlined, CalendarOutlined, DashboardOutlined, FileTextOutlined, IdcardOutlined, LineChartOutlined, SnippetsOutlined, UploadOutlined, UserAddOutlined, UserOutlined, VideoCameraOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { BankOutlined, MenuFoldOutlined, MenuUnfoldOutlined, BookOutlined, CalendarOutlined, DashboardOutlined, FileTextOutlined, IdcardOutlined, LineChartOutlined, SnippetsOutlined, UploadOutlined, UserAddOutlined, UserOutlined, VideoCameraOutlined, LogoutOutlined, SettingOutlined, SettingFilled } from '@ant-design/icons';
 import { Layout, Menu, theme, Dropdown, Button, Row, Col, Space, Avatar, Popconfirm, Spin, Typography } from 'antd';
 import './style.css';
 import AppRoutes from '../Routes';
@@ -352,22 +352,22 @@ if (!user || !token) {
             <div style={{ marginRight: '30px', display: 'flex', alignItems: 'center' }}>
               <Space wrap>
               <Dropdown
-              
-                  overlay={<Menu items={settingsDropdownItems} />}
-                  placement="bottomRight"
-                  arrow
-                >
-                  <Button
-                    type="primary"
-                    shape="circle"
-                    icon={<SettingOutlined />}
-                    style={{
-                      marginLeft: '10px',
-                      backgroundColor: '#001529', // Dark navy background
-                      borderColor: '#001529',
-                    }}
-                  />
-                </Dropdown>
+  overlay={<Menu items={settingsDropdownItems} />}
+  placement="bottomRight"
+  arrow
+>
+  <Button
+    shape='circle'
+    type="primary"
+    icon={<SettingFilled style={{ color: '#000000', fontSize: '22px' }} />} // Larger icon
+    style={{
+      marginLeft: '10px',
+      backgroundColor: '#ffffff', // White background
+      borderColor: '#ffffff',
+   
+    }}
+  />
+</Dropdown>
                 <span
                   style={{
                     padding: '10px 12px',
@@ -430,7 +430,9 @@ if (!user || !token) {
               textAlign: 'center',
             }}
           >
-            Ant Design ©{new Date().getFullYear()} Created by Achraf , Taha
+                      <Title style={{ fontSize: '18px' }}>   EHPM ©{new Date().getFullYear()} Created by Achraf , Taha</Title>
+
+         
           </Footer>
         </Layout>
       </Layout>

@@ -5,6 +5,8 @@ import Highlighter from 'react-highlight-words';
 import axiosInstance from '../../../Middleware/axiosInstance';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import logoImage from '../../Finance/Facture/LOGO-EHPM.png';
+
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -46,7 +48,8 @@ const CrudTable = () => {
     });
 
     // Add logo (assuming EHPM is a text logo)
-    const logoText = 'EHPM';
+    doc.addImage(logoImage, 'PNG', 5, 1, 60, 40);
+
     const nomClasse = selectedRecord.NomClasse;
     const niveau = selectedRecord.Niveau;
    
@@ -55,16 +58,16 @@ const CrudTable = () => {
     doc.setFont('helvetica', 'bold'); // Set the font and style to bold
 
     // Position logo text at the top left
-    doc.text(logoText, 10, 20);
+   
 
     // Set font size for class and level
     doc.setFontSize(12);
     
     // Add Classe | Niveau below the logo text
-    doc.text(`Classe: ${nomClasse} | Niveau: ${niveau}`, 10, 30);
+    doc.text(`Classe: ${nomClasse} | Niveau: ${niveau}`, 10, 55);
 
     // Add table
-    doc.autoTable(tableColumn, tableRows, { startY: 40 });
+    doc.autoTable(tableColumn, tableRows, { startY: 60 });
 
     // Add Annee Scolaire at the bottom center
     const pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
@@ -900,7 +903,7 @@ useEffect(() => {
             <>
               <Descriptions
                 bordered
-                column={4}
+                column={5}
                 layout="vertical"
                 style={{ width: '100%', border: '1px solid #f0f0f0' }}
               >
