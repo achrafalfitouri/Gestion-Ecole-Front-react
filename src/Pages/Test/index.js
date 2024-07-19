@@ -29,6 +29,7 @@ import {
   ToTopOutlined,
   MenuUnfoldOutlined,
   RightOutlined,
+  SnippetsOutlined,
 } from "@ant-design/icons";
 import Paragraph from "antd/lib/typography/Paragraph";
 import "./assets/styles/main.css";
@@ -39,6 +40,7 @@ import ColumnChart from "./components/chart/ColumnChart";
 import PieChart from "./components/chart/PieChart";
 import 'antd/dist/reset.css';
 
+import { DollarCircleOutlined, UserOutlined, FileTextOutlined, TeamOutlined } from '@ant-design/icons';
 
 import ava1 from "./assets/images/logo-shopify.svg";
 import ava2 from "./assets/images/logo-atlassian.svg";
@@ -53,6 +55,8 @@ import team4 from "./assets/images/team-4.jpg";
 import card from "./assets/images/info-card-1.jpg";
 import moment from "moment";
 import axios from "axios";
+import axiosInstance from "../../Middleware/axiosInstance";
+const { Title, Text } = Typography;
 
 function Home() {
   const { Title, Text } = Typography;
@@ -176,130 +180,62 @@ function Home() {
       icon: cart,
       bnb: "bnb2",
     },
-  ];
+  ]; 
+  const [counts, setCounts] = useState({
+    inscriToday: 0,
+    personnelNb: 0,
+    formateurNb: 0,
+    factureNb: 0,
+  });
 
-  const list = [
-    {
-      img: ava1,
-      Title: "Soft UI Shopify Version",
-      bud: "$14,000",
-      progress: <Progress percent={60} size="small" />,
-      member: (
-        <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team2} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Alexander Smith">
-            <img className="tootip-img" src={team3} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Jessica Doe">
-            <img className="tootip-img" src={team4} alt="" />
-          </Tooltip>
-        </div>
-      ),
-    },
-    {
-      img: ava2,
-      Title: "Progress Track",
-      bud: "$3,000",
-      progress: <Progress percent={10} size="small" />,
-      member: (
-        <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team2} alt="" />
-          </Tooltip>
-        </div>
-      ),
-    },
-    {
-      img: ava3,
-      Title: "Fix Platform Errors",
-      bud: "Not Set",
-      progress: <Progress percent={100} size="small" status="active" />,
-      member: (
-        <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Alexander Smith">
-            <img className="tootip-img" src={team3} alt="" />
-          </Tooltip>
-        </div>
-      ),
-    },
-    {
-      img: ava4,
-      Title: "Launch new Mobile App",
-      bud: "$20,600",
-      progress: <Progress percent={100} size="small" status="active" />,
-      member: (
-        <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team2} alt="" />
-          </Tooltip>
-        </div>
-      ),
-    },
-    {
-      img: ava5,
-      Title: "Add the New Landing Page",
-      bud: "$4,000",
-      progress: <Progress percent={80} size="small" />,
-      member: (
-        <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team2} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Alexander Smith">
-            <img className="tootip-img" src={team3} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Jessica Doe">
-            <img className="tootip-img" src={team4} alt="" />
-          </Tooltip>
-        </div>
-      ),
-    },
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const inscriResponse = await axiosInstance.get('/api/dashboard/inscrinb');
+        const personnelResponse = await axiosInstance.get('/api/dashboard/personnelnb');
+        const formateurResponse = await axiosInstance.get('/api/dashboard/formateurnb');
+        const factureResponse = await axiosInstance.get('/api/dashboard/facturenb');
 
+        
+
+        setCounts({
+          inscriToday: inscriResponse.data[0]?.total_inscription_today || 0,
+          personnelNb: personnelResponse.data[0]?.total_personnel || 0,
+          formateurNb: formateurResponse.data[0]?.total_formateurs || 0,
+          factureNb: factureResponse.data[0]?.total_factures || 0,
+        });
+      } catch (error) {
+        console.error('Error fetching data', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const cards = [
     {
-      img: ava6,
-      Title: "Redesign Online Store",
-      bud: "$2,000",
-      progress: (
-        <Progress
-          percent={100}
-          size="small"
-          status="exception"
-          format={() => "Cancel"}
-        />
-      ),
-      member: (
-        <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team2} alt="" />
-          </Tooltip>
-        </div>
-      ),
+      title: "Inscriptions Aaujourd'hui",
+      count: counts.inscriToday,
+      icon: <UserOutlined style={{ fontSize: '22px', color: '#fff' }} />,
+    },
+    {
+      title: 'Total Personnel',
+      count: counts.personnelNb,
+      icon: <TeamOutlined style={{ fontSize: '22px', color: '#fff' }} />,
+    },
+    {
+      title: 'Total Formateurs',
+      count: counts.formateurNb,
+      icon: <FileTextOutlined style={{ fontSize: '22px', color: '#fff' }} />,
+    },
+    {
+      title: 'Total Factures',
+      count: counts.factureNb,
+      icon: <SnippetsOutlined style={{ fontSize: '22px', color: '#fff' }} />,
     },
   ];
 
+ 
   const timelineList = [
     {
       title: "$2,400 - Redesign store",
@@ -330,77 +266,100 @@ function Home() {
     },
   ];
 
-  const uploadProps = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
+  
 
 
 
 
 // Le composant des derniers rendez-vous
 function DerniersRv({ cardStyle }) {
-    const [dataSource, setDataSource] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [currentPage] = useState(1);
-    const [pageSize] = useState(5);
-    const [, setTotalItems] = useState(0);
-  
-    useEffect(() => {
-      const fetchRendezvouss = () => {
-        const params = {
-          page: currentPage,
-          itemsPerPage: 3,
-          'order[created_at]': 'DESC'
-        };
-  
-        axios
-          .get("/api/rendezvouses?pagination=true", { params })
-          .then((response) => {
-            setDataSource(response.data['hydra:member']);
-            setTotalItems(response.data['hydra:totalItems']);
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.error("Erreur lors de la récupération des données depuis l'API :", error);
-            setLoading(false);
-          });
-      };
-  
-      setLoading(true);
-      fetchRendezvouss();
-    }, [currentPage, pageSize]);
-  
+  const [data, setData] = useState([]);
+  const [refreshLoading, setRefreshLoading] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setRefreshLoading(true);
+    try {
+      const response = await axiosInstance.get('/api/rendezvous/three');
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setRefreshLoading(false);
+    }
+  };
     const columns = [
-      { title: "Nom d'étudiant", dataIndex: 'nomPatient', key: 'nomPatient' },
-      { title: "Email d'étudiant", dataIndex: 'emailPatient', key: 'emailPatient' },
-      { title: 'Motif', dataIndex: 'maladie', key: 'maladie' },
-      { title: 'Réception', dataIndex: 'medecin', key: 'medecin' },
-      { title: 'Date de rendez-vous', dataIndex: 'dateRv', key: 'dateRv', render: (dateRv) => moment(dateRv).format('YYYY-MM-DD HH:mm:ss') },
+      {
+        title: <Text strong style={{ fontSize: '16px' }}>Date</Text>,
+        dataIndex: 'DateRendezVous',
+        key: 'DateRendezVous',
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {moment(text).format('DD/MM/YYYY')}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+      {
+        title: <Text strong style={{ fontSize: '16px' }}>Heure Debut</Text>,
+        dataIndex: 'HeureDebut',
+        key: 'HeureDebut',
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {text}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+      {
+        title: <Text strong style={{ fontSize: '16px' }}>Heure Fin</Text>,
+        dataIndex: 'HeureFin',
+        key: 'HeureFin',
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {text}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+      {
+        title: <Text strong style={{ fontSize: '16px' }}>Sujet</Text>,
+        dataIndex: 'Sujet',
+        key: 'Sujet',
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {text}
+          </Text>
+        ),
+        ellipsis: true,
+      },
+      {
+        title: <Text strong style={{ fontSize: '16px' }}>Description</Text>,
+        dataIndex: 'Description',
+        key: 'Description',
+        render: (text) => (
+          <Text strong style={{ fontSize: '16px' }}>
+            {text}
+          </Text>
+        ),
+        ellipsis: true,
+      },
     ];
+    
   
     return (
-      <Card style={{ ...cardStyle, width: '100%' }} title="Les derniers rendez-vous">
-        <Table
+<Card style={{ ...cardStyle, width: '100%' }} title={<Text strong style={{ fontSize: '20px' }}>Les derniers rendez-vous</Text>}>
+<Table
           columns={columns}
-          loading={loading}
-          dataSource={dataSource}
+          loading={refreshLoading}
+          dataSource={data}
           pagination={false}
-          size='small'
+          scroll={{ x: 'max-content' }} // This helps with horizontal scrolling if the table is too wide
+          size="middle" // Optionally change the size of the table (default, middle, small)
+          rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}
         />
       </Card>
     );
@@ -425,35 +384,34 @@ function DerniersRv({ cardStyle }) {
   return (
     <>
       <div className="layout-content">
-        <Row className="rowgap-vbox" gutter={[24, 0]}>
-          {count.map((c, index) => (
-            <Col
-              key={index}
-              xs={24}
-              sm={24}
-              md={12}
-              lg={6}
-              xl={6}
-              className="mb-24"
-            >
-              <Card bordered={false} className="criclebox ">
-                <div className="number">
-                  <Row align="middle" gutter={[24, 0]}>
-                    <Col xs={18}>
-                      <span>{c.today}</span>
-                      <Title level={3}>
-                        {c.title} <small className={c.bnb}>{c.persent}</small>
-                      </Title>
-                    </Col>
-                    <Col xs={6}>
-                      <div className="icon-box">{c.icon}</div>
-                    </Col>
-                  </Row>
-                </div>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+      <Row className="rowgap-vbox" gutter={[24, 0]}>
+      {cards.map((card, index) => (
+        <Col
+          key={index}
+          xs={24}
+          sm={24}
+          md={12}
+          lg={6}
+          xl={6}
+          className="mb-24"
+        >
+          <Card bordered={true} className="criclebox" style={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', border: '1px solid #f0f0f0' }}>
+
+            <div className="number">
+              <Row align="middle" gutter={[24, 0]}>
+                <Col xs={18}>
+                  <Title level={3}>{card.count}</Title>
+                  <span>{card.title}</span>
+                </Col>
+                <Col xs={6}>
+                  <div className="icon-box">{card.icon}</div>
+                </Col>
+              </Row>
+            </div>
+          </Card>
+        </Col>
+      ))}
+    </Row>
 
         <Row gutter={[24, 0]}>
           <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-24">
@@ -525,7 +483,6 @@ function DerniersRv({ cardStyle }) {
             </Card>
           </Col>
         </Row>
-
         <Row gutter={[24, 0]}>
           
           <Col xs={24} md={12} sm={24} lg={12} xl={10} className="mb-24">
@@ -561,6 +518,7 @@ function DerniersRv({ cardStyle }) {
           </Col>
 
         </Row>
+       
       </div>
     </>
   );

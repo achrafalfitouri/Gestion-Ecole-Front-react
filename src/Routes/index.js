@@ -26,7 +26,7 @@ const Classe = lazy(() => import("../Pages/Scolarite/Classe"));
 const Anneescolaire = lazy(() => import("../Pages/Scolarite/Anneescolaire"));
 const Formateur = lazy(() => import("../Pages/Scolarite/Formateur"));
 const Inscription = lazy(() => import("../Pages/Scolarite/Inscription"));
-const Niveau = lazy(() => import("../Pages/Scolarite/Classe/Niveau"));
+// const Niveau = lazy(() => import("../Pages/Scolarite/Classe/Niveau"));
 const Stage = lazy(() => import("../Pages/Scolarite/Stage"));
 const Absence = lazy(() => import("../Pages/Scolarite/Abcense"));
 const Fournisseur = lazy(() => import("../Pages/Finance/Fournisseur"));
@@ -60,7 +60,7 @@ function AppRoutes() {
           <Route path="/filiere" element={<Filiere />} />
           <Route path="/classe" element={<Classe />} />
           <Route path="/formateur" element={<Formateur />} />
-          <Route path="/niveau" element={<Niveau />} />
+          {/* <Route path="/niveau" element={<Niveau />} /> */}
           <Route path="/matiere" element={<Matiere />} />
           <Route path="/inscription" element={<Inscription />} />
           <Route path="/stage" element={<Stage />} />

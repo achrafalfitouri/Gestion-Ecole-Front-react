@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Space, Dropdown, Menu, Typography, Input, Card, Row, Col, Form, Drawer, Descriptions, message, Modal, Select } from 'antd';
 import { DeleteOutlined, EditOutlined, EllipsisOutlined, EyeOutlined,  RedoOutlined, SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import axiosInstance from '../../../../Middleware/axiosInstance';
+import axiosInstance from '../../../Middleware/axiosInstance';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -31,7 +31,7 @@ const CrudTable = () => {
   const fetchData = async () => {
     setRefreshLoading(true);
     try {
-        const response = await axiosInstance.get('/api/niveau', {
+        const response = await axiosInstance.get('/api/taxe', {
             params: {
                 page: pagination.current,
                 pageSize: pagination.pageSize,
@@ -57,7 +57,7 @@ const CrudTable = () => {
       setDrawerType('edit');
       setDrawerVisible(true);
     } else if (action === 'delete') {
-      showDeleteConfirm(record.ID_Niveau);
+      showDeleteConfirm(record.ID_Taxe);
     } else if (action === 'view') {
       setDrawerType('view');
       setDrawerVisible(true);
@@ -78,7 +78,7 @@ const CrudTable = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/api/niveau/${id}`);
+      await axiosInstance.delete(`/api/taxe/${id}`);
       message.success('Niveau supprimé avec succès');
       fetchData();
     } catch (error) {
@@ -186,7 +186,7 @@ const CrudTable = () => {
   
     {
 
-      title: <Text strong style={{ fontSize: '16px' }}>Nom de classe</Text>,
+      title: <Text strong style={{ fontSize: '16px' }}>Nom</Text>,
       dataIndex: 'NomClasse',
       key: 'NomClasse',
       sorter: (a, b) => a.NomClasse.localeCompare(b.NomClasse),
@@ -200,7 +200,7 @@ const CrudTable = () => {
     },
     {
 
-      title: <Text strong style={{ fontSize: '16px' }}>Niveau</Text>,
+      title: <Text strong style={{ fontSize: '16px' }}>Valeur</Text>,
       dataIndex: 'Niveau',
       key: 'Niveau',
       sorter: (a, b) => a.Niveau.localeCompare(b.Niveau),
