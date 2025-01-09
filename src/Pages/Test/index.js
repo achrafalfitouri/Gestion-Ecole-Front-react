@@ -238,34 +238,36 @@ function Home() {
  
   const timelineList = [
     {
-      title: "$2,400 - Redesign store",
-      time: "09 JUN 7:20 PM",
-      color: "green",
+      title: "Réaménagement de la cuisine pédagogique",
+      time: "09 juin 19:20",
+      color: "green", // Facture payée
     },
     {
-      title: "New order #3654323",
-      time: "08 JUN 12:20 PM",
-      color: "green",
+      title: "Nouvelle inscription pour le cours de gestion hôtelière",
+      time: "08 juin 12:20",
+      color: "green", // Facture payée
     },
     {
-      title: "Company server payments",
-      time: "04 JUN 3:10 PM",
+      title: "Paiement des fournisseurs pour le restaurant d'application",
+      time: "04 juin 15:10",
+      color: "green", // Facture impayée
     },
     {
-      title: "New card added for order #4826321",
-      time: "02 JUN 2:45 PM",
+      title: "Nouveau matériel de pâtisserie ajouté pour la formation",
+      time: "02 juin 14:45",
+      color: "gray", // Facture impayée
     },
     {
-      title: "Unlock folders for development",
-      time: "18 MAY 1:30 PM",
+      title: "Maintenance des chambres d’application pour les étudiants",
+      time: "18 mai 13:30",
+      color: "gray", // Facture impayée
     },
     {
-      title: "New order #46282344",
-      time: "14 MAY 3:30 PM",
-      color: "gray",
+      title: "Nouvelle commande pour l'événement culinaire ",
+      time: "14 mai 15:30",
+      color: "gray", // Facture impayée
     },
   ];
-
   
 
 
@@ -455,9 +457,9 @@ function DerniersRv({ cardStyle }) {
           <Col xs={24} sm={24} md={12} lg={12} xl={8} className="mb-24">
             <Card bordered={false} className="criclebox h-full">
               <div className="timeline-box">
-                <Title level={5}>Orders History</Title>
+                <Title level={5}>Historique des factures</Title>
                 <Paragraph className="lastweek" style={{ marginBottom: 24 }}>
-                  this month <span className="bnb2">20%</span>
+                  Ce mois <span className="bnb2">20%</span>
                 </Paragraph>
 
                 <Timeline
@@ -489,7 +491,7 @@ function DerniersRv({ cardStyle }) {
             <Card bordered={false} className="criclebox card-info-2 h-full">
               <div >
                 <div className="card-content">
-                  
+                <Title level={5}>Les Huit Personnes Absentes dans une Classe avec Nombre Élevé d'Absences</Title>
                 <PieChart/>
                 </div>
                 
@@ -505,7 +507,7 @@ function DerniersRv({ cardStyle }) {
                   <div className="h-full col-content p-20">
                     <div className="ant-muse">
                      <div>
-
+                     <Title level={5}>La Classe avec Nombre Élevé d'Absences</Title>
                      <PieChart/>
                      </div>
                       

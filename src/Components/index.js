@@ -41,12 +41,12 @@ const Components = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setTimeout(() => {
-      setIsLoading(true); // Set loading state to false after 1000ms (or after redirection)
+      setIsLoading(true); 
     }, 1000);
   
     setTimeout(() => {
-      setIsLoading(false); // Set loading state to false after 1000ms (or after redirection)
-      navigate('/login'); // Redirect to login page after 1000ms
+      setIsLoading(false); 
+      navigate('/login'); 
     }, 1000);
   };
   
@@ -105,6 +105,11 @@ if (!user || !token) {
 
     },
 
+    {
+      label: <Text strong style={{ fontSize: '16px' }}>Créer Salle</Text>,
+      key: '5',
+      onClick: () => navigate('/salle'), // Navigate to the appropriate route
+    },
     {
       label: <Text strong style={{ fontSize: '16px' }}>Calendrier</Text>,
       key: '5',

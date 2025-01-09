@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:3000'; // Replace with your API base URL
+const BASE_URL = 'http://127.0.0.1:3005'; // Replace with your API base URL
 const TOKEN_STORAGE_KEY = 'token';
 
 // Create an axios instance with base URL

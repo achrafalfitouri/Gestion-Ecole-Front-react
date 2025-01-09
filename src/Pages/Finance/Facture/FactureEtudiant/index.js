@@ -585,7 +585,9 @@ useEffect(() => {
           SousMontant: datapaiement.Montant,
           Reste: datapaiement.Reste,
           Montant: datapaiement.MontantTotal,
+      
         });
+        console.log(datapaiement.MontantTotal)
       }
     }, [datapaiement, form]);
   
@@ -693,7 +695,7 @@ useEffect(() => {
         </Form.Item>
   
         <Form.Item
-          name="MontantTotal"
+          name="Montant"
           label={<Text strong style={{ fontSize: '16px' }}>Total</Text>}
           rules={[{ required: true, message: 'Champ requis' }]}
           style={{ fontSize: '16px', width: '100%', fontWeight: "bold", minHeight: '40px' }}

@@ -53,7 +53,7 @@ function AppRoutes() {
         <Routes>
           {/* Dashboard */}
           {/* <Route path="/" element={<DashboardDataProvider>{(data) => <Dashboard data={data} />}</DashboardDataProvider>} /> */}
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Test/>} />
           <Route path="/utilisateur" element={<Utilisateur />} />
           <Route path="/etudiant" element={<Etudiant />} />
           <Route path="/rendezvous" element={<RendezVous />} />
@@ -76,7 +76,7 @@ function AppRoutes() {
           <Route path="/paiementpersonnel" element={<PaiementPersonnel/>} />
           <Route path="/facturefournisseur" element={<FactureFournisseur/>} />
           <Route path="/factureetudiant" element={<FactureEtudiant/>} />
-          <Route path="/test" element={<Test/>} />
+          <Route path="/test" element={<Dashboard />} />
 
 
           <Route path="/planing" element={<Planing />} />
