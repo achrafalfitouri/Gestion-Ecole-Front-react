@@ -46,7 +46,7 @@ A web application for managing school resources including trainers, student regi
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/Gestion-Ecole-Front-react.git
+   git clone https://github.com/achrafalfitouri/Gestion-Ecole-Front-react.git
    cd Gestion-Ecole-Front-react
    
 2. Run the following command:
