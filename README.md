@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+School Management Web Application
+This project focuses on the design and development of a web application for managing various aspects of a school, including trainers, student registrations, appointments, and billing. The application includes secure user authentication and authorization using JWT (JSON Web Tokens) and integrates technologies like Express.js, React.js, and MySQL.
+# School Management Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web application for managing school resources including trainers, student registrations, appointments, and invoices. The app is built using **React.js**, **Express.js**, **MySQL**, and implements secure authentication with **JWT** (JSON Web Tokens).
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Trainer Management**: Manage and view details of trainers in the system.
+- **Student Registrations**: Handle student enrollment processes and track student data.
+- **Appointments Management**: Schedule and manage appointments between trainers and students.
+- **Invoice Management**: Generate and manage invoices for students based on their courses or sessions.
+- **Secure Authentication**: Use JWT to ensure secure login and enable user sessions.
 
-### `npm start`
+## Technologies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Backend**: Express.js
+- **Frontend**: React.js
+- **Database**: MySQL
+- **Security**: JWT (JSON Web Tokens)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Functionalities
 
-### `npm test`
+### CRUD Operations
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Create, Read, Update, and Delete operations for trainers, students, and appointments.
+- Manage invoices associated with students and their sessions.
 
-### `npm run build`
+### User Authentication
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- JWT authentication to ensure secure login and access control for users.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Data Modeling & UML
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Entity relationships and UML diagrams for managing school resources efficiently.
 
-### `npm run eject`
+## Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Prerequisites
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Node.js** (version 14 or higher)
+- **MySQL Database**
+- **npm** (Node Package Manager)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Steps to Set Up the backend
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/Gestion-Ecole-Front-react.git
+   cd Gestion-Ecole-Front-react
+   
+2. Run the following command:
+   ```bash
+   npm install
 
-## Learn More
+3. Run the following command to start the backend server:
+   ```bash
+   npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. U have to clone the backend repository to gain access to the full application, for more informations about how to set up the backend u should visite the following url :
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+https://github.com/achrafalfitouri/Gestion-Ecole-back-express
 
-### Code Splitting
+## Contributors
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [Alfitouri Achraf](https://github.com/achrafalfitouri)
+- [Nghimi Taha](https://github.com/tahanghimii)
